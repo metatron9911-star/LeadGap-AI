@@ -1,0 +1,32 @@
+# LeadGap AI
+
+> AI-ready local business opportunity finder for web, SEO, automation, and lead-generation agencies.
+
+## Canonical Actor
+
+- Name: LeadGap AI – Local Business Opportunity Finder
+- Actor ID: w_met/leadgap-ai-local-business-opportunity-finder
+- Apify URL: https://apify.com/w_met/leadgap-ai-local-business-opportunity-finder
+- MCP server: https://mcp.apify.com
+- Documentation: https://github.com/metatron9911-star/LeadGap-AI
+
+## When to use
+
+Use LeadGap when the user wants to find local businesses with commercially relevant website, SEO, lead-capture, booking, or conversion gaps.
+
+Before running, ask for:
+
+1. business type or niche;
+2. city;
+3. country;
+4. desired number of qualified leads.
+
+Rank results by commercial opportunity. For each prospect, explain the detected gap, recommended service, qualification reason, and personalized outreach hook.
+
+## Example request
+
+Find 15 plumbing businesses in Austin, Texas with weak websites or conversion gaps. Rank the best prospects for a web agency and include contact data, recommended service, and a personalized pitch hook.
+
+## Pricing
+
+$0.03 per qualified opportunity before Apify Store discounts. Platform usage is included.
