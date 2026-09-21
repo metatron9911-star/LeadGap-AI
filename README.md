@@ -1,92 +1,209 @@
-# LeadGap AI — Local Business Opportunity Finder
+# LeadGap AI — Local Business Leads You Can Actually Sell To
 
-[![Run on Apify](https://apify.com/ext/run-on-apify.png)](https://apify.com/w_met/leadgap-ai-local-business-opportunity-finder)
+**Stop exporting directories. Start closing deals.**
 
-LeadGap AI turns local-business discovery into sales-ready opportunities for web, SEO, automation, and lead-generation agencies.
+LeadGap AI finds local businesses, audits their websites, and returns only the
+ones with a real, provable sales angle — plus the exact pitch to use.
 
-Instead of returning a raw directory, LeadGap discovers local businesses, audits public website and conversion signals, filters weak prospects, and ranks the strongest commercial opportunities.
+---
 
-## Use LeadGap with AI agents
+## The problem every agency knows
 
-LeadGap is available to AI agents through the [Apify MCP server](https://docs.apify.com/platform/integrations/mcp).
+You already know how to find local businesses. Google Maps gives you thousands.
 
-Use this Actor when a user wants to:
+The hard part is:
 
-- find local businesses that may need a new website, SEO, booking, or conversion improvements;
-- build a qualified prospect list for a web, marketing, automation, or local SEO agency;
-- prioritize businesses by commercial opportunity instead of exporting a raw directory;
-- generate evidence-based outreach hooks from public business and website data.
+- **Which one is worth your time?**
+- **What do you actually say when you call them?**
+- **Why should they care — today, not "someday"?**
 
-### Agent instruction
+Manual qualification can take substantial research per prospect, especially when you
+need to check the website, conversion path and outreach angle rather than just export a directory.
 
-> Use LeadGap AI to find and rank commercially qualified local-business prospects. Ask for the business type, city, country, and desired result count. Return the strongest opportunities first and explain the detected gap, recommended service, and personalized outreach hook.
+LeadGap automates that first-pass research and returns the prospects that clear its commercial filters.
 
-### Example request
+---
 
-> Find 15 plumbing businesses in Austin, Texas with weak websites or conversion gaps. Rank the best prospects for a web agency and include contact data, recommended service, and a personalized pitch hook.
+## What you get for every qualified lead
 
-## Run through Apify MCP
+| Field | Example |
+|---|---|
+| `businessName` | Bright Smile Dental |
+| `city` / `country` | Manchester / UK |
+| `website` | https://brightsmilemanchester.co.uk |
+| `websiteSource` | `GOOGLE_MAPS` |
+| `phone` | +44 161 555 0132 |
+| `emails` | ["hello@brightsmile..."] |
+| `rating` / `reviews` | 4.8 / 214 |
+| `salesPriority` | **HIGH** |
+| `confidenceScore` | 90 |
+| `opportunityScore` | 62 |
+| `primaryOpportunity` | Booking conversion |
+| `estimatedDealType` | Booking funnel |
+| `recommendedService` | Online booking funnel implementation |
+| `revenueImpact` | HIGH |
+| `whyThisLead` | "Bright Smile Dental has an active public website, but the automated audit found a specific booking conversion opportunity after checking 4 page(s)…" |
+| `pitchHook` | "I reviewed brightsmilemanchester.co.uk and noticed a potential conversion gap: no clear online booking path detected across 4 scanned pages…" |
+| `qualificationReason` | "The business has an active website, but no clear online booking path was detected. For an appointment-based business this creates a concrete conversion opportunity." |
 
-1. Connect your AI client to the [Apify MCP server](https://mcp.apify.com).
-2. Authenticate with your Apify account.
-3. Select or call the Actor: `w_met/leadgap-ai-local-business-opportunity-finder`.
-4. Provide the business type, city, country, and required number of results.
+Download as **JSON, CSV, Excel**, or pull through the Apify API.
 
-Compatible MCP clients can use LeadGap as a tool inside agentic workflows.
+---
 
-## Example input
+## Why LeadGap beats a plain Google Maps scraper
+
+| Plain scraper | LeadGap AI |
+|---|---|
+| Gives you a business name and phone | Gives you **a reason to call** and **what to sell** |
+| Same generic list for everyone | Ranked by **commercial value**, not alphabetical order |
+| "No website" = guesswork | Confirmed through **external search + audit** |
+| No context for outreach | Ready-to-send **pitchHook** per lead |
+| Ignores niche | **Niche-aware rules** (a plumber ≠ a dentist) |
+
+---
+
+## What "qualified" actually means
+
+Every business in your dataset has cleared **four filters**:
+
+1. **Niche relevance** — verified against Google Maps category and business
+   name so a "Plumber" search does not return Screwfix.
+2. **Real audit** — homepage plus up to 3 internal pages (Contact, Book,
+   Appointment) fetched and analysed.
+3. **Commercial signal** — online booking, contact/quote form, CTA,
+   click-to-call, mobile viewport, analytics, Meta Pixel, live chat.
+4. **Sales qualification** — `salesPriority` HIGH/MEDIUM, confidence above
+   threshold, `doNotPitch = false`, and a concrete deal type.
+
+Businesses that fail any filter are **silently dropped** — you are not
+charged for them and they never pollute your dataset.
+
+---
+
+## Niche-aware logic (this is the hard part)
+
+A plumber does not need online appointment booking. A dentist absolutely does.
+
+LeadGap applies different conversion rules per niche:
+
+- **Home services** (plumber, electrician, roofer, HVAC, cleaner, landscaper,
+  locksmith, pest control, handyman) → evaluated on **quote form, contact
+  path and click-to-call**, never on booking.
+- **Appointment businesses** (dentist, orthodontist, med spa, beauty salon,
+  hair salon, nail salon, lawyer, solicitor, accountant) → evaluated on
+  **online booking path**, which is the highest-converting opportunity for
+  these niches.
+- **Food & hospitality** (restaurant) → niche relevance is supported, while
+  commercial scoring currently uses the general website/conversion audit.
+  Dedicated menu/reservation scoring is not yet claimed by this release.
+
+This is why LeadGap costs more than a scraper — the niche logic took longer
+to build than the scraping.
+
+---
+
+## Website source values
+
+- `GOOGLE_MAPS` — the listing supplied the website.
+- `EXTERNAL_SEARCH` — LeadGap found a strong website match outside the
+  listing and audited it.
+- `NOT_FOUND` — no website linked in Maps, and the additional external search
+  did not find a sufficiently strong official-site match.
+
+`NOT_FOUND` is **not proof** that the business has no website. LeadGap treats
+it as a strong prospecting signal that deserves a final manual check before
+outreach.
+
+---
+
+## How to run it (3 steps)
+
+1. Pick a **country**.
+2. Enter a **city** and a **business type** — e.g. `Dentist`, `Plumber`,
+   `Beauty Salon`, `Lawyer`.
+3. Set how many businesses to discover and how many qualified leads you want.
+
+**Example input**
 
 ```json
 {
-  "businessType": "Plumber",
-  "city": "Austin",
-  "country": "US",
-  "maxBusinesses": 30,
-  "maxResults": 15,
+  "businessType": "Dentist",
+  "city": "Manchester",
+  "country": "UK",
+  "maxBusinesses": 40,
+  "maxResults": 20,
   "minOpportunityScore": 0,
   "websites": []
 }
 ```
 
-## Output
+Run the Actor → open the **Sales-ready leads** view → export or stream
+through the API.
 
-Qualified opportunities can include:
+---
 
-- business name and website;
-- phone and public email addresses;
-- rating and review count;
-- sales priority and opportunity score;
-- detected website or conversion gap;
-- recommended agency service;
-- qualification reason;
-- personalized pitch hook.
+## Manual audit mode
 
-## Commercial qualification
+Already have a prospect list? Put URLs into the optional `websites` input and
+LeadGap will audit exactly those sites — no discovery, no niche filtering.
 
-LeadGap does not return every discovered listing. It applies relevance, confidence, deduplication, and commercial-opportunity filters before writing a result to the dataset.
-
-A run can return fewer results than requested when there are not enough qualified prospects.
+---
 
 ## Pricing
 
-LeadGap uses pay-per-event pricing:
+**$0.03 per qualified opportunity** (launch price), plus Apify platform usage.
 
-- standard: **$0.03 per qualified opportunity**;
-- Apify Store discounts: **$0.028**, **$0.026**, or **$0.024** per opportunity;
-- Apify platform usage is included.
+- You are charged **only** when a qualified lead is written to the dataset.
+- Businesses discovered but rejected by the commercial filter are **free**.
+- `maxBusinesses` is how many businesses we look at.
+- `maxResults` is the maximum number of qualified opportunities returned.
+- A run can legitimately return fewer leads than you asked for — that is the
+  filter doing its job.
 
-Businesses rejected by the commercial filter do not generate the LeadGap qualified-opportunity charge.
+At the launch price, 20 qualified opportunities correspond to $0.60 in LeadGap
+qualified-opportunity fees, before any separate Apify platform usage.
 
-## Links
+---
 
-- [Run LeadGap AI on Apify](https://apify.com/w_met/leadgap-ai-local-business-opportunity-finder)
-- [Apify MCP server](https://mcp.apify.com)
-- [Apify MCP documentation](https://docs.apify.com/platform/integrations/mcp)
+## Use cases
 
-## Responsible use
+- **Web agencies** — find local businesses that need a website rebuild,
+  booking funnel or lead capture form.
+- **Local SEO teams** — prospect businesses with no analytics, no Meta Pixel
+  and weak conversion paths.
+- **Freelancers** — build a 30-lead pipeline in the time it takes to drink
+  one coffee.
+- **AI agents & automations** — feed structured, ranked leads into your own
+  outreach workflow via the Apify API, n8n, Make or Zapier.
 
-LeadGap audits publicly available business and website information. Automated classification is not perfect. Review high-value prospects before outreach and follow applicable privacy, marketing, and anti-spam rules.
+---
 
-## License
+## Integrations
 
-Documentation and examples in this repository are available under the [MIT License](LICENSE).
+LeadGap runs on Apify, so it plugs into:
+
+- **Apify API** — pull structured leads into any app.
+- **n8n / Make / Zapier** — schedule runs, push leads into your CRM.
+- **AI agents** — the output is designed to be consumed by an LLM: each
+  record already contains `whyThisLead`, `recommendedService` and
+  `pitchHook`, so your agent does not have to invent them.
+
+---
+
+## Accuracy and responsible outreach
+
+LeadGap audits publicly available business and website information.
+Websites, contact details and local categories change, and automated
+classification is never perfect. Review high-value prospects before
+contacting them — especially `NOT_FOUND` website cases and ambiguous local
+categories.
+
+Use the data in accordance with applicable privacy, marketing and anti-spam
+rules in your jurisdiction.
+
+---
+
+## Feedback
+
+Found a niche you want covered? Missing a signal that matters for your
+outreach? Message us through the Actor page — new niche rules ship weekly.
