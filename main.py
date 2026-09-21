@@ -359,4 +359,122 @@ def extract_contacts(
         html,
         re.I,
     ):
-        emails.add(email.lower
+        emails.add(email.lower())
+
+    return (
+        sorted(emails)[:10],
+        sorted(phones)[:10],
+    )
+
+
+def extract_social_links(html: str) -> dict:
+    soup = BeautifulSoup(html, "html.parser")
+    out = {"facebook": None, "instagram": None}
+    for a in soup.find_all("a", href=True):
+        href = (a.get("href") or "").strip()
+        host = clean_host(href) if href.startswith(("http://", "https://")) else ""
+        if not out["facebook"] and ("facebook.com" in host or "fb.com" in host):
+            out["facebook"] = href
+        if not out["instagram"] and "instagram.com" in host:
+            out["instagram"] = href
+    return out
+
+
+def has_contact_form(html: str) -> bool:
+    """Detect enquiry/contact forms without treating every <form> as a lead form."""
+    soup = BeautifulSoup(html, "html.parser")
+    contact_words = re.compile(
+        r"contact|enquir|message|quote|appointment|booking|callback|consult|"
+        # German
+        r"kontakt|anfrage|nachricht|termin|beratung|"
+        # French
+        r"rendez|message|demande|devis|"
+        # Spanish
+        r"contacto|cita|mensaje|consulta|presupuesto|"
+        # Italian
+        r"contatt|richiesta|preventivo|messaggio|consulenza|prenota|"
+        # Dutch
+        r"afspraak|bericht|aanvraag|offerte|"
+        # Polish
+        r"rezerwac|zapytanie|wiadomo|konsultacja|oferta",
+        re.I,
+    )
+    field_hint = re.compile(
+        r"(email|e-mail|phone|telephone|tel|mobile|message|"
+        r"enquir|comment|question|details|"
+        # German
+        r"telefon|nachricht|bericht|name|vorname|nachname|anliegen|"
+        # French
+        r"t[ée]l[ée]phone|courriel|message|nom|pr[ée]nom|demande|"
+        # Spanish
+        r"tel[ée]fono|correo|mensaje|nombre|apellido|consulta|"
+        # Italian
+        r"telefono|messaggio|posta|nome|cognome|richiesta|"
+        # Dutch
+        r"telefoon|bericht|naam|voornaam|achternaam|aanvraag|"
+        # Polish
+        r"telefon|wiadomo[śs][ćc]|imi[ęe]|nazwisko|nazwa|zapytanie)",
+        re.I,
+    )
+
+    for form in soup.find_all("form"):
+        action = (form.get("action") or "").strip()
+        identity = " ".join(
+            str(form.get(attr) or "") for attr in ("id", "class", "name")
+        )
+        form_text = form.get_text(" ", strip=True)
+
+        field_parts: list[str] = []
+        for field in form.find_all(["input", "textarea", "select"]):
+            field_parts.append(
+                " ".join(
+                    str(field.get(attr) or "")
+                    for attr in ("type", "name", "id", "placeholder", "aria-label")
+                )
+            )
+            label = field.find_parent("label")
+            if label:
+                field_parts.append(label.get_text(" ", strip=True))
+
+        for label in form.find_all("label"):
+            field_parts.append(label.get_text(" ", strip=True))
+
+        field_text = " ".join(field_parts)
+        haystack = f"{action} {identity} {form_text}"
+
+        has_message = bool(
+            re.search(
+                r"message|enquir|details|comment|question|nachricht|mensaje|"
+                r"messaggio|bericht|wiadomo",
+                field_text,
+                re.I,
+            )
+        )
+        has_contact_field = bool(field_hint.search(field_text))
+        has_contact_context = bool(contact_words.search(haystack))
+
+        if has_contact_context and (has_message or has_contact_field):
+            return True
+
+    embedded_form_hosts = (
+        "typeform.com", "hubspot.com", "hsforms.com",
+        "jotform.com", "forms.gle", "calendly.com",
+        "acuityscheduling.com", "setmore.com", "squareup.com/appointments",
+    )
+    for iframe in soup.find_all("iframe", src=True):
+        src = (iframe.get("src") or "").strip().lower()
+        if any(host in src for host in embedded_form_hosts):
+            return True
+
+    return False
+
+
+def analyse_signals(
+    combined_html: str,
+) -> dict:
+
+    low = combined_html.lower()
+
+    soup = BeautifulSoup(
+        combined_html,
+        "html.pa
