@@ -1,0 +1,343 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://catalogfix.ai/schemas/leadgap-lead.json",
+  "title": "LeadGap Lead — CatalogFix outreach",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "company_name",
+    "website",
+    "country",
+    "segment",
+    "subtype",
+    "decision_maker_name",
+    "decision_maker_role",
+    "linkedin_url",
+    "recent_evidence",
+    "evidence_type",
+    "evidence_url",
+    "evidence_date",
+    "evidence_date_precision",
+    "personalization_hook",
+    "hook_grounding",
+    "relevance_reason",
+    "catalog_workflow_signal",
+    "likely_pain",
+    "recommended_angle",
+    "recommended_offer",
+    "first_line",
+    "fit_score",
+    "evidence_score",
+    "priority_score",
+    "excluded_signals",
+    "language_ok",
+    "primary_discovery_source",
+    "source_urls"
+  ],
+  "properties": {
+    "company_name": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 120
+    },
+    "website": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://"
+    },
+    "country": {
+      "type": "string",
+      "pattern": "^[A-Z]{2}$"
+    },
+    "city": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 80
+    },
+    "employee_range": {
+      "type": "string",
+      "enum": [
+        "1-10",
+        "11-15",
+        "16-50",
+        "51-200",
+        "201-500",
+        "500+"
+      ]
+    },
+    "segment": {
+      "type": "string",
+      "enum": [
+        "shopify_commerce_agency",
+        "pim_mdm_integrator",
+        "pl_cee_de_smb_agency"
+      ]
+    },
+    "secondary_segments": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "shopify_commerce_agency",
+          "pim_mdm_integrator",
+          "pl_cee_de_smb_agency"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "subtype": {
+      "type": "string",
+      "maxLength": 80
+    },
+    "commerce_stack": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "Shopify",
+          "Shopify Plus",
+          "BigCommerce",
+          "headless",
+          "Magento",
+          "WooCommerce",
+          "commercetools",
+          "other"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "pim_stack": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "Akeneo",
+          "Pimcore",
+          "Plytix",
+          "Salsify",
+          "inRiver",
+          "custom",
+          "other"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "partner_badges": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 80
+      },
+      "uniqueItems": true
+    },
+    "decision_maker_name": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 120
+    },
+    "decision_maker_role": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 120
+    },
+    "linkedin_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://([a-z]{2,3}\\.)?linkedin\\.com/"
+    },
+    "work_email": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "email"
+    },
+    "email_confidence": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 1
+    },
+    "email_source": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "hunter",
+        "clearbit",
+        "dropcontact",
+        "neverbounce",
+        "other_verifier",
+        null
+      ]
+    },
+    "recent_evidence": {
+      "type": "string",
+      "minLength": 20,
+      "maxLength": 500
+    },
+    "evidence_type": {
+      "type": "string",
+      "enum": [
+        "case_study",
+        "job_posting",
+        "linkedin_post",
+        "press",
+        "partner_page",
+        "client_logo"
+      ]
+    },
+    "evidence_url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "evidence_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "evidence_date_precision": {
+      "type": "string",
+      "enum": [
+        "exact",
+        "approximate"
+      ]
+    },
+    "personalization_hook": {
+      "type": "string",
+      "minLength": 30,
+      "maxLength": 300
+    },
+    "hook_grounding": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "claim",
+          "grounded_in"
+        ],
+        "properties": {
+          "claim": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "grounded_in": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      }
+    },
+    "relevance_reason": {
+      "type": "string",
+      "minLength": 30,
+      "maxLength": 400
+    },
+    "catalog_workflow_signal": {
+      "type": "string",
+      "minLength": 20,
+      "maxLength": 300
+    },
+    "likely_pain": {
+      "type": "string",
+      "minLength": 20,
+      "maxLength": 300
+    },
+    "recommended_angle": {
+      "type": "string",
+      "enum": [
+        "shopify_onboarding",
+        "staging_before_pim",
+        "supplier_normalization",
+        "catalog_migration",
+        "ongoing_supplier_intake"
+      ]
+    },
+    "recommended_offer": {
+      "type": "string",
+      "enum": [
+        "actor_self_serve",
+        "managed_service",
+        "pilot_engagement"
+      ]
+    },
+    "first_line": {
+      "type": "string",
+      "minLength": 20,
+      "maxLength": 200
+    },
+    "fit_score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "evidence_score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "priority_score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "excluded_signals": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "maxLength": 120
+      },
+      "minItems": 0
+    },
+    "language_ok": {
+      "type": "string",
+      "enum": [
+        "en",
+        "pl",
+        "de",
+        "mixed"
+      ]
+    },
+    "primary_discovery_source": {
+      "type": "string",
+      "enum": [
+        "linkedin",
+        "clutch",
+        "shopify_partners",
+        "apify_store",
+        "google",
+        "referral",
+        "other"
+      ]
+    },
+    "source_urls": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uri"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "exclude_reason": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 200
+    },
+    "human_pass_notes": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 500
+    }
+  }
+}
