@@ -2146,7 +2146,7 @@ def _norm_niche_text(value: object) -> str:
 
 def _place_primary_category(place: dict) -> str:
     """Return the primary Maps category across current scraper field shapes."""
-    category = _place_primary_category(place) or place.get("categoryName")
+    category = place.get("category") or place.get("categoryName")
     if category:
         return str(category)
     categories = place.get("categories") or []
