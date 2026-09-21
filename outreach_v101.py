@@ -343,6 +343,13 @@ def evaluate_candidate(candidate: dict, run_timestamp_utc: str | datetime) -> tu
         record["evidence_date"] = parsed_date
         record["evidence_date_precision"] = precision
 
+    grounding_failed = False
+    if record.get("personalization_hook") or record.get("hook_grounding"):
+        grounding_failed = not hook_grounding_ok(
+            record.get("hook_grounding") or [],
+            record.get("evidence_content") or "",
+        )
+
     flags = {
         "pre_filter": signal_count < 2,
         "no_decision_maker": not decision_maker_ok,
@@ -350,8 +357,10 @@ def evaluate_candidate(candidate: dict, run_timestamp_utc: str | datetime) -> tu
         "low_fit_score": int(record.get("fit_score") or 0) < 75,
         "low_evidence_score": int(record.get("evidence_score") or 0) < 70,
         "language_mismatch": record.get("language_ok") != "en",
-        "manual_exclude": bool(record.get("manual_exclude")),
+        "manual_exclude": bool(record.get("manual_exclude")) or grounding_failed,
     }
+    if grounding_failed and not record.get("manual_exclude_reason"):
+        record["manual_exclude_reason"] = "hook grounding failed"
     stage = determine_exclusion_stage(flags)
 
     if stage is None:
@@ -414,6 +423,37 @@ def evaluate_batch(candidates: list[dict], *, run_id: str, run_timestamp_utc: st
             reserve.append(row)
 
     passed = dedupe_companies(passed_raw)
+
+    # Enforce deterministic first-line diversity. In this non-generative gate,
+    # a conflicting line is moved to reserve for regeneration rather than guessed.
+    diverse: list[dict] = []
+    accepted_lines: list[str] = []
+    for lead in sorted(passed, key=priority_sort_key):
+        line = str(lead.get("first_line") or "")
+        if line and not first_line_ok(line, accepted_lines):
+            reserve.append({
+                "company_name": lead.get("company_name") or "",
+                "website": lead.get("website") or "",
+                "country": lead.get("country"),
+                "segment": lead.get("segment") or "unknown",
+                "exclude_stage": "manual_exclude",
+                "exclude_reason": "first_line similarity > 0.60; regeneration required",
+                "fit_score": lead.get("fit_score"),
+                "evidence_score": lead.get("evidence_score"),
+                "recent_evidence": lead.get("recent_evidence"),
+                "evidence_type": lead.get("evidence_type"),
+                "evidence_url": lead.get("evidence_url"),
+                "evidence_date": lead.get("evidence_date"),
+                "decision_maker_name": lead.get("decision_maker_name"),
+                "decision_maker_role": lead.get("decision_maker_role"),
+                "source_urls": lead.get("source_urls") or [],
+            })
+            continue
+        if line:
+            accepted_lines.append(line)
+        diverse.append(lead)
+
+    passed = diverse
     passed.sort(key=priority_sort_key)
 
     manifest = build_manifest(
