@@ -15,7 +15,7 @@ class ApifyClientAsync: pass
 apify_client.ApifyClientAsync = ApifyClientAsync
 sys.modules["apify_client"] = apify_client
 
-from main import has_contact_form, PATTERNS, apply_niche_qualification, is_niche_match, find_external_business_website, _place_primary_category
+from main import has_contact_form, PATTERNS, apply_niche_qualification, is_niche_match, find_external_business_website, _place_primary_category, _website_identity_key, _blocked_discovery_domain
 import re
 import asyncio
 
@@ -77,6 +77,10 @@ assert is_niche_match(
 assert _place_primary_category(
     {"title": "Bright Smile Dental", "categoryName": "Dentist", "categories": ["Dentist"]}
 ) == "Dentist", "categoryName fallback failed"
+assert _website_identity_key("https://www.bupa.co.uk/dental/a/?utm_source=x") != _website_identity_key("https://www.bupa.co.uk/dental/b/"), "shared-domain location pages must remain distinct"
+assert _website_identity_key("https://example.com/?utm_source=x") == _website_identity_key("https://www.example.com/"), "root URLs should dedupe by host"
+assert _blocked_discovery_domain("https://dentist-london.com/practice/example/"), "dentist-london directory must be blocked"
+assert _blocked_discovery_domain("https://www.dental-art.co.uk/example"), "dental-art directory must be blocked"
 assert is_niche_match(
     {"title": "Smith & Jones Law", "category": "Lawyer"},
     "Legal",
