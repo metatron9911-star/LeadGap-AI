@@ -3119,7 +3119,7 @@ async def main() -> None:
                         "PLACE_INPUT %s",
                         json.dumps({
                             "title": discovered_place.get("title"),
-                            "category": discovered__place_primary_category(place),
+                            "category": _place_primary_category(discovered_place),
                             "placeId": discovered_place.get("placeId"),
                             "website": discovered_place.get("website"),
                         }, ensure_ascii=False, default=str),
