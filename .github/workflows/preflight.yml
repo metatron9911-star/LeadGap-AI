@@ -1,0 +1,23 @@
+name: LeadGap preflight
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Compile
+        run: python -m py_compile main.py outreach_v101.py smoke_test.py preflight_v101_test.py
+      - name: Existing smoke tests
+        run: python smoke_test.py
+      - name: Outreach v1.0.1 preflight
+        run: python preflight_v101_test.py
