@@ -477,4 +477,198 @@ def analyse_signals(
 
     soup = BeautifulSoup(
         combined_html,
-        "html.pa
+        "html.parser",
+    )
+
+    visible_text = soup.get_text(
+        " ",
+        strip=True,
+    )
+
+    title_present = bool(
+        soup.title
+        and soup.title.get_text(strip=True)
+    )
+
+    meta_description = bool(
+        soup.find(
+            "meta",
+            attrs={
+                "name": re.compile(
+                    "^description$",
+                    re.I,
+                )
+            },
+        )
+    )
+
+    analytics = bool(
+        re.search(
+            PATTERNS["ga4"],
+            combined_html,
+            re.I,
+        )
+        or re.search(
+            PATTERNS["gtm"],
+            combined_html,
+            re.I,
+        )
+    )
+
+    return {
+        "https": False,
+
+        "contact_form": has_contact_form(combined_html),
+
+        "click_to_call": (
+            'href="tel:' in low
+            or "href='tel:" in low
+        ),
+
+        "booking": bool(
+            re.search(
+                PATTERNS["booking"],
+                visible_text,
+                re.I,
+            )
+        ),
+
+        "live_chat": bool(
+            re.search(
+                PATTERNS["live_chat"],
+                combined_html,
+                re.I,
+            )
+        ),
+
+        "ga4": bool(
+            re.search(
+                PATTERNS["ga4"],
+                combined_html,
+                re.I,
+            )
+        ),
+
+        "gtm": bool(
+            re.search(
+                PATTERNS["gtm"],
+                combined_html,
+                re.I,
+            )
+        ),
+
+        "analytics": analytics,
+
+        "meta_pixel": bool(
+            re.search(
+                PATTERNS["meta_pixel"],
+                combined_html,
+                re.I,
+            )
+        ),
+
+        "cta": bool(
+            re.search(
+                PATTERNS["cta"],
+                visible_text,
+                re.I,
+            )
+        ),
+
+        "mobile_viewport": bool(
+            soup.find(
+                "meta",
+                attrs={
+                    "name": re.compile(
+                        "^viewport$",
+                        re.I,
+                    )
+                },
+            )
+        ),
+
+        "title": title_present,
+        "meta_description": meta_description,
+    }
+
+
+def build_opportunity(
+    signals: dict,
+    pages_scanned: int,
+) -> dict:
+
+    opportunities = []
+
+    def add(
+        key: str,
+        missing: bool,
+        weight: int,
+        gap: str,
+        opportunity: str,
+        service: str,
+        revenue_impact: str,
+    ):
+
+        if missing:
+            opportunities.append(
+                {
+                    "key": key,
+                    "weight": weight,
+                    "gap": gap,
+                    "opportunity": opportunity,
+                    "service": service,
+                    "revenueImpact": revenue_impact,
+                }
+            )
+
+    add(
+        "https",
+        not signals["https"],
+        15,
+        "HTTPS not confirmed",
+        "Website trust and technical reliability",
+        "Website security / technical repair",
+        "HIGH",
+    )
+
+    add(
+        "booking",
+        not signals["booking"],
+        20,
+        (
+            "No clear online booking path detected "
+            f"across {pages_scanned} scanned page(s)"
+        ),
+        "Booking conversion",
+        "Online booking funnel implementation",
+        "HIGH",
+    )
+
+    add(
+        "cta",
+        not signals["cta"],
+        15,
+        (
+            "No strong conversion CTA detected "
+            f"across {pages_scanned} scanned page(s)"
+        ),
+        "Conversion CTA optimization",
+        "Conversion-focused website optimization",
+        "HIGH",
+    )
+
+    add(
+        "contact_form",
+        not signals["contact_form"],
+        12,
+        (
+            "No contact form detected "
+            f"across {pages_scanned} scanned page(s)"
+        ),
+        "Lead capture",
+        "Lead capture form implementation",
+        "HIGH",
+    )
+
+    add(
+        "click_to_call",
