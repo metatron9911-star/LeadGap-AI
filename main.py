@@ -171,6 +171,21 @@ def clean_host(url: str) -> str:
     return urlparse(url).netloc.lower().replace("www.", "")
 
 
+def _website_identity_key(url: str) -> str:
+    """Deduplicate exact business pages, not every location on a shared domain."""
+    normalized = normalize_url(url)
+    if not normalized:
+        return ""
+
+    parsed = urlparse(normalized)
+    host = (parsed.netloc or "").lower().replace("www.", "")
+    path = re.sub(r"/+", "/", parsed.path or "/").rstrip("/")
+
+    # Root/homepage URLs still dedupe at host level. Location/profile pages on
+    # shared corporate domains remain distinct by path.
+    return host if not path else f"{host}{path}"
+
+
 def detect_cms(html: str) -> str | None:
     low = html.lower()
 
@@ -1180,6 +1195,8 @@ DISCOVERY_BLOCKED_DOMAINS = (
     "opendi.co.uk",
     "bizseek.co.uk",
     "mapquest.com",
+    "dental-art.co.uk",
+    "dentist-london.com",
 )
 
 
@@ -3202,25 +3219,25 @@ async def main() -> None:
 
                         if external_website:
 
-                            domain = clean_host(
+                            website_key = _website_identity_key(
                                 external_website
                             )
 
                             if (
-                                domain
-                                and domain in seen_websites
+                                website_key
+                                and website_key in seen_websites
                             ):
                                 log_place_diagnostic(
                                     place,
                                     niche_match=True,
                                     skip_reason="SEEN_WEBSITE",
-                                    website=domain,
+                                    website=website_key,
                                 )
                                 continue
 
-                            if domain:
+                            if website_key:
                                 seen_websites.add(
-                                    domain
+                                    website_key
                                 )
 
                             Actor.log.info(
@@ -3274,27 +3291,27 @@ async def main() -> None:
                         )
 
 
-                        domain = clean_host(
+                        website_key = _website_identity_key(
                             normalized
                         )
 
 
                         if (
-                            domain
-                            and domain in seen_websites
+                            website_key
+                            and website_key in seen_websites
                         ):
                             log_place_diagnostic(
                                 place,
                                 niche_match=True,
                                 skip_reason="SEEN_WEBSITE",
-                                website=domain,
+                                website=website_key,
                             )
                             continue
 
 
-                        if domain:
+                        if website_key:
                             seen_websites.add(
-                                domain
+                                website_key
                             )
 
 
