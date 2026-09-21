@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://catalogfix.ai/schemas/leadgap-reserve.json",
+  "title": "LeadGap Reserve Lead",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "company_name",
+    "website",
+    "segment",
+    "exclude_reason",
+    "exclude_stage"
+  ],
+  "properties": {
+    "company_name": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 120
+    },
+    "website": {
+      "type": "string",
+      "format": "uri"
+    },
+    "country": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[A-Z]{2}$"
+    },
+    "segment": {
+      "type": "string",
+      "enum": [
+        "shopify_commerce_agency",
+        "pim_mdm_integrator",
+        "pl_cee_de_smb_agency",
+        "unknown"
+      ]
+    },
+    "exclude_stage": {
+      "type": "string",
+      "enum": [
+        "pre_filter",
+        "no_decision_maker",
+        "no_recent_evidence",
+        "low_fit_score",
+        "low_evidence_score",
+        "language_mismatch",
+        "manual_exclude"
+      ]
+    },
+    "exclude_reason": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 300
+    },
+    "fit_score": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 100
+    },
+    "evidence_score": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 100
+    },
+    "recent_evidence": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 500
+    },
+    "evidence_type": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "case_study",
+        "job_posting",
+        "linkedin_post",
+        "press",
+        "partner_page",
+        "client_logo",
+        null
+      ]
+    },
+    "evidence_url": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uri"
+    },
+    "evidence_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "decision_maker_name": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 120
+    },
+    "decision_maker_role": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 120
+    },
+    "source_urls": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uri"
+      },
+      "minItems": 0
+    }
+  }
+}
