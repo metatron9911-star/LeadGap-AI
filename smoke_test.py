@@ -81,6 +81,7 @@ assert _website_identity_key("https://www.bupa.co.uk/dental/a/?utm_source=x") !=
 assert _website_identity_key("https://example.com/?utm_source=x") == _website_identity_key("https://www.example.com/"), "root URLs should dedupe by host"
 assert _blocked_discovery_domain("https://dentist-london.com/practice/example/"), "dentist-london directory must be blocked"
 assert _blocked_discovery_domain("https://www.dental-art.co.uk/example"), "dental-art directory must be blocked"
+assert _blocked_discovery_domain("https://dentistlocator.co.uk/dentists/london/example/"), "dentistlocator directory must be blocked"
 assert is_niche_match(
     {"title": "Smith & Jones Law", "category": "Lawyer"},
     "Legal",
@@ -93,6 +94,10 @@ assert not is_niche_match(
     {"title": "Screwfix Bristol", "category": "Hardware store"},
     "Plumber",
 ), "retail guard failed"
+assert is_niche_match(
+    {"title": "Selsdon Smiles Dental Practice", "category": "Dentist", "categories": ["Dentist", "Dental clinic", "Dental supply store"]},
+    "Dentist",
+), "secondary retail category must not reject a genuine dentist"
 
 # Common service-form aliases must resolve to canonical niche rules.
 assert is_niche_match(
