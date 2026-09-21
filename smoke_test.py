@@ -15,7 +15,7 @@ class ApifyClientAsync: pass
 apify_client.ApifyClientAsync = ApifyClientAsync
 sys.modules["apify_client"] = apify_client
 
-from main import has_contact_form, PATTERNS, apply_niche_qualification, is_niche_match, find_external_business_website
+from main import has_contact_form, PATTERNS, apply_niche_qualification, is_niche_match, find_external_business_website, _place_primary_category
 import re
 import asyncio
 
@@ -74,6 +74,9 @@ assert is_niche_match(
     {"title": "Bright Smile Dental", "category": "Dentist"},
     "Dental",
 ), "alias Dental failed"
+assert _place_primary_category(
+    {"title": "Bright Smile Dental", "categoryName": "Dentist", "categories": ["Dentist"]}
+) == "Dentist", "categoryName fallback failed"
 assert is_niche_match(
     {"title": "Smith & Jones Law", "category": "Lawyer"},
     "Legal",
@@ -183,6 +186,20 @@ async def _test_external_search_statuses():
         "Manchester",
     )
     assert out_weak["status"] == "NOT_FOUND", out_weak
+    directory_result_html = """
+    <div class="result">
+      <a class="result__a" href="https://dental-directory.example/riverside-dental-centre">
+        Riverside Dental Centre
+      </a>
+      <div class="result__snippet">Riverside Dental Centre in Manchester - local dentist profile</div>
+    </div>
+    """
+    out_directory = await find_external_business_website(
+        _FakeClient(_FakeResponse(200, directory_result_html)),
+        {"title": "Riverside Dental Centre", "address": "1 River St, Manchester M1 1AA"},
+        "Manchester",
+    )
+    assert out_directory["status"] == "NOT_FOUND", out_directory
 
 asyncio.run(_test_external_search_statuses())
 
