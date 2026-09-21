@@ -327,3 +327,101 @@ def build_manifest(
         },
         "notes": "",
     }
+
+
+def evaluate_candidate(candidate: dict, run_timestamp_utc: str | datetime) -> tuple[str, dict]:
+    """Evaluate one research candidate deterministically into main or reserve."""
+    record = candidate.copy()
+    signal_count = int(record.get("signal_count") or 0)
+    decision_maker_ok = bool(record.get("decision_maker_name") and record.get("decision_maker_role"))
+
+    parsed_date, precision = parse_evidence_date(
+        record.get("evidence_date_raw"),
+        run_timestamp_utc,
+    )
+    if parsed_date:
+        record["evidence_date"] = parsed_date
+        record["evidence_date_precision"] = precision
+
+    flags = {
+        "pre_filter": signal_count < 2,
+        "no_decision_maker": not decision_maker_ok,
+        "no_recent_evidence": not evidence_is_wave1_eligible(parsed_date, run_timestamp_utc),
+        "low_fit_score": int(record.get("fit_score") or 0) < 75,
+        "low_evidence_score": int(record.get("evidence_score") or 0) < 70,
+        "language_mismatch": record.get("language_ok") != "en",
+        "manual_exclude": bool(record.get("manual_exclude")),
+    }
+    stage = determine_exclusion_stage(flags)
+
+    if stage is None:
+        email, conf, channel = apply_email_policy(
+            record.get("work_email"),
+            record.get("email_source"),
+            record.get("email_confidence"),
+        )
+        record["work_email"] = email
+        record["email_confidence"] = conf
+        record["outreach_channel"] = channel
+        record["priority_score"] = priority_score(
+            int(record.get("fit_score") or 0),
+            int(record.get("evidence_score") or 0),
+        )
+        return "passed", record
+
+    reserve = {
+        "company_name": record.get("company_name") or "",
+        "website": record.get("website") or "",
+        "country": record.get("country"),
+        "segment": record.get("segment") or "unknown",
+        "exclude_stage": stage,
+        "exclude_reason": record.get("exclude_reason")
+        or {
+            "pre_filter": "fewer than two qualifying ICP signals",
+            "no_decision_maker": "no qualifying decision-maker verified",
+            "no_recent_evidence": "no defensible evidence date inside the 90-day UTC window",
+            "low_fit_score": "fit_score below 75",
+            "low_evidence_score": "evidence_score below 70",
+            "language_mismatch": "first-wave language is not English",
+            "manual_exclude": record.get("manual_exclude_reason") or "manual exclusion",
+        }[stage],
+        "fit_score": record.get("fit_score"),
+        "evidence_score": record.get("evidence_score"),
+        "recent_evidence": record.get("recent_evidence"),
+        "evidence_type": record.get("evidence_type"),
+        "evidence_url": record.get("evidence_url"),
+        "evidence_date": parsed_date,
+        "decision_maker_name": record.get("decision_maker_name"),
+        "decision_maker_role": record.get("decision_maker_role"),
+        "source_urls": record.get("source_urls") or [],
+    }
+    return "reserve", reserve
+
+
+def evaluate_batch(candidates: list[dict], *, run_id: str, run_timestamp_utc: str | datetime) -> tuple[list[dict], list[dict], dict]:
+    """Evaluate, dedupe and manifest a research batch."""
+    passed_raw: list[dict] = []
+    reserve: list[dict] = []
+    passed_pre_filter = 0
+
+    for candidate in candidates:
+        if int(candidate.get("signal_count") or 0) >= 2:
+            passed_pre_filter += 1
+        bucket, row = evaluate_candidate(candidate, run_timestamp_utc)
+        if bucket == "passed":
+            passed_raw.append(row)
+        else:
+            reserve.append(row)
+
+    passed = dedupe_companies(passed_raw)
+    passed.sort(key=priority_sort_key)
+
+    manifest = build_manifest(
+        run_id=run_id,
+        run_timestamp_utc=run_timestamp_utc,
+        passed_leads=passed,
+        reserve_leads=reserve,
+        candidates_raw=len(candidates),
+        passed_pre_filter=passed_pre_filter,
+    )
+    return passed, reserve, manifest
