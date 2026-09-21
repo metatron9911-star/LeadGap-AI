@@ -1,0 +1,4 @@
+LeadGap AI – Local Business Opportunity Finder
+Project release: 0.0.35d-observe
+Actor definition version: 0.35
+Date: 2026-09-21
