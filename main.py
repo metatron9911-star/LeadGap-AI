@@ -1197,6 +1197,7 @@ DISCOVERY_BLOCKED_DOMAINS = (
     "mapquest.com",
     "dental-art.co.uk",
     "dentist-london.com",
+    "dentistlocator.co.uk",
 )
 
 
@@ -2452,7 +2453,11 @@ def is_niche_match(place: dict, business_type: str) -> bool:
         "grocer",
     )
     if not any(term in niche for term in retail_niches):
-        if any(term in haystack for term in obvious_retail):
+        # Use title + primary Maps category for the hard retail rejection.
+        # Secondary categories can contain incidental labels such as a shop/store
+        # even when the business itself is clearly a dentist or other requested trade.
+        retail_haystack = f"{title_haystack} {category}".strip()
+        if any(term in retail_haystack for term in obvious_retail):
             return False
 
     # -- Pick the most specific matching rule ------------------------- #
