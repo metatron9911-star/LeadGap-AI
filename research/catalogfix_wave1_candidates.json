@@ -1,0 +1,562 @@
+[
+  {
+    "company_name": "InteractOne",
+    "website": "https://interactone.com/",
+    "country": "US",
+    "segment": "shopify_commerce_agency",
+    "subtype": "Shopify/Adobe Commerce agency",
+    "decision_maker_name": "Ryan Janis",
+    "decision_maker_role": "Director of Development",
+    "linkedin_url": "https://www.linkedin.com/in/rynosolutions",
+    "recent_evidence": "Short Line Parts Shopify migration case study published July 6, 2026; migration from Magento to Shopify with measurable post-launch results.",
+    "evidence_type": "case_study",
+    "evidence_url": "https://interactone.com/industry/industrial-b2b-supply/",
+    "evidence_date_raw": "2026-07-06",
+    "personalization_hook": "Saw your July Short Line Parts migration work — moving a parts-heavy business to Shopify is exactly where supplier/catalog normalization can become a hidden time sink.",
+    "hook_grounding": [
+      {
+        "claim": "Short Line Parts",
+        "grounded_in": "https://interactone.com/industry/industrial-b2b-supply/"
+      },
+      {
+        "claim": "Shopify",
+        "grounded_in": "https://interactone.com/industry/industrial-b2b-supply/"
+      }
+    ],
+    "evidence_content": "Short Line Parts Shopify Migration Case Study. Jul 6, 2026. Facing a costly mandatory Magento upgrade, Short Line Parts chose to migrate to Shopify with InteractOne instead.",
+    "relevance_reason": "InteractOne handles ecommerce migrations and catalog-heavy industrial clients, making supplier/product-data normalization relevant upstream of implementation.",
+    "catalog_workflow_signal": "Magento-to-Shopify migration for an industrial parts supplier with brand-specific fitment and product complexity.",
+    "likely_pain": "Manual cleanup and normalization of supplier/product data before Shopify migration and integration work.",
+    "recommended_angle": "catalog_migration",
+    "recommended_offer": "pilot_engagement",
+    "first_line": "Your Short Line Parts migration caught my eye because parts catalogs tend to hide a lot of data-cleanup work before the Shopify build even starts.",
+    "fit_score": 86,
+    "evidence_score": 80,
+    "language_ok": "en",
+    "primary_discovery_source": "google",
+    "source_urls": [
+      "https://interactone.com/industry/industrial-b2b-supply/",
+      "https://interactone.com/about-us/",
+      "https://www.linkedin.com/in/rynosolutions"
+    ],
+    "signal_count": 3,
+    "excluded_signals": [],
+    "work_email": null,
+    "email_confidence": null,
+    "email_source": null,
+    "exclude_reason": null,
+    "human_pass_notes": null
+  },
+  {
+    "company_name": "Graftstudio",
+    "website": "https://graftstudio.com/",
+    "country": "GB",
+    "segment": "shopify_commerce_agency",
+    "subtype": "solo Shopify Plus development studio",
+    "decision_maker_name": "Richard Forbes-Simpson",
+    "decision_maker_role": "Founder",
+    "linkedin_url": "https://uk.linkedin.com/in/richard-forbes-simpson-26b98b9",
+    "recent_evidence": "Published September 11, 2026 article describing how Graftstudio handled Shopify Plus architecture and implementation for Cult Gaia.",
+    "evidence_type": "case_study",
+    "evidence_url": "https://graftstudio.com/insights/how-a-design-agency-and-a-shopify-plus-developer-split-a-build",
+    "evidence_date_raw": "2026-09-11",
+    "personalization_hook": "Your Cult Gaia write-up on splitting design from Shopify Plus implementation stood out — that handoff is exactly where clean, defensible product data matters.",
+    "hook_grounding": [
+      {
+        "claim": "Cult Gaia",
+        "grounded_in": "https://graftstudio.com/insights/how-a-design-agency-and-a-shopify-plus-developer-split-a-build"
+      },
+      {
+        "claim": "Shopify Plus",
+        "grounded_in": "https://graftstudio.com/insights/how-a-design-agency-and-a-shopify-plus-developer-split-a-build"
+      }
+    ],
+    "evidence_content": "How a design agency and a Shopify Plus developer split a build. Cult Gaia's Shopify Plus store was built by two studios: ToyFight on design and front end, Graftstudio on Shopify Plus architecture and implementation. Published 11 Sep 2026.",
+    "relevance_reason": "Graftstudio directly owns Shopify Plus implementation and migration work, where catalog cleanup can otherwise consume senior developer time.",
+    "catalog_workflow_signal": "Shopify Plus architecture, implementation, product/collection setup and store migration services.",
+    "likely_pain": "Senior developer time spent cleaning product data and resolving ambiguous catalog fields before import.",
+    "recommended_angle": "shopify_onboarding",
+    "recommended_offer": "actor_self_serve",
+    "first_line": "Your Cult Gaia post was unusually specific about the implementation handoff, which is where messy product data can quietly eat senior development time.",
+    "fit_score": 85,
+    "evidence_score": 100,
+    "language_ok": "en",
+    "primary_discovery_source": "google",
+    "source_urls": [
+      "https://graftstudio.com/insights/how-a-design-agency-and-a-shopify-plus-developer-split-a-build",
+      "https://graftstudio.com/about",
+      "https://uk.linkedin.com/in/richard-forbes-simpson-26b98b9"
+    ],
+    "signal_count": 3,
+    "excluded_signals": [],
+    "work_email": null,
+    "email_confidence": null,
+    "email_source": null,
+    "exclude_reason": null,
+    "human_pass_notes": null
+  },
+  {
+    "company_name": "Ruby Digital Agency",
+    "website": "https://rubydigitalagency.com/",
+    "country": "US",
+    "segment": "shopify_commerce_agency",
+    "subtype": "Shopify migration agency",
+    "decision_maker_name": "Lance Allison",
+    "decision_maker_role": "Founder",
+    "linkedin_url": "https://www.linkedin.com/in/lance-allison",
+    "recent_evidence": "Ruby Digital Agency published a recent BigCommerce-to-Shopify Plus migration breakdown using an AI agent with human verification and source-value checks.",
+    "evidence_type": "linkedin_post",
+    "evidence_url": "https://www.linkedin.com/in/lance-allison",
+    "evidence_date_raw": "1 month ago",
+    "personalization_hook": "Your recent BigCommerce → Shopify Plus migration post was very close to our philosophy: automate the repetitive work, but verify every value against source data.",
+    "hook_grounding": [
+      {
+        "claim": "BigCommerce",
+        "grounded_in": "https://www.linkedin.com/in/lance-allison"
+      },
+      {
+        "claim": "Shopify Plus",
+        "grounded_in": "https://www.linkedin.com/in/lance-allison"
+      },
+      {
+        "claim": "verified against the source data",
+        "grounded_in": "https://www.linkedin.com/in/lance-allison"
+      }
+    ],
+    "evidence_content": "On a recent BigCommerce → Shopify Plus project, Ruby Digital Agency handed the bulk of the migration to an AI agent, with our team on strategy and verification. Every migrated value verified against the source data, down to the cent.",
+    "relevance_reason": "Ruby is already automating ecommerce migration while keeping human verification, strongly matching CatalogFix's Ready/Review and no-invented-fields model.",
+    "catalog_workflow_signal": "Live Shopify Plus migration work involving catalog dedupe, source-data verification and import safety.",
+    "likely_pain": "Time spent validating messy source exports and catching catalog anomalies before Shopify import.",
+    "recommended_angle": "catalog_migration",
+    "recommended_offer": "pilot_engagement",
+    "first_line": "The part of your AI-migration write-up that mattered most was not the automation — it was verifying every migrated value against the source.",
+    "fit_score": 93,
+    "evidence_score": 90,
+    "language_ok": "en",
+    "primary_discovery_source": "linkedin",
+    "source_urls": [
+      "https://www.linkedin.com/in/lance-allison",
+      "https://rubydigitalagency.com/about-us/"
+    ],
+    "signal_count": 4,
+    "excluded_signals": [],
+    "work_email": null,
+    "email_confidence": null,
+    "email_source": null,
+    "exclude_reason": null,
+    "human_pass_notes": null
+  },
+  {
+    "company_name": "The Commerce Team Global",
+    "website": "https://www.thecommerceteam.com/",
+    "country": "GB",
+    "segment": "shopify_commerce_agency",
+    "subtype": "enterprise commerce implementation agency",
+    "decision_maker_name": "Paul Sanderson",
+    "decision_maker_role": "CEO",
+    "linkedin_url": "https://uk.linkedin.com/in/paul-sanderson-9b704b6",
+    "recent_evidence": "Paul Sanderson published a July 24, 2026 commerce-platform article discussing Shopify Plus and enterprise platform selection.",
+    "evidence_type": "linkedin_post",
+    "evidence_url": "https://uk.linkedin.com/in/paul-sanderson-9b704b6",
+    "evidence_date_raw": "2026-07-24",
+    "personalization_hook": "Your July platform-map series made the operational-fit point well — CatalogFix is aimed at one upstream operational bottleneck: normalizing supplier catalogs before commerce implementation.",
+    "hook_grounding": [
+      {
+        "claim": "Shopify Plus",
+        "grounded_in": "https://uk.linkedin.com/in/paul-sanderson-9b704b6"
+      }
+    ],
+    "evidence_content": "Jul 24, 2026. The New Commerce Map: Why the platform question finally has better answers. Discussion includes Shopify Plus, Salesforce Commerce Cloud, SCAYLE and enterprise commerce platform fit.",
+    "relevance_reason": "TCTG implements enterprise commerce systems and integrations, but this evidence is broad platform thought leadership rather than a concrete supplier-data pain signal.",
+    "catalog_workflow_signal": "Enterprise commerce implementations, systems integrations and Shopify platform work.",
+    "likely_pain": "Potential upstream catalog normalization effort, but current evidence is not specific enough to establish active pain.",
+    "recommended_angle": "shopify_onboarding",
+    "recommended_offer": "pilot_engagement",
+    "first_line": "Your platform-map series argues for operational fit over architecture alone; I was curious whether supplier-data cleanup is one of the upstream costs you see repeatedly.",
+    "fit_score": 88,
+    "evidence_score": 65,
+    "language_ok": "en",
+    "primary_discovery_source": "linkedin",
+    "source_urls": [
+      "https://uk.linkedin.com/in/paul-sanderson-9b704b6",
+      "https://www.thecommerceteam.com/who-we-are"
+    ],
+    "signal_count": 3,
+    "excluded_signals": [],
+    "work_email": null,
+    "email_confidence": null,
+    "email_source": null,
+    "exclude_reason": null,
+    "human_pass_notes": null
+  },
+  {
+    "company_name": "asioso",
+    "website": "https://www.asioso.com/",
+    "country": "DE",
+    "segment": "pim_mdm_integrator",
+    "subtype": "Pimcore/PIM ecommerce consultancy",
+    "decision_maker_name": "Thilo Machotta",
+    "decision_maker_role": "Senior Project Manager & Consultant PIM/Ecommerce",
+    "linkedin_url": "https://de.linkedin.com/in/thilo-machotta-04119932",
+    "recent_evidence": "Pimcore promoted a September 17, 2026 webinar with asioso on fragmented data, supplier obligations and Digital Product Passport readiness.",
+    "evidence_type": "linkedin_post",
+    "evidence_url": "https://de.linkedin.com/company/pimcore/",
+    "evidence_date_raw": "2026-09-17",
+    "personalization_hook": "The Pimcore/asioso DPP session is unusually close to our problem space — fragmented product data and supplier inputs are exactly where CatalogFix sits before PIM load.",
+    "hook_grounding": [
+      {
+        "claim": "fragmentierte Daten",
+        "grounded_in": "https://de.linkedin.com/company/pimcore/"
+      },
+      {
+        "claim": "Lieferanten",
+        "grounded_in": "https://de.linkedin.com/company/pimcore/"
+      },
+      {
+        "claim": "asioso",
+        "grounded_in": "https://de.linkedin.com/company/pimcore/"
+      }
+    ],
+    "evidence_content": "Im gemeinsamen Webinar mit asioso: Wie du fragmentierte Daten zusammenführst und interoperabel machst; Wie du Lieferanten in die Pflicht nimmst. Mit dabei Thilo Machotta, Senior Project Manager & Consultant PIM/Ecommerce. Donnerstag, 17.09.2026.",
+    "relevance_reason": "asioso is publicly working on fragmented product data and supplier inputs in a Pimcore context, directly matching CatalogFix's staging-before-PIM angle.",
+    "catalog_workflow_signal": "PIM/ecommerce consulting around fragmented data consolidation and supplier data readiness.",
+    "likely_pain": "Manual normalization of supplier-provided product data before it can be loaded safely into PIM workflows.",
+    "recommended_angle": "staging_before_pim",
+    "recommended_offer": "pilot_engagement",
+    "first_line": "The DPP webinar with Pimcore caught my attention because you explicitly called out fragmented data and supplier inputs before they become a PIM problem.",
+    "fit_score": 93,
+    "evidence_score": 95,
+    "language_ok": "en",
+    "primary_discovery_source": "linkedin",
+    "source_urls": [
+      "https://de.linkedin.com/company/pimcore/",
+      "https://de.linkedin.com/in/thilo-machotta-04119932"
+    ],
+    "signal_count": 4,
+    "excluded_signals": [],
+    "work_email": null,
+    "email_confidence": null,
+    "email_source": null,
+    "exclude_reason": null,
+    "human_pass_notes": null
+  },
+  {
+    "company_name": "7thSENSE",
+    "website": "https://www.7thsense.de/",
+    "country": "DE",
+    "segment": "pim_mdm_integrator",
+    "subtype": "ecommerce agency with Pimcore/Akeneo integrations",
+    "decision_maker_name": null,
+    "decision_maker_role": null,
+    "linkedin_url": "https://www.linkedin.com/company/7thsense-gmbh/",
+    "recent_evidence": "On July 21, 2026, 7thSENSE published a case study about ORTOVOX using Shopware 6 with Pimcore as central PIM and data migration.",
+    "evidence_type": "case_study",
+    "evidence_url": "https://www.7thsense.de/news/artikel/neue-case-study-ortovox-setzt-auf-shopware-6.html",
+    "evidence_date_raw": "2026-07-21",
+    "personalization_hook": "Your ORTOVOX case ties commerce migration directly to Pimcore-backed product data, which is the staging layer CatalogFix is designed to feed.",
+    "hook_grounding": [
+      {
+        "claim": "ORTOVOX",
+        "grounded_in": "https://www.7thsense.de/news/artikel/neue-case-study-ortovox-setzt-auf-shopware-6.html"
+      },
+      {
+        "claim": "Pimcore",
+        "grounded_in": "https://www.7thsense.de/news/artikel/neue-case-study-ortovox-setzt-auf-shopware-6.html"
+      }
+    ],
+    "evidence_content": "21.07.2026 Neue Case Study: ORTOVOX setzt auf Shopware 6. Anbindung von Pimcore als zentralem PIM-System. Datenmigration und Contentpflege.",
+    "relevance_reason": "7thSENSE integrates Pimcore with commerce platforms and performs data migration, making CatalogFix relevant upstream.",
+    "catalog_workflow_signal": "Pimcore central PIM integration plus ecommerce data migration.",
+    "likely_pain": "Supplier/product data cleanup before migration into Pimcore and Shopware.",
+    "recommended_angle": "staging_before_pim",
+    "recommended_offer": "pilot_engagement",
+    "first_line": "The ORTOVOX case is a clean example of where product-data staging sits between migration work and Pimcore.",
+    "fit_score": 95,
+    "evidence_score": 80,
+    "language_ok": "en",
+    "primary_discovery_source": "google",
+    "source_urls": [
+      "https://www.7thsense.de/news/artikel/neue-case-study-ortovox-setzt-auf-shopware-6.html",
+      "https://www.7thsense.de/agentur/7thsense.html"
+    ],
+    "signal_count": 4,
+    "excluded_signals": [],
+    "work_email": null,
+    "email_confidence": null,
+    "email_source": null,
+    "exclude_reason": null,
+    "human_pass_notes": null
+  },
+  {
+    "company_name": "e-point",
+    "website": "https://www.e-point.com/",
+    "country": "PL",
+    "segment": "pim_mdm_integrator",
+    "subtype": "Pimcore solution partner",
+    "decision_maker_name": null,
+    "decision_maker_role": null,
+    "linkedin_url": "https://www.linkedin.com/company/e-point-sa/",
+    "recent_evidence": "Pimcore partner profile confirms e-point provides PIM design, implementation and maintenance, but the page exposes no qualifying publication date.",
+    "evidence_type": "partner_page",
+    "evidence_url": "https://pimcore.com/en/partners/find-a-solution-partner/e-point",
+    "evidence_date_raw": null,
+    "personalization_hook": "Your Pimcore partner profile focuses on multilingual product-data management and distribution, which is directly downstream of supplier-catalog cleanup.",
+    "hook_grounding": [
+      {
+        "claim": "product data",
+        "grounded_in": "https://pimcore.com/en/partners/find-a-solution-partner/e-point"
+      }
+    ],
+    "evidence_content": "e-point offers design, implementation, and maintenance services for PIM, which helps businesses efficiently manage product data in multiple languages.",
+    "relevance_reason": "Strong PIM fit, but no recent dated evidence and no verified first-wave decision maker yet.",
+    "catalog_workflow_signal": "PIM implementation and product-data distribution work.",
+    "likely_pain": "Normalization of incoming supplier data before PIM ingestion.",
+    "recommended_angle": "staging_before_pim",
+    "recommended_offer": "pilot_engagement",
+    "first_line": "Your Pimcore profile makes product-data distribution central to the work; the missing piece we focus on is what happens before that data is PIM-ready.",
+    "fit_score": 90,
+    "evidence_score": 55,
+    "language_ok": "en",
+    "primary_discovery_source": "google",
+    "source_urls": [
+      "https://pimcore.com/en/partners/find-a-solution-partner/e-point"
+    ],
+    "signal_count": 3,
+    "excluded_signals": [],
+    "work_email": null,
+    "email_confidence": null,
+    "email_source": null,
+    "exclude_reason": null,
+    "human_pass_notes": null
+  },
+  {
+    "company_name": "OmegaCode",
+    "website": "https://omegacode.pl/",
+    "country": "PL",
+    "segment": "pim_mdm_integrator",
+    "subtype": "Pimcore Gold Partner",
+    "decision_maker_name": null,
+    "decision_maker_role": null,
+    "linkedin_url": "https://www.linkedin.com/company/omegacode/",
+    "recent_evidence": "Pimcore partner profile shows broad PIM/MDM/ecommerce and ERP expertise, but no qualifying publication date.",
+    "evidence_type": "partner_page",
+    "evidence_url": "https://pimcore.com/en/partners/find-a-solution-partner/omegacode",
+    "evidence_date_raw": null,
+    "personalization_hook": "OmegaCode's Pimcore profile spans PIM, MDM, ecommerce and ERP — exactly the kind of system boundary where supplier data needs a defensible staging step.",
+    "hook_grounding": [
+      {
+        "claim": "PIM",
+        "grounded_in": "https://pimcore.com/en/partners/find-a-solution-partner/omegacode"
+      },
+      {
+        "claim": "MDM",
+        "grounded_in": "https://pimcore.com/en/partners/find-a-solution-partner/omegacode"
+      }
+    ],
+    "evidence_content": "OmegaCode Pimcore Expertise: Product Configurators Database Publishing PIM MDM DAM CDP eCommerce. Connected Technologies include ERP and PIM.",
+    "relevance_reason": "Very strong system fit, but first-wave recency and decision-maker evidence are not established.",
+    "catalog_workflow_signal": "PIM/MDM/ecommerce/ERP integration scope.",
+    "likely_pain": "Supplier product-data normalization across PIM and ERP boundaries.",
+    "recommended_angle": "staging_before_pim",
+    "recommended_offer": "pilot_engagement",
+    "first_line": "Your Pimcore scope crosses PIM, MDM, ecommerce and ERP; that is exactly where bad supplier data tends to propagate fastest.",
+    "fit_score": 96,
+    "evidence_score": 55,
+    "language_ok": "en",
+    "primary_discovery_source": "google",
+    "source_urls": [
+      "https://pimcore.com/en/partners/find-a-solution-partner/omegacode"
+    ],
+    "signal_count": 4,
+    "excluded_signals": [],
+    "work_email": null,
+    "email_confidence": null,
+    "email_source": null,
+    "exclude_reason": null,
+    "human_pass_notes": null
+  },
+  {
+    "company_name": "KK Digital",
+    "website": "https://kkdigital.pl/",
+    "country": "PL",
+    "segment": "pl_cee_de_smb_agency",
+    "subtype": "Polish Shopify agency",
+    "decision_maker_name": "Kamil Krala",
+    "decision_maker_role": "Digital Founder",
+    "linkedin_url": "https://www.linkedin.com/company/kkdigitalpl/",
+    "recent_evidence": "Shopify partner and company pages confirm migrations plus ERP/CRM/PIM integrations, but no dated evidence inside the 90-day window was found.",
+    "evidence_type": "partner_page",
+    "evidence_url": "https://www.shopify.com/partners/directory/partner/kk-digital1",
+    "evidence_date_raw": null,
+    "personalization_hook": "Your Shopify profile is unusually explicit about ERP, CRM and PIM integrations — the gap CatalogFix targets is cleaning supplier data before those integrations receive it.",
+    "hook_grounding": [
+      {
+        "claim": "ERP",
+        "grounded_in": "https://www.shopify.com/partners/directory/partner/kk-digital1"
+      },
+      {
+        "claim": "PIM",
+        "grounded_in": "https://www.shopify.com/partners/directory/partner/kk-digital1"
+      }
+    ],
+    "evidence_content": "Shopify migrations, builds and integrations for EU and US merchants. We move stores off WooCommerce, PrestaShop, Shoper and AtomStore and connect them to your ERP, CRM or PIM.",
+    "relevance_reason": "Strong local ICP fit and clear integration work, but no qualifying recent dated evidence.",
+    "catalog_workflow_signal": "Shopify migrations with ERP, CRM and PIM integrations and product-data transfer.",
+    "likely_pain": "Manual product-data cleanup before migration and integration.",
+    "recommended_angle": "supplier_normalization",
+    "recommended_offer": "actor_self_serve",
+    "first_line": "Your Shopify partner profile calls out ERP, CRM and PIM integrations directly; that is the exact boundary where we see supplier-file cleanup become repetitive.",
+    "fit_score": 92,
+    "evidence_score": 55,
+    "language_ok": "en",
+    "primary_discovery_source": "shopify_partners",
+    "source_urls": [
+      "https://www.shopify.com/partners/directory/partner/kk-digital1",
+      "https://kkdigital.pl/"
+    ],
+    "signal_count": 4,
+    "excluded_signals": [],
+    "work_email": null,
+    "email_confidence": null,
+    "email_source": null,
+    "exclude_reason": null,
+    "human_pass_notes": null
+  },
+  {
+    "company_name": "Brand Active",
+    "website": "https://brandactive.co/",
+    "country": "PL",
+    "segment": "pl_cee_de_smb_agency",
+    "subtype": "CEE Shopify Plus agency",
+    "decision_maker_name": null,
+    "decision_maker_role": null,
+    "linkedin_url": "https://www.linkedin.com/company/brand-active/",
+    "recent_evidence": "Current Shopify partner page confirms Shopify Plus migration and systems-integration work; no qualifying dated evidence and no current decision maker verified for wave 1.",
+    "evidence_type": "partner_page",
+    "evidence_url": "https://www.shopify.com/partners/directory/partner/brandactive-pl",
+    "evidence_date_raw": null,
+    "personalization_hook": "Your Shopify partner profile combines migrations with external-software integration, which is where messy supplier data can turn into expensive implementation work.",
+    "hook_grounding": [
+      {
+        "claim": "Store migration",
+        "grounded_in": "https://www.shopify.com/partners/directory/partner/brandactive-pl"
+      },
+      {
+        "claim": "Systems Integration",
+        "grounded_in": "https://www.shopify.com/partners/directory/partner/brandactive-pl"
+      }
+    ],
+    "evidence_content": "Brand Active is an eCommerce Agency implementing Shopify Plus stores and integration with external software. Other services include Store migration and Systems Integration.",
+    "relevance_reason": "Strong Shopify Plus and integrations fit, but first-wave decision-maker/recency evidence is incomplete.",
+    "catalog_workflow_signal": "Shopify Plus migrations and external software integrations.",
+    "likely_pain": "Catalog normalization before migration and systems integration.",
+    "recommended_angle": "catalog_migration",
+    "recommended_offer": "pilot_engagement",
+    "first_line": "Your Shopify partner profile combines migration and systems integration in the same delivery scope — that is where we most often see catalog cleanup become invisible project overhead.",
+    "fit_score": 90,
+    "evidence_score": 55,
+    "language_ok": "en",
+    "primary_discovery_source": "shopify_partners",
+    "source_urls": [
+      "https://www.shopify.com/partners/directory/partner/brandactive-pl",
+      "https://brandactive.co/en/about"
+    ],
+    "signal_count": 3,
+    "excluded_signals": [],
+    "work_email": null,
+    "email_confidence": null,
+    "email_source": null,
+    "exclude_reason": null,
+    "human_pass_notes": null
+  },
+  {
+    "company_name": "Noto Agency",
+    "website": "https://notoagency.pl/",
+    "country": "PL",
+    "segment": "pl_cee_de_smb_agency",
+    "subtype": "Polish Shopify/ecommerce agency",
+    "decision_maker_name": null,
+    "decision_maker_role": null,
+    "linkedin_url": "https://www.linkedin.com/company/noto-agency/",
+    "recent_evidence": "Current site confirms Shopify/Shopify Plus migrations and ERP/PIM integrations; no qualifying dated recent evidence and no current decision maker verified.",
+    "evidence_type": "partner_page",
+    "evidence_url": "https://notoagency.pl/en",
+    "evidence_date_raw": null,
+    "personalization_hook": "Noto explicitly combines Shopify migrations with ERP and PIM integration — CatalogFix is meant to make the supplier/catalog layer cleaner before those systems touch it.",
+    "hook_grounding": [
+      {
+        "claim": "ERP",
+        "grounded_in": "https://notoagency.pl/en"
+      },
+      {
+        "claim": "PIM",
+        "grounded_in": "https://notoagency.pl/en"
+      }
+    ],
+    "evidence_content": "Noto Agency: Shopify and Shopify Plus store implementation and migration, integration with ERP and PIM systems.",
+    "relevance_reason": "Very strong workflow relevance but no qualifying recent dated evidence or verified decision maker for the first wave.",
+    "catalog_workflow_signal": "Shopify/Shopify Plus migration with ERP and PIM integrations.",
+    "likely_pain": "Manual normalization of product data before ERP/PIM/Shopify integration.",
+    "recommended_angle": "supplier_normalization",
+    "recommended_offer": "pilot_engagement",
+    "first_line": "Noto's positioning is unusually close to our workflow: Shopify migration on one side, ERP/PIM integration on the other, and messy supplier data in between.",
+    "fit_score": 94,
+    "evidence_score": 55,
+    "language_ok": "en",
+    "primary_discovery_source": "google",
+    "source_urls": [
+      "https://notoagency.pl/en",
+      "https://notoagency.pl/pages/o-nas"
+    ],
+    "signal_count": 4,
+    "excluded_signals": [],
+    "work_email": null,
+    "email_confidence": null,
+    "email_source": null,
+    "exclude_reason": null,
+    "human_pass_notes": null
+  },
+  {
+    "company_name": "Storise",
+    "website": "https://www.storise.eu/",
+    "country": "PL",
+    "segment": "pl_cee_de_smb_agency",
+    "subtype": "Warsaw ecommerce/AI agency",
+    "decision_maker_name": null,
+    "decision_maker_role": null,
+    "linkedin_url": "https://www.linkedin.com/company/storise/",
+    "recent_evidence": "Storise publishes a La Vie migration case where product data needed cleanup, but the page exposes no qualifying publication date and no decision maker was verified for wave 1.",
+    "evidence_type": "case_study",
+    "evidence_url": "https://www.storise.eu/case/lavie",
+    "evidence_date_raw": null,
+    "personalization_hook": "Your La Vie migration case explicitly says product data needed cleaning before a safe launch — that is almost exactly the staging problem CatalogFix handles.",
+    "hook_grounding": [
+      {
+        "claim": "Product data cleaned up",
+        "grounded_in": "https://www.storise.eu/case/lavie"
+      }
+    ],
+    "evidence_content": "La Vie migration. Data Product data cleaned up. The challenge went beyond migration itself. Product data needed to be cleaned up.",
+    "relevance_reason": "Extremely strong pain match, but v1.0.1 correctly blocks it from wave 1 without a defensible source date and verified decision maker.",
+    "catalog_workflow_signal": "Migration project with explicit product-data cleanup requirement.",
+    "likely_pain": "Manual cleanup of product data during migration rescue work.",
+    "recommended_angle": "catalog_migration",
+    "recommended_offer": "pilot_engagement",
+    "first_line": "Your La Vie case says plainly that product data had to be cleaned up before the migration could launch safely; that is the exact problem we built CatalogFix around.",
+    "fit_score": 92,
+    "evidence_score": 60,
+    "language_ok": "en",
+    "primary_discovery_source": "google",
+    "source_urls": [
+      "https://www.storise.eu/case/lavie",
+      "https://www.storise.eu/about"
+    ],
+    "signal_count": 3,
+    "excluded_signals": [],
+    "work_email": null,
+    "email_confidence": null,
+    "email_source": null,
+    "exclude_reason": null,
+    "human_pass_notes": null
+  }
+]
