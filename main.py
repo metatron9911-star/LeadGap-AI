@@ -672,3 +672,185 @@ def build_opportunity(
 
     add(
         "click_to_call",
+       not signals["click_to_call"],
+        8,
+        "No click-to-call telephone link detected",
+        "Mobile lead capture",
+        "Mobile contact conversion optimization",
+        "MEDIUM",
+    )
+
+    add(
+        "mobile_viewport",
+        not signals["mobile_viewport"],
+        8,
+        "Mobile viewport configuration not detected",
+        "Mobile conversion experience",
+        "Mobile website optimization",
+        "MEDIUM",
+    )
+
+    add(
+        "analytics",
+        not signals["analytics"],
+        8,
+        "No GA4 or Google Tag Manager detected",
+        "Conversion measurement",
+        "Analytics and conversion tracking setup",
+        "MEDIUM",
+    )
+
+    add(
+        "meta_pixel",
+        not signals["meta_pixel"],
+        4,
+        "No Meta Pixel detected",
+        "Paid social measurement",
+        "Meta Ads tracking setup",
+        "LOW",
+    )
+
+    add(
+        "live_chat",
+        not signals["live_chat"],
+        4,
+        "No live-chat technology detected",
+        "After-hours enquiry capture",
+        "Conversational lead capture",
+        "LOW",
+    )
+
+    add(
+        "meta_description",
+        not signals["meta_description"],
+        4,
+        "Meta description not detected",
+        "Search-result conversion",
+        "SEO metadata optimization",
+        "LOW",
+    )
+
+    opportunities.sort(
+        key=lambda item: item["weight"],
+        reverse=True,
+    )
+
+    score_value = min(
+        sum(
+            item["weight"]
+            for item in opportunities
+        ),
+        100,
+    )
+
+    if score_value >= 60:
+        level = "HIGH"
+
+    elif score_value >= 35:
+        level = "MEDIUM"
+
+    else:
+        level = "LOW"
+
+    if opportunities:
+        primary = opportunities[0]
+
+    else:
+        primary = {
+            "opportunity": "General conversion optimization",
+            "service": "Website conversion audit",
+            "revenueImpact": "LOW",
+            "gap": "No major conversion gap detected",
+        }
+
+    return {
+        "score": score_value,
+        "level": level,
+        "primary": primary,
+        "gaps": [
+            item["gap"]
+            for item in opportunities
+        ],
+        "opportunities": opportunities,
+    }
+
+
+def build_evidence(
+    signals: dict,
+    pages_scanned: int,
+) -> list[str]:
+
+    evidence = [
+        (
+            "Automated audit successfully scanned "
+            f"{pages_scanned} public page(s)."
+        )
+    ]
+
+    if signals["booking"]:
+        evidence.append(
+            "Online booking or appointment language detected."
+        )
+    else:
+        evidence.append(
+            "No clear booking or appointment path was detected."
+        )
+
+    if signals["contact_form"]:
+        evidence.append(
+            "Contact form detected."
+        )
+    else:
+        evidence.append(
+            "No contact form detected."
+        )
+
+    if signals["click_to_call"]:
+        evidence.append(
+            "Clickable telephone link detected."
+        )
+    else:
+        evidence.append(
+            "No clickable telephone link detected."
+        )
+
+    if signals["cta"]:
+        evidence.append(
+            "Strong conversion CTA language detected."
+        )
+    else:
+        evidence.append(
+            "Strong conversion CTA language was not detected."
+        )
+
+    if signals["analytics"]:
+        evidence.append(
+            "Google analytics/tag-management technology detected."
+        )
+    else:
+        evidence.append(
+            "GA4 or Google Tag Manager was not detected."
+        )
+
+    if signals["meta_pixel"]:
+        evidence.append(
+            "Meta Pixel detected."
+        )
+    else:
+        evidence.append(
+            "Meta Pixel was not detected."
+        )
+
+    if signals["mobile_viewport"]:
+        evidence.append(
+            "Mobile viewport configuration detected."
+        )
+    else:
+        evidence.append(
+            "Mobile viewport configuration was not detected."
+        )
+
+    return evidence
+
+
+def 
