@@ -1,0 +1,12 @@
+{
+  "actorOutputSchemaVersion": 1,
+  "title": "LeadGap AI output",
+  "properties": {
+    "leads": {
+      "type": "string",
+      "title": "Sales-ready leads",
+      "description": "Qualified local businesses with a concrete commercial opportunity and ready pitch hook.",
+      "template": "{{links.apiDefaultDatasetUrl}}/items?view=salesReadyLeads"
+    }
+  }
+}
