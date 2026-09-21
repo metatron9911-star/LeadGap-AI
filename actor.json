@@ -1,0 +1,18 @@
+{
+  "actorSpecification": 1,
+  "name": "leadgap-ai-local-business-opportunity-finder",
+  "title": "LeadGap AI — Local Business Leads with Audit",
+  "description": "Find local businesses, audit their websites, and return sales-ready opportunities with a concrete reason to reach out and a personalized pitch hook.",
+  "version": "0.35",
+  "buildTag": "latest",
+  "meta": {
+    "templateId": "python-start"
+  },
+  "dockerfile": "../Dockerfile",
+  "readme": "../README.md",
+  "input": "./input_schema.json",
+  "output": "./output_schema.json",
+  "storages": {
+    "dataset": "./dataset_schema.json"
+  }
+}
