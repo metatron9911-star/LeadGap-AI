@@ -1227,6 +1227,10 @@ def _business_tokens(name: str) -> set[str]:
         "the", "and", "of", "at", "in", "a", "an",
         "ltd", "limited", "llc", "inc", "plc", "company",
         "practice", "clinic", "surgery", "centre", "center",
+        "dental", "dentist", "dentistry",
+        "plumber", "plumbing", "roofer", "roofing", "cleaner", "cleaning",
+        "law", "legal", "lawyer", "attorney", "solicitor",
+        "accountant", "accounting", "spa", "salon", "beauty",
     }
 
     tokens = {
@@ -1269,7 +1273,10 @@ def _external_candidate_score(
     host_name_match = any(token in host for token in name_tokens)
     if host_name_match:
         score += 2
-    if not (city_match or postcode_match_found or host_name_match):
+    # A directory/profile page can contain the exact business name and city.
+    # Require a stronger identity anchor before treating a result as official:
+    # either a distinctive business-name token in the host or the Maps postcode.
+    if not (postcode_match_found or host_name_match):
         return min(score, 3)
     return score
 
@@ -1444,7 +1451,7 @@ def make_no_website_lead(
 
         "mapAddress": place.get("address"),
         "mapPhone": phone,
-        "mapCategory": place.get("category"),
+        "mapCategory": _place_primary_category(place),
         "mapRating": place.get("totalScore"),
         "mapReviewsCount": place.get("reviewsCount"),
         "mapPlaceId": place.get("placeId"),
@@ -2137,6 +2144,19 @@ def _norm_niche_text(value: object) -> str:
     return re.sub(r"[^a-z0-9]+", " ", str(value or "").lower()).strip()
 
 
+def _place_primary_category(place: dict) -> str:
+    """Return the primary Maps category across current scraper field shapes."""
+    category = _place_primary_category(place) or place.get("categoryName")
+    if category:
+        return str(category)
+    categories = place.get("categories") or []
+    if isinstance(categories, str):
+        return categories
+    if categories:
+        return str(categories[0])
+    return ""
+
+
 # Единый rule-объект для ниш с разным написанием (med spa / medspa)
 _MED_SPA_RULE = {
     "title_positive": (
@@ -2386,7 +2406,7 @@ def is_niche_match(place: dict, business_type: str) -> bool:
     """
     niche = _norm_niche_text(business_type)
     title = _norm_niche_text(place.get("title"))
-    category = _norm_niche_text(place.get("category"))
+    category = _norm_niche_text(_place_primary_category(place))
 
     extra_categories = place.get("categories") or []
     if isinstance(extra_categories, str):
@@ -2460,7 +2480,7 @@ def is_niche_match(place: dict, business_type: str) -> bool:
             "Niche rule '%s': no positive evidence for '%s' (category: '%s').",
             selected_key,
             place.get("title") or "Unknown business",
-            place.get("category") or "no category",
+            _place_primary_category(place) or "no category",
         )
         return False
 
@@ -2712,7 +2732,7 @@ def enrich_with_map_data(
     item["businessType"] = business_type
     item["mapAddress"] = place.get("address")
     item["mapPhone"] = map_phone
-    item["mapCategory"] = place.get("category")
+    item["mapCategory"] = _place_primary_category(place)
     item["mapRating"] = place.get("totalScore")
     item["mapReviewsCount"] = place.get("reviewsCount")
     item["mapPlaceId"] = place.get("placeId")
@@ -2852,7 +2872,7 @@ def log_place_diagnostic(
     signals = item.get("signals") or {}
     payload = {
         "title": place.get("title"),
-        "category": place.get("category"),
+        "category": _place_primary_category(place),
         "placeId": place.get("placeId"),
         "nicheMatch": niche_match,
         "auditStatus": item.get("auditStatus"),
@@ -3099,7 +3119,7 @@ async def main() -> None:
                         "PLACE_INPUT %s",
                         json.dumps({
                             "title": discovered_place.get("title"),
-                            "category": discovered_place.get("category"),
+                            "category": discovered__place_primary_category(place),
                             "placeId": discovered_place.get("placeId"),
                             "website": discovered_place.get("website"),
                         }, ensure_ascii=False, default=str),
