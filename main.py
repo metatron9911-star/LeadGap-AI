@@ -2086,22 +2086,41 @@ async def discover_businesses(
         )
 
 
+    # apify-client 1.x returns run metadata as a dict, while newer
+    # clients may expose attributes. Support both without changing logic.
+    default_dataset_id = (
+        run.get("defaultDatasetId")
+        if isinstance(run, dict)
+        else getattr(run, "default_dataset_id", None)
+    )
+
+    if not default_dataset_id:
+        raise RuntimeError(
+            "Google Maps discovery Actor returned no default dataset ID."
+        )
+
     dataset_client = (
         apify_client.dataset(
-            run.default_dataset_id
+            default_dataset_id
         )
     )
 
 
-    # IMPORTANT FIX:
-    # list_items() returns DatasetItemsPage, not a list.
+    # list_items() is object-like in apify-client 1.x, but keep a dict
+    # fallback for compatibility with alternate client return shapes.
 
     page = await dataset_client.list_items(
         limit=max_businesses
     )
 
+    page_items = (
+        page.get("items", [])
+        if isinstance(page, dict)
+        else getattr(page, "items", [])
+    )
+
     places = list(
-        page.items
+        page_items
     )
 
 
