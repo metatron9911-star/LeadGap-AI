@@ -156,4 +156,207 @@ IMPORTANT_LINK_WORDS = (
 
 
 def normalize_url(url: str) -> str:
-    url = (url or "")
+    url = (url or "").strip()
+
+    if not url:
+        return ""
+
+    if not re.match(r"^https?://", url, re.I):
+        url = "https://" + url
+
+    return url
+
+
+def clean_host(url: str) -> str:
+    return urlparse(url).netloc.lower().replace("www.", "")
+
+
+def detect_cms(html: str) -> str | None:
+    low = html.lower()
+
+    checks = [
+        ("WordPress", ("wp-content", "wp-includes")),
+        ("Wix", ("wixstatic.com", "wix.com")),
+        ("Squarespace", ("squarespace.com", "static1.squarespace.com")),
+        ("Shopify", ("cdn.shopify.com", "shopify.theme")),
+        ("Webflow", ("webflow.js", "webflow.com")),
+    ]
+
+    for name, needles in checks:
+        if any(n in low for n in needles):
+            return name
+
+    return None
+
+
+def extract_business_name(
+    soup: BeautifulSoup,
+    fallback: str,
+) -> str:
+
+    def valid_name(text: str) -> bool:
+        text = text.strip()
+
+        if not 2 <= len(text) <= 100:
+            return False
+
+        digits = sum(ch.isdigit() for ch in text)
+        letters = sum(ch.isalpha() for ch in text)
+
+        if letters < 2:
+            return False
+
+        if digits > letters:
+            return False
+
+        if re.fullmatch(r"[ds()+-./]+", text):
+            return False
+
+        return True
+
+    h1 = soup.find("h1")
+
+    if h1:
+        text = h1.get_text(" ", strip=True)
+
+        if valid_name(text):
+            return text
+
+    if soup.title:
+        title = soup.title.get_text(" ", strip=True)
+
+        if title:
+            title = re.split(
+                r"s+[|–—-]s+",
+                title,
+            )[0].strip()
+
+            if valid_name(title):
+                return title
+
+    return fallback
+
+
+def find_candidate_pages(
+    base_url: str,
+    html: str,
+    max_pages: int = 3,
+) -> list[str]:
+
+    soup = BeautifulSoup(
+        html,
+        "html.parser",
+    )
+
+    base_host = clean_host(base_url)
+
+    scored = []
+
+    for tag in soup.find_all("a", href=True):
+        href = tag.get("href", "").strip()
+
+        if not href:
+            continue
+
+        absolute = urljoin(
+            base_url,
+            href,
+        )
+
+        parsed = urlparse(absolute)
+
+        if parsed.scheme not in ("http", "https"):
+            continue
+
+        if clean_host(absolute) != base_host:
+            continue
+
+        text = tag.get_text(
+            " ",
+            strip=True,
+        ).lower()
+
+        path = parsed.path.lower()
+
+        haystack = f"{text} {path}"
+
+        page_score = 0
+
+        for word in IMPORTANT_LINK_WORDS:
+            if word in haystack:
+                page_score += 10
+
+        if page_score <= 0:
+            continue
+
+        clean_url = absolute.split("#")[0]
+
+        scored.append(
+            (
+                page_score,
+                clean_url,
+            )
+        )
+
+    scored.sort(
+        key=lambda x: x[0],
+        reverse=True,
+    )
+
+    output = []
+    seen = set()
+
+    for _, page_url in scored:
+        if page_url in seen:
+            continue
+
+        if page_url.rstrip("/") == base_url.rstrip("/"):
+            continue
+
+        seen.add(page_url)
+        output.append(page_url)
+
+        if len(output) >= max_pages:
+            break
+
+    return output
+
+
+def extract_contacts(
+    html: str,
+) -> tuple[list[str], list[str]]:
+
+    soup = BeautifulSoup(
+        html,
+        "html.parser",
+    )
+
+    emails = set()
+    phones = set()
+
+    for a in soup.find_all("a", href=True):
+        href = a.get("href", "").strip()
+
+        if href.lower().startswith("mailto:"):
+            email = (
+                href[7:]
+                .split("?")[0]
+                .strip()
+                .lower()
+            )
+
+            if email:
+                emails.add(email)
+
+        elif href.lower().startswith("tel:"):
+            phone = href[4:].strip()
+
+            if phone:
+                phones.add(phone)
+
+    for email in re.findall(
+        r"[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,}",
+        html,
+        re.I,
+    ):
+        emails.add(email.lower
