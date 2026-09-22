@@ -248,3 +248,13 @@ The number of runs needed for a candidate is better approximated by the number o
 
 A fix can introduce a new failure class that was not present in the initial stack, so the required run count can grow during the series.
 
+## Grounding why-taxonomy (frozen at Run H)
+
+Grounding-related failures are classified by cause:
+
+- `grounding_bug`: evaluator/code validates the wrong grounding context or otherwise misapplies the rule.
+- `hook_overclaim`: a hook claim is not actually supported by the company/source evidence. Fix the hook.
+- `source_bundle_mismatch`: the claim is true, but the selected/substituted evidence context no longer covers every declared hook claim. Repair the evidence bundle/context without weakening grounding.
+
+Known limitation: first-party capability pages may be used as `self_claim` grounding evidence. This is valid under the current experiment semantics but is not independent verification. Treat `self_claim_only_grounding` as a precision limitation to monitor, not as a current failing gate.
+
