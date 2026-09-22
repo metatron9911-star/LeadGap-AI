@@ -5,7 +5,7 @@
   "e_point": {
     "question": "Does a qualifying dated PIM/product-data source exist inside the frozen 90-day window?",
     "result": "no_qualifying_fresh_source_found",
-    "classification": "no_evidence_exists",
+    "classification": "no_evidence_found_in_current_scope",
     "scope_note": "This means no qualifying fresh source was found in the current targeted public-web research scope; it is not a mathematical claim that no such source can exist anywhere.",
     "evidence_checked": [
       {
@@ -26,13 +26,18 @@
         "finding": "Strong current PIM capability page, but no defensible publication date."
       }
     ],
-    "planning_effect": "Remove e-point from the active Run I source-substitution queue unless a new date-bearing source is discovered later.",
-    "next_action": "inactive_pending_new_evidence"
+    "planning_effect": "Park e-point outside the active Run I promotion queue, with explicit re-entry conditions.",
+    "next_action": "parked_with_reentry_conditions",
+    "re_entry_conditions": [
+      "new dated PIM/product-data source appears",
+      "search scope extended to additional registries/press archives/non-public or connector-accessible sources",
+      "collector gains stronger date-extraction capabilities"
+    ]
   },
   "kk_digital": {
     "question": "Can the existing Hekiert case publication date be defensibly extracted from another public surface?",
     "result": "no_defensible_publication_date_extracted",
-    "classification": "sourcing_gap",
+    "classification": "date_extraction_unresolved",
     "diagnostic_subtype": "date_extraction_unresolved",
     "evidence_checked": [
       {
@@ -59,16 +64,18 @@
       "undated related-page presence"
     ],
     "planning_effect": "Do not run a date-rule bypass and do not treat media timestamps as case publication dates. Run I should not promote KK Digital until a date-bearing source is found or collector metadata extraction is improved.",
-    "next_action": "collector_date_metadata_or_alternate_dated_source"
+    "next_action": "collector_date_metadata_or_alternate_dated_source",
+    "parent_classification": "sourcing_gap"
   },
   "run_i_scope": {
     "ready_for_clean_data_level_substitution": [],
-    "inactive_due_to_no_evidence": [
-      "e-point"
-    ],
+    "inactive_due_to_no_evidence": [],
     "still_active_but_not_ready": [
       "KK Digital"
     ],
-    "note": "No clean candidate is currently ready for a Run I promotion experiment from the freshness branch."
+    "note": "No clean candidate is currently ready for a Run I promotion experiment from the freshness branch.",
+    "parked_with_reentry": [
+      "e-point"
+    ]
   }
 }
