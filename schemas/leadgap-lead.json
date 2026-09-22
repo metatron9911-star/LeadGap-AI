@@ -172,6 +172,8 @@
         "clearbit",
         "dropcontact",
         "neverbounce",
+        "zerobounce",
+        "millionverifier",
         "other_verifier",
         null
       ]
@@ -338,6 +340,20 @@
         "null"
       ],
       "maxLength": 500
+    },
+    "email_confidence_source": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "hunter_score",
+        "neverbounce_category",
+        "zerobounce_category",
+        "millionverifier_category",
+        "other_verifier_score",
+        null
+      ]
     }
   }
 }
