@@ -223,3 +223,28 @@ A hook-grounding failure can arise from at least two distinct causes:
 
 Grounding rules should not be relaxed merely because a substituted source is narrower than the prior evidence.
 
+## Evidence-bundle compatibility in v1.0.1
+
+The current evaluator is **single-string grounding**: `hook_grounding_ok()` receives one `evidence_content` string and checks every declared claim against that normalized string. It does not natively iterate over an evidence-item list or inspect multiple source fields.
+
+Therefore a data-level bundle repair in the current model may preserve multiple source contents by composing them into the existing `evidence_content` field while storing explicit provenance metadata separately. This is a compatibility technique, not a claim that the core evidence model is list-native.
+
+If a future change converts evidence from a single string to a first-class list of items and changes evaluator behavior, that is a structural/rule-level model change and must be tested separately.
+
+## Claim-coverage preservation for substitutions
+
+A data-level source substitution should preserve the full claim coverage of the pre-substitution evidence context unless the hook itself is intentionally revised.
+
+If the new source grounds fewer claims than the previous context, the substitution is a narrowing. Any resulting grounding failure should be classified as `source_bundle_mismatch`, not automatically as a pipeline defect.
+
+After each substitution:
+1. recompute all-gates on the new state;
+2. compare the pre- and post-substitution gate stacks;
+3. record any newly created gates explicitly.
+
+## Multi-gate run-count expectation
+
+The number of runs needed for a candidate is better approximated by the number of **distinct fix classes** encountered, not by the initial failing-gate count.
+
+A fix can introduce a new failure class that was not present in the initial stack, so the required run count can grow during the series.
+
