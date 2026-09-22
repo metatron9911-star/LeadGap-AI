@@ -41,8 +41,8 @@
   "storise": {
     "question": "Does a current verifiable DM exist publicly, and if so is the issue role matching or source access?",
     "result": "public_owner_identity_found_via_legal_entity",
-    "classification": "dm_public_found",
-    "diagnostic_subtype": "owner_identity_requires_role_normalization",
+    "classification": "dm_public_found_identity_chain_confirmed",
+    "diagnostic_subtype": "brand_identity_confirmed_source_policy_unresolved",
     "findings": [
       {
         "subject": "Storise legal controller",
@@ -63,18 +63,33 @@
         "source": "https://www.storise.eu/about"
       }
     ],
-    "why": "A public current owner identity can be tied to the same legal entity behind Storise. For the PL/CEE/DE matrix, Owner is already an allowed title. The remaining issue is not matrix width but whether a sole-proprietorship legal owner may be normalized to the DM role 'Owner' with sufficient source confidence under the current resolver policy.",
-    "next_fix_class": "dm_source_normalization / legal-owner mapping",
-    "run_i_ready": "conditional",
-    "required_pre_run_check": "Confirm that legal-owner evidence from an allowed/approved source class can populate decision_maker_role='Owner' without changing the global role matrix."
+    "why": "The direct ownership inference is now materially stronger: Storise's own privacy policy identifies IDM with NIP 7792508107 and explicitly says '(hereinafter: Storise)', while no separate Storise NIP/KRS surfaced in targeted public search. The remaining blocker is source-policy: current resolver rules do not explicitly define a multi-hop company-legal-identity -> registry-owner chain as a qualifying DM source.",
+    "next_fix_class": "dm_source_policy_decision",
+    "run_i_ready": false,
+    "required_pre_run_check": "Decide whether privacy-policy-derived brand/legal identity plus registry-owner evidence is an allowed DM source construction. Treat that as rule-level source-policy work, not a data-level substitution.",
+    "nip_krs_check": {
+      "result": "brand_identity_matches_idm_jdg",
+      "own_storise_nip_found": false,
+      "own_storise_krs_found": false,
+      "strongest_identity_evidence": {
+        "source": "https://www.storise.eu/privacy-policy",
+        "statement": "IDM, VAT/NIP 7792508107 (hereinafter: Storise)",
+        "interpretation": "The site's own legal/privacy text explicitly uses Storise as the name for IDM in this context; no separate Storise legal entity identifier surfaced in the targeted search."
+      },
+      "registry_identity": {
+        "nip": "7792508107",
+        "legal_business": "IDM PRZEMYSŁAW KOSIOR",
+        "owner": "Przemysław Kosior",
+        "status": "active"
+      },
+      "caution": "This supports Storise as a brand/trading identity of the IDM sole proprietorship for the site. It does not by itself change DM source-policy."
+    }
   },
   "planning": {
     "clean_rule_level_matrix_change_needed": false,
     "brand_active_ready_for_promotion_run": false,
-    "storise_ready_for_promotion_run": "conditional on source-policy acceptance",
-    "likely_run_i_scope": [
-      "Storise only, if legal-owner mapping is accepted as a data-level DM sourcing fix"
-    ],
-    "note": "Brand Active remains a sourcing/succession problem. Storise is not dm_not_public: a current legal owner is publicly recoverable from the entity identified by Storise itself."
+    "storise_ready_for_promotion_run": false,
+    "likely_run_i_scope": [],
+    "note": "No clean data-level Run I is currently ready. Brand Active is parked on successor sourcing. Storise's brand/legal identity is now sufficiently supported to move the question from ownership inference to source-policy; any promotion experiment would be rule-level source-policy work."
   }
 }
