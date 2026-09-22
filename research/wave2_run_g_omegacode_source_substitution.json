@@ -1,0 +1,46 @@
+{
+  "run_id": "lg-2026-09-22-wave2-run-g-omegacode-source-substitution-only",
+  "target_company": "OmegaCode",
+  "diagnostic": "sourcing_gap",
+  "mode": "evidence-substitution-only",
+  "collector_behavior_changed": false,
+  "global_scoring_logic_changed": false,
+  "thresholds_changed": false,
+  "dm_logic_changed": false,
+  "evidence_max_age_days_changed": false,
+  "previous_evidence": {
+    "url": "https://pimcore.com/en/partners/find-a-solution-partner/omegacode",
+    "type": "partner_page",
+    "date_raw": null,
+    "evidence_score": 55
+  },
+  "substituted_evidence": {
+    "evidence_type": "press",
+    "evidence_url": "https://omegacode.pl/blog/ppwr-w-e-commerce-jak-przygotowac-sklep-b2c-do-sprzedazy-w-roznych-krajach-ue/",
+    "evidence_date_raw": "2026-09-09",
+    "evidence_content": "OmegaCode published a September 9, 2026 article on PPWR in e-commerce explaining that packaging/product data are fragmented across ERP, e-commerce, WMS and spreadsheets and that PIM is used to centralize product and packaging data for reporting.",
+    "recent_evidence": "September 9, 2026 OmegaCode article on PPWR/e-commerce identifies fragmented product and packaging data across ERP/e-commerce/WMS/Excel and positions PIM as the central source of truth.",
+    "source_urls_append": [
+      "https://omegacode.pl/blog/ppwr-w-e-commerce-jak-przygotowac-sklep-b2c-do-sprzedazy-w-roznych-krajach-ue/"
+    ]
+  },
+  "rubric": {
+    "version": "run-c-v1",
+    "component_scores": {
+      "source_quality": 15,
+      "recency": 20,
+      "workflow_specificity": 25,
+      "catalog_data_relevance": 25,
+      "traceability": 5
+    },
+    "total": 90,
+    "rationale": {
+      "source_quality": "First-party dated company publication.",
+      "recency": "Exact date 2026-09-09 is within 30 days of frozen run timestamp.",
+      "workflow_specificity": "Directly discusses ERP/e-commerce/WMS/PIM workflow and reporting.",
+      "catalog_data_relevance": "Explicit product and packaging data centralization in PIM.",
+      "traceability": "Exact dated URL; no named author/case used for full traceability bonus."
+    }
+  },
+  "follow_up": "A successful Run G validates downstream gating on the substituted fresh source only; it does not validate collector discovery."
+}
