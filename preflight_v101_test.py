@@ -17,6 +17,7 @@ from outreach_v101 import (
     parse_evidence_date,
     primary_source_mix,
     registrable_domain,
+    evaluate_batch,
 )
 
 RUN_TS = "2026-09-22T00:00:00Z"
@@ -201,3 +202,68 @@ ok("12 source_mix primary discovery only")
 
 
 print("ALL 12 PRE-FLIGHT TESTS PASSED")
+
+# Output schema conformance gate (in addition to the mandatory 12 rule tests).
+main_schema = json.loads(Path("schemas/leadgap-lead.json").read_text(encoding="utf-8"))
+reserve_schema = json.loads(Path("schemas/leadgap-reserve.json").read_text(encoding="utf-8"))
+main_validator = Draft202012Validator(main_schema)
+reserve_validator = Draft202012Validator(reserve_schema)
+
+synthetic_pass = {
+    "company_name": "Schema Safe Ltd",
+    "website": "https://schema-safe.example.com",
+    "country": "GB",
+    "segment": "shopify_commerce_agency",
+    "subtype": "Shopify agency",
+    "decision_maker_name": "Alex Example",
+    "decision_maker_role": "Founder",
+    "linkedin_url": "https://linkedin.com/in/alex-example",
+    "recent_evidence": "A dated Shopify migration case with supplier product data.",
+    "evidence_type": "case_study",
+    "evidence_url": "https://schema-safe.example.com/case",
+    "evidence_date_raw": "2026-09-10",
+    "personalization_hook": "Shopify Plus migration",
+    "hook_grounding": [{"claim": "Shopify Plus", "grounded_in": "https://schema-safe.example.com/case"}],
+    "evidence_content": "Shopify Plus migration",
+    "relevance_reason": "The agency handles catalog migration and supplier product data before Shopify onboarding.",
+    "catalog_workflow_signal": "Catalog migration and supplier product data handling.",
+    "likely_pain": "Manual normalization before Shopify import.",
+    "recommended_angle": "shopify_onboarding",
+    "recommended_offer": "pilot_engagement",
+    "first_line": "Your recent Shopify Plus migration case points to a recurring catalog-cleanup step before launch.",
+    "fit_score": 90,
+    "evidence_score": 90,
+    "language_ok": "en",
+    "primary_discovery_source": "google",
+    "source_urls": ["https://schema-safe.example.com/case"],
+    "signal_count": 3,
+    "excluded_signals": [],
+    "work_email": null if False else None,
+    "email_confidence": None,
+    "email_source": None,
+    "exclude_reason": None,
+    "human_pass_notes": None,
+}
+
+passed, reserve, _ = evaluate_batch(
+    [synthetic_pass],
+    run_id="schema-conformance",
+    run_timestamp_utc=RUN_TS,
+)
+assert len(passed) == 1 and not reserve
+assert not list(main_validator.iter_errors(passed[0])), list(main_validator.iter_errors(passed[0]))
+ok("schema conformance main output")
+
+synthetic_reserve = dict(synthetic_pass)
+synthetic_reserve["company_name"] = "Reserve Safe Ltd"
+synthetic_reserve["website"] = "https://reserve-safe.example.com"
+synthetic_reserve["signal_count"] = 0
+passed, reserve, _ = evaluate_batch(
+    [synthetic_reserve],
+    run_id="schema-conformance-reserve",
+    run_timestamp_utc=RUN_TS,
+)
+assert not passed and len(reserve) == 1
+assert not list(reserve_validator.iter_errors(reserve[0])), list(reserve_validator.iter_errors(reserve[0]))
+ok("schema conformance reserve output")
+
