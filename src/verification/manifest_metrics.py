@@ -5,17 +5,21 @@ from collections import Counter
 from .email_policy import confidence_bucket
 
 
-def email_metrics(results: list[dict]) -> dict:
+def email_metrics(results: list[dict], *, verification_status: str = "skipped", provider_skipped: list[str] | None = None) -> dict:
     found = sum(1 for row in results if row.get("email"))
     verified = sum(1 for row in results if row.get("decision") == "verified")
     catch_all = sum(1 for row in results if row.get("status") in {"catch_all", "accept_all"})
     providers = Counter(row.get("provider") for row in results if row.get("provider"))
     dist = Counter(confidence_bucket(row.get("confidence")) for row in results)
+    confidence_sources = Counter(row.get("confidence_source") for row in results if row.get("confidence_source"))
     return {
+        "verification_status": verification_status,
+        "provider_skipped": sorted(provider_skipped or []),
         "emails_found": found,
         "emails_verified": verified,
         "catch_all_rate": (catch_all / found) if found else 0.0,
         "email_confidence_dist": dict(sorted(dist.items())),
+        "email_confidence_source": dict(sorted(confidence_sources.items())),
         "email_provider": dict(sorted(providers.items())),
     }
 
