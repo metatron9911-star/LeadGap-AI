@@ -203,3 +203,23 @@ If a fresh qualifying source exists but the collector/input did not select it, c
 
 Do not use the existence of an older out-of-window source as evidence for changing the cutoff until fresh-source discovery has been exhausted.
 
+## Gate-stack mutation after data substitution
+
+A data-level source substitution can change the entire gate stack, not only remove the targeted gate.
+
+After any substitution, the new all-gates state must be recomputed and compared with the pre-substitution stack. Three outcomes are possible:
+- the targeted gate is removed;
+- an already-existing downstream gate becomes first-blocking;
+- a new gate is introduced because the substituted evidence no longer supports another validation condition.
+
+Do not assume a substitution can only reveal pre-existing gates.
+
+## Hook-grounding why classes
+
+A hook-grounding failure can arise from at least two distinct causes:
+
+- `hook_overclaim`: the hook claim is not actually supported by the company/source evidence. Fix the hook.
+- `source_bundle_mismatch`: the company capability is real, but the substituted selected evidence no longer supports every hook claim under the current grounding validator. Fix the evidence bundle/source selection; do not weaken grounding.
+
+Grounding rules should not be relaxed merely because a substituted source is narrower than the prior evidence.
+
