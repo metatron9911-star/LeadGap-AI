@@ -5,7 +5,7 @@ ROLE_MATRIX = {
         "founder", "co-founder", "ceo", "head of ecommerce", "head of e-commerce", "cto", "growth lead",
     ],
     "pim_mdm_integrator": [
-        "cto", "head of delivery", "solution architect", "solutions architect", "managing partner",
+        "cto", "ceo", "head of delivery", "solution architect", "solutions architect", "managing partner",
     ],
     "pl_cee_de_smb_agency": [
         "owner", "ceo", "managing director", "head of client services",
