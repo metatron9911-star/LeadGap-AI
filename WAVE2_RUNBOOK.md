@@ -163,3 +163,27 @@ A gate is an observed failure condition; a why-diagnostic identifies the underly
 
 An evidence-substitution calibration run may replace the selected evidence for a candidate while leaving collector behavior unchanged. A successful promotion proves only that downstream scoring/gating can work with a stronger input. It does **not** prove that the collector would discover that stronger source automatically. Collector-discovery improvement remains a separate follow-up experiment.
 
+## Fix taxonomy
+
+### Data-level fix
+Examples: evidence substitution for one candidate.
+
+Expected properties:
+- one candidate's input changes;
+- zero regression is expected on the existing passed set;
+- first-blocking histogram changes by exactly the candidates whose input changed (or by zero if no promotion);
+- attribution is to the input change only;
+- collector capability is not implied by a manually substituted source.
+
+### Rule-level fix
+Examples: decision-maker role-matrix expansion.
+
+Expected properties:
+- the rule applies globally to every candidate in the affected segment;
+- a full 12-candidate rerun is required;
+- regression check on the existing passed set is mandatory;
+- reserve candidates other than the motivating target may move between first-blocking gates without being promoted;
+- attribution is to the global rule change, not to a single candidate.
+
+A rule-level experiment may be motivated by one candidate, but it must be interpreted as a global rule change.
+
