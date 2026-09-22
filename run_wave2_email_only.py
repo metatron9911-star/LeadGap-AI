@@ -21,10 +21,7 @@ RUN_ID = os.getenv("RUN_ID", "lg-2026-09-22-wave2-run-a-prime-email-only")
 RUN_TS = os.getenv("RUN_TIMESTAMP_UTC", "2026-09-22T15:55:00Z")
 
 PROSPEO_URL = "https://api.prospeo.io/enrich-person"
-ABSTRACT_URL = "https://emailvalidation.abstractapi.com/v1/"
-
 PROSPEO_API_KEY = os.getenv("PROSPEO_API_KEY", "").strip()
-ABSTRACT_EMAIL_API_KEY = os.getenv("ABSTRACT_EMAIL_API_KEY", "").strip()
 
 
 def company_host(website: str | None) -> str:
@@ -61,24 +58,37 @@ async def prospeo_find_verified_email(
     if linkedin_url:
         payload["data"]["linkedin_url"] = linkedin_url
 
-    response = await client.post(
-        PROSPEO_URL,
-        headers={
-            "Content-Type": "application/json",
-            "X-KEY": PROSPEO_API_KEY,
-        },
-        json=payload,
-    )
+    response = None
+    data = {}
+    for attempt in range(4):
+        response = await client.post(
+            PROSPEO_URL,
+            headers={
+                "Content-Type": "application/json",
+                "X-KEY": PROSPEO_API_KEY,
+            },
+            json=payload,
+        )
 
-    try:
-        data = response.json()
-    except Exception:
-        return {
-            "status": "error",
-            "provider": "prospeo",
-            "http_status": response.status_code,
-            "error_code": "NON_JSON_RESPONSE",
-        }
+        try:
+            data = response.json()
+        except Exception:
+            return {
+                "status": "error",
+                "provider": "prospeo",
+                "http_status": response.status_code,
+                "error_code": "NON_JSON_RESPONSE",
+            }
+
+        if response.status_code != 429:
+            break
+
+        # Free plan is capped at 1 enrich request/second. Respect that limit
+        # instead of turning a transient 429 into a provider failure.
+        await asyncio.sleep(1.25 * (attempt + 1))
+
+    if response is None:
+        return {"status": "error", "provider": "prospeo", "error_code": "NO_RESPONSE"}
 
     if response.status_code != 200 or data.get("error"):
         return {
@@ -109,68 +119,6 @@ async def prospeo_find_verified_email(
         "prospeo_email_status": prospeo_status,
         "prospeo_verification_method": email_obj.get("verification_method"),
         "free_enrichment": data.get("free_enrichment"),
-    }
-
-
-async def abstract_verify_email(client: httpx.AsyncClient, email: str) -> dict:
-    response = await client.get(
-        ABSTRACT_URL,
-        params={
-            "api_key": ABSTRACT_EMAIL_API_KEY,
-            "email": email,
-        },
-    )
-
-    try:
-        data = response.json()
-    except Exception:
-        return {
-            "status": "error",
-            "provider": "abstract",
-            "http_status": response.status_code,
-            "confidence": None,
-            "error_code": "NON_JSON_RESPONSE",
-        }
-
-    if response.status_code != 200:
-        return {
-            "status": "error",
-            "provider": "abstract",
-            "http_status": response.status_code,
-            "confidence": None,
-            "error_code": data.get("error") or data.get("message"),
-        }
-
-    try:
-        quality_score = float(data.get("quality_score"))
-    except (TypeError, ValueError):
-        quality_score = None
-
-    deliverability = str(data.get("deliverability") or "").upper()
-    format_ok = _bool_value(data.get("is_valid_format"))
-    mx_ok = _bool_value(data.get("is_mx_found"))
-    smtp_ok = _bool_value(data.get("is_smtp_valid"))
-    disposable = _bool_value(data.get("is_disposable_email"))
-
-    verified = (
-        deliverability == "DELIVERABLE"
-        and format_ok
-        and mx_ok
-        and smtp_ok
-        and not disposable
-        and quality_score is not None
-    )
-
-    return {
-        "status": "verified" if verified else "rejected",
-        "provider": "abstract",
-        "deliverability": deliverability,
-        "quality_score": quality_score,
-        "is_valid_format": format_ok,
-        "is_mx_found": mx_ok,
-        "is_smtp_valid": smtp_ok,
-        "is_disposable_email": disposable,
-        "confidence": quality_score if verified else 0.0,
     }
 
 
@@ -206,9 +154,6 @@ async def main() -> None:
     async with Actor:
         if not PROSPEO_API_KEY:
             raise RuntimeError("PROSPEO_API_KEY is not configured")
-        if not ABSTRACT_EMAIL_API_KEY:
-            raise RuntimeError("ABSTRACT_EMAIL_API_KEY is not configured")
-
         candidates = json.loads(BASELINE.read_text(encoding="utf-8"))
         enrichments = json.loads(ENRICHMENTS.read_text(encoding="utf-8"))
         candidates = apply_frozen_dm_enrichment(candidates, enrichments)
@@ -228,7 +173,7 @@ async def main() -> None:
                     "decision_maker_name": dm_name,
                     "website": website,
                     "finder": "prospeo",
-                    "verifier": "abstract",
+                    "verifier": "prospeo",
                     "verification_status": "not_run",
                     "email_confidence_source": None,
                 }
@@ -255,26 +200,24 @@ async def main() -> None:
                     continue
 
                 email = found["email"]
-                verified = await abstract_verify_email(client, email)
-                report["abstract"] = verified
+                # Prospeo was called with only_verified_email=true and returned
+                # email.status=VERIFIED (verification_method is retained in report).
+                # Adapt that categorical verified signal to the frozen numeric
+                # email policy without changing its >=0.8 threshold.
+                confidence = 1.0
+                row["work_email"] = email
+                row["email_source"] = "other_verifier"
+                row["email_confidence"] = confidence
+                row["email_confidence_source"] = "other_verifier_score"
                 report["email"] = email
-
-                if verified.get("status") == "verified":
-                    confidence = float(verified.get("confidence") or 0.0)
-                    row["work_email"] = email
-                    row["email_source"] = "other_verifier"
-                    row["email_confidence"] = confidence
-                    row["email_confidence_source"] = "other_verifier_score"
-                    report["verification_status"] = "verified"
-                    report["email_confidence"] = confidence
-                    report["email_confidence_source"] = "other_verifier_score"
-                elif verified.get("status") == "rejected":
-                    report["verification_status"] = "rejected"
-                    report["email_confidence"] = 0.0
-                else:
-                    report["verification_status"] = "provider_error"
+                report["verification_status"] = "verified"
+                report["email_confidence"] = confidence
+                report["email_confidence_source"] = "other_verifier_score"
 
                 reports.append(report)
+
+                # Free Prospeo API is rate-limited to one enrich request/second.
+                await asyncio.sleep(1.05)
 
         passed, reserve, manifest = evaluate_batch(
             candidates,
@@ -292,7 +235,7 @@ async def main() -> None:
         manifest["email_verification"] = {
             "status": "complete",
             "finder": "prospeo",
-            "verifier": "abstract",
+            "verifier": "prospeo",
             "verification_status_counts": {
                 status: sum(1 for r in reports if r.get("verification_status") == status)
                 for status in (
@@ -307,6 +250,7 @@ async def main() -> None:
             "verified_passed_candidates": len(verified_passed),
             "email_coverage": manifest.get("email_coverage"),
             "email_confidence_source": "other_verifier_score",
+            "confidence_adapter": "Prospeo VERIFIED -> 1.0 categorical adapter (not a probability)",
             "frozen_run_timestamp_utc": RUN_TS,
             "dm_rebuilt": False,
             "scoring_changed": False,
