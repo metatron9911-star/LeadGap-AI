@@ -1,0 +1,68 @@
+{
+  "freeze_id": "lg-2026-09-23-wave2-run-h-freeze",
+  "basis_state": "Run H",
+  "artifact_type": "reconstructed",
+  "passed": 8,
+  "reserve": 4,
+  "first_blocking_histogram": {
+    "pre_filter": 0,
+    "no_decision_maker": 2,
+    "no_recent_evidence": 2,
+    "low_fit_score": 0,
+    "low_evidence_score": 0,
+    "language_mismatch": 0,
+    "manual_exclude": 0
+  },
+  "all_failing_gate_counts": {
+    "pre_filter": 0,
+    "no_decision_maker": 2,
+    "no_recent_evidence": 4,
+    "low_fit_score": 0,
+    "low_evidence_score": 4,
+    "language_mismatch": 0,
+    "manual_exclude": 0
+  },
+  "multi_gate_reserve_count": 4,
+  "single_gate_reserve_count": 0,
+  "reserve_detail": [
+    {
+      "company_name": "e-point",
+      "all_failing_gates": [
+        "no_recent_evidence",
+        "low_evidence_score"
+      ],
+      "first_blocking_gate": "no_recent_evidence",
+      "gate_count": 2
+    },
+    {
+      "company_name": "KK Digital",
+      "all_failing_gates": [
+        "no_recent_evidence",
+        "low_evidence_score"
+      ],
+      "first_blocking_gate": "no_recent_evidence",
+      "gate_count": 2
+    },
+    {
+      "company_name": "Brand Active",
+      "all_failing_gates": [
+        "no_decision_maker",
+        "no_recent_evidence",
+        "low_evidence_score"
+      ],
+      "first_blocking_gate": "no_decision_maker",
+      "gate_count": 3
+    },
+    {
+      "company_name": "Storise",
+      "all_failing_gates": [
+        "no_decision_maker",
+        "no_recent_evidence",
+        "low_evidence_score"
+      ],
+      "first_blocking_gate": "no_decision_maker",
+      "gate_count": 3
+    }
+  ],
+  "invariant_scope_note": "I2 applies to first_blocking_histogram only. all_failing_gate_counts is diagnostic-only and is not subject to I1/I2/I3."
+}
