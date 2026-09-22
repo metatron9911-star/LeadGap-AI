@@ -258,3 +258,20 @@ Grounding-related failures are classified by cause:
 
 Known limitation: first-party capability pages may be used as `self_claim` grounding evidence. This is valid under the current experiment semantics but is not independent verification. Treat `self_claim_only_grounding` as a precision limitation to monitor, not as a current failing gate.
 
+## DM why-diagnostic split for Wave 3
+
+Do not collapse stale-successor and public-absence cases into one DM why-class.
+
+For previously known leadership:
+- `dm_current_verified`
+- `dm_stale_no_successor`
+- `dm_role_changed`
+
+For publicly unnamed leadership:
+- `dm_public_found`
+- `dm_not_public`
+- `dm_source_blocked`
+- `dm_role_informal`
+
+A legal owner recovered from the company's own legal-entity identity is a sourcing/source-normalization question, not automatically a role-matrix expansion. If `Owner` is already allowed for the segment, test source acceptance and identity linkage separately before changing the matrix.
+
