@@ -1,0 +1,46 @@
+{
+  "run_id": "lg-2026-09-22-wave2-run-h-omegacode-grounding-bundle-repair",
+  "target_company": "OmegaCode",
+  "diagnostic": "source_bundle_mismatch",
+  "mode": "grounding-bundle-repair-only",
+  "evaluator_model": "single evidence_content string",
+  "structural_model_change": false,
+  "global_grounding_rule_changed": false,
+  "collector_behavior_changed": false,
+  "thresholds_changed": false,
+  "dm_logic_changed": false,
+  "evidence_scoring_changed": false,
+  "primary_evidence": {
+    "evidence_type": "press",
+    "evidence_url": "https://omegacode.pl/blog/ppwr-w-e-commerce-jak-przygotowac-sklep-b2c-do-sprzedazy-w-roznych-krajach-ue/",
+    "evidence_date_raw": "2026-09-09",
+    "role": "recency_and_workflow"
+  },
+  "grounding_support_item": {
+    "evidence_type": "self_claim",
+    "evidence_url": "https://omegacode.pl/en/b2b-ecommerce/enterprise/",
+    "role": "claim_grounding",
+    "supported_claims": [
+      "PIM",
+      "MDM"
+    ],
+    "note": "First-party capability page; used as self-claim grounding support, not as independent verification."
+  },
+  "compatibility_representation": {
+    "field": "evidence_content",
+    "method": "concatenate primary fresh source content with explicit self-claim support content",
+    "provenance_field": "grounding_evidence_items",
+    "note": "Current validator is single-string; no list-native evaluator change is made in Run H."
+  },
+  "expected": {
+    "passed": 8,
+    "reserve": 4,
+    "omega_all_failing_gates": [],
+    "first_blocking_histogram": {
+      "no_decision_maker": 2,
+      "no_recent_evidence": 2,
+      "manual_exclude": 0
+    },
+    "regressions": 0
+  }
+}
