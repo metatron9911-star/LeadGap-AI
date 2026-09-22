@@ -1,0 +1,45 @@
+{
+  "version": "run-c-v1",
+  "purpose": "Deterministic experimental evidence scoring for Run C only; production scoring logic remains unchanged.",
+  "threshold": 70,
+  "components": [
+    {
+      "id": "source_quality",
+      "max": 20,
+      "rule": "20 independent/partner/case evidence; 15 first-party dated company publication; 10 undated first-party/partner page; 0 unverifiable."
+    },
+    {
+      "id": "recency",
+      "max": 20,
+      "rule": "20 <=30d; 15 31-60d; 10 61-90d; 0 >90d or no defensible date."
+    },
+    {
+      "id": "workflow_specificity",
+      "max": 25,
+      "rule": "25 directly documents migration/PIM/MDM/catalog implementation; 15 directly documents Shopify/ecommerce implementation topic; 5 generic company activity; 0 unrelated."
+    },
+    {
+      "id": "catalog_data_relevance",
+      "max": 25,
+      "rule": "25 explicitly product/catalog/supplier/PIM data; 15 adjacent ecommerce implementation where catalog work is plausible but not explicit; 5 generic ecommerce; 0 unrelated."
+    },
+    {
+      "id": "traceability",
+      "max": 10,
+      "rule": "10 exact dated URL + named author/case; 5 exact dated URL without named author/case; 0 weak/no traceability."
+    }
+  ],
+  "noto_agency": {
+    "source_url": "https://notoagency.pl/blogs/strefa-wiedzy/shopify-dla-marki-odziezowej-premium-na-co-zwrocic-uwage",
+    "source_date": "2026-09-08",
+    "basis": "First-party dated article about Shopify for a premium fashion brand; named author Zofia Komada-Andrukhiv.",
+    "component_scores": {
+      "source_quality": 15,
+      "recency": 20,
+      "workflow_specificity": 15,
+      "catalog_data_relevance": 15,
+      "traceability": 10
+    },
+    "total": 75
+  }
+}
