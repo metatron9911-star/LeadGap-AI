@@ -256,5 +256,5 @@ Grounding-related failures are classified by cause:
 - `hook_overclaim`: a hook claim is not actually supported by the company/source evidence. Fix the hook.
 - `source_bundle_mismatch`: the claim is true, but the selected/substituted evidence context no longer covers every declared hook claim. Repair the evidence bundle/context without weakening grounding.
 
-Known limitation: first-party capability pages may be used as `self_claim` grounding evidence. This is valid under the current experiment semantics but is not independent verification. Treat `self_claim_only_grounding` as a precision limitation to monitor, not as a current failing gate.
+Known limitation: first-party capability pages may be used as `self_claim` grounding evidence. **Scope: permitted for the Wave 2 experimental measured state only; must be reviewed before production use.** It is not independent verification. Treat `self_claim_only_grounding` as a precision limitation to monitor, not as a current failing gate.
 
