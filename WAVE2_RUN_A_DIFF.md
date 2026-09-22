@@ -216,3 +216,16 @@ All-failing reserve stacks:
 
 Freeze artifacts live under `research/freeze_run_h/`. They are explicitly marked reconstructed because raw KVS export was not retrieved. The observed Run H terminal result was 8 passed / 4 reserve with 0 regressions.
 
+## Wave 2 headline
+
+**The rules layer saturated at 8/12; further gains require collector improvements or explicit source-policy changes, not looser scoring/rubric/threshold rules.**
+
+After Run H, every remaining blocker sits outside the scoring/threshold path:
+
+- Brand Active — no verified current successor → collector / DM sourcing
+- e-point — no fresh qualifying PIM/product-data evidence found in current scope → search-scope / collector
+- KK Digital — relevant source exists but publication date remains unresolved → collector / date extraction
+- Storise — legal identity chain is supportable, but acceptance of that chain as DM evidence is unresolved → source-policy
+
+This marks a natural boundary between Wave 2 (pipeline/rule calibration) and Wave 3 (collector and source-policy work).
+
