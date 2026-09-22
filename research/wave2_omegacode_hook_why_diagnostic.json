@@ -1,0 +1,40 @@
+{
+  "run_id": "lg-2026-09-22-wave2-omegacode-hook-why-diagnostic",
+  "basis_state": "Run G",
+  "target_company": "OmegaCode",
+  "current_first_blocking_gate": "manual_exclude",
+  "trigger": "hook_grounding_failed",
+  "question": "hook_claim_MDM_supported",
+  "answer": true,
+  "support": {
+    "company_capability": "OmegaCode explicitly markets MDM/PIM and enterprise Master Data Management services.",
+    "sources": [
+      {
+        "url": "https://omegacode.pl/en/b2b-ecommerce/enterprise/",
+        "note": "States 'PIM, MDM, ESB & global data architecture' and lists Master Data Management (MDM/PIM) among managed enterprise ecommerce capabilities."
+      },
+      {
+        "url": "https://omegacode.pl/ecommerce-b2b/",
+        "note": "Enterprise offering explicitly includes 'zarządzanie Master Data (MDM/PIM)'."
+      }
+    ]
+  },
+  "diagnosis": "hook_claim_supported_companywide_but_not_grounded_in_substituted_evidence",
+  "interpretation": "The MDM claim is not an over-claim about OmegaCode's capabilities. The failure was introduced because the new fresh PPWR evidence used in Run G does not contain MDM, while hook_grounding validates claims only against the selected evidence_content.",
+  "rejected_fixes": [
+    {
+      "option": "drop_MDM_from_hook",
+      "reason": "Would remove a factually supported capability merely to fit the substituted source."
+    },
+    {
+      "option": "weaken_grounding_rule",
+      "reason": "Would be a rule-level precision loss and is unnecessary."
+    }
+  ],
+  "recommended_fix": {
+    "class": "source_bundle_grounding_repair",
+    "option": "b",
+    "description": "Keep the fresh dated PPWR source for recency and add a current OmegaCode capability source that explicitly supports MDM/PIM to the evidence bundle used by hook grounding. Do not weaken the rule and do not delete a supported claim.",
+    "rule_level_change": false
+  }
+}
