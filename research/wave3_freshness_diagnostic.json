@@ -1,0 +1,74 @@
+{
+  "diagnostic_id": "lg-2026-09-23-wave3-freshness-diagnostic",
+  "basis_state": "Frozen Run H",
+  "artifact_type": "research_diagnostic",
+  "e_point": {
+    "question": "Does a qualifying dated PIM/product-data source exist inside the frozen 90-day window?",
+    "result": "no_qualifying_fresh_source_found",
+    "classification": "no_evidence_exists",
+    "scope_note": "This means no qualifying fresh source was found in the current targeted public-web research scope; it is not a mathematical claim that no such source can exist anywhere.",
+    "evidence_checked": [
+      {
+        "url": "https://www.e-point.com/blog",
+        "finding": "The latest PIM-tagged e-point blog items surfaced are from June 2025, well outside the frozen 90-day window."
+      },
+      {
+        "url": "https://www.e-point.com/blog/pim-reduces-operating-costs",
+        "date": "2025-06-17",
+        "finding": "Strong PIM/product-data relevance, but far outside the window."
+      },
+      {
+        "url": "https://www.linkedin.com/company/e-point-sa",
+        "finding": "Fresh September 2026 company posts exist, but the surfaced posts are banking/AI-related rather than PIM/product-data evidence."
+      },
+      {
+        "url": "https://www.e-point.com/pim-implementation",
+        "finding": "Strong current PIM capability page, but no defensible publication date."
+      }
+    ],
+    "planning_effect": "Remove e-point from the active Run I source-substitution queue unless a new date-bearing source is discovered later.",
+    "next_action": "inactive_pending_new_evidence"
+  },
+  "kk_digital": {
+    "question": "Can the existing Hekiert case publication date be defensibly extracted from another public surface?",
+    "result": "no_defensible_publication_date_extracted",
+    "classification": "sourcing_gap",
+    "diagnostic_subtype": "date_extraction_unresolved",
+    "evidence_checked": [
+      {
+        "url": "https://kkdigital.pl/wdrozenie-shopify-dla-hekiertmeble-pl-i-wsparcie-dalszej-ekspansji/",
+        "finding": "Strong Hekiert case content; no publication date exposed in the surfaced page text."
+      },
+      {
+        "url": "https://kkdigital.pl/migracje-sklepow/",
+        "finding": "Current migration page references Hekiert. Image filenames contain Aug 2026-looking timestamps, but those are media asset names and are not defensible as the publication date of the Hekiert case."
+      },
+      {
+        "url": "https://kkdigital.pl/realizacje/",
+        "finding": "Portfolio page confirms the Hekiert project but exposes no case publication date."
+      },
+      {
+        "url": "https://kkdigital.pl/sprzedaz-mebli-na-shopify/",
+        "finding": "Related Hekiert project page exists, but no defensible publication date surfaced."
+      }
+    ],
+    "rejected_date_proxies": [
+      "search-engine crawl date",
+      "image filename timestamp",
+      "current page availability",
+      "undated related-page presence"
+    ],
+    "planning_effect": "Do not run a date-rule bypass and do not treat media timestamps as case publication dates. Run I should not promote KK Digital until a date-bearing source is found or collector metadata extraction is improved.",
+    "next_action": "collector_date_metadata_or_alternate_dated_source"
+  },
+  "run_i_scope": {
+    "ready_for_clean_data_level_substitution": [],
+    "inactive_due_to_no_evidence": [
+      "e-point"
+    ],
+    "still_active_but_not_ready": [
+      "KK Digital"
+    ],
+    "note": "No clean candidate is currently ready for a Run I promotion experiment from the freshness branch."
+  }
+}
