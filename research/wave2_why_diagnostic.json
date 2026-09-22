@@ -1,0 +1,61 @@
+{
+  "run_id": "lg-2026-09-22-wave2-why-diagnostic",
+  "basis_state": "Run D / all-gates diagnostic",
+  "purpose": "Explain why the two single-gate reserve candidates fail before choosing any global fix.",
+  "targets": [
+    {
+      "company_name": "The Commerce Team Global",
+      "failing_gate": "low_evidence_score",
+      "why": "evidence_low_quality",
+      "why_detail": "The score failure is attributable to the evidence selected in the frozen candidate state: a broad platform-strategy/ thought-leadership article, not a concrete catalog/product-data pain signal. The existing candidate note already says the evidence is broad and not specific enough. A stronger September 2026 KEF Shopify Plus migration case now exists, so the next action should be source substitution/re-evaluation under the same rubric rather than changing the global scoring rubric first.",
+      "current_evidence": {
+        "url": "https://uk.linkedin.com/in/paul-sanderson-9b704b6",
+        "type": "linkedin_post",
+        "date": "2026-07-24",
+        "evidence_score": 65
+      },
+      "stronger_evidence_found": {
+        "url": "https://www.thecommerceteam.com/our-work/kef-shopify-plus-migration",
+        "published": "2026-09",
+        "type": "case_study",
+        "notes": "Concrete Shopify Plus migration, integration and multi-market implementation case authored by Paul Sanderson."
+      },
+      "fix_implication": "Do not widen/loosen the global scoring rubric based on CTG alone. First test whether replacing the weak source with the stronger dated case changes the score under the existing Run-C rubric."
+    },
+    {
+      "company_name": "7thSENSE",
+      "failing_gate": "no_decision_maker",
+      "why": "role_matrix_narrow",
+      "why_detail": "Current management is public, but the fixed PIM/MDM matrix only accepts CTO / Head of Delivery / Solution(s) Architect / Managing Partner. 7thSENSE publicly lists two CEOs plus Head of Project Management, Head of Consulting & Sales, Head of Software Development and Head of IT. The candidate was excluded because none of those exact titles match the matrix, not because no management exists.",
+      "public_management": [
+        {
+          "name": "Michael Bofinger",
+          "role": "CEO"
+        },
+        {
+          "name": "Blasius Damaschek",
+          "role": "CEO"
+        },
+        {
+          "name": "Robin Hoffmann",
+          "role": "Head of Project Management"
+        },
+        {
+          "name": "Robin Schnaidt",
+          "role": "Head of Consulting & Sales"
+        },
+        {
+          "name": "Sebastian Wilhelm",
+          "role": "Head of Software Development"
+        },
+        {
+          "name": "Fernando Kindermann",
+          "role": "Head of IT"
+        }
+      ],
+      "source": "https://www.7thsense.de/agentur/7thsense.html",
+      "fix_implication": "If changing the role matrix, test a principled matrix extension (for example CEO and/or project/delivery-equivalent leadership) across all 12 candidates. Do not add a 7thSENSE-specific override."
+    }
+  ],
+  "decision_note": "The why-diagnostic weakens a generic score-first plan: CTG's failure points to weak selected evidence, whereas 7thSENSE points to role-matrix coverage. Any next experiment should target the diagnosed cause, not merely the visible gate."
+}
