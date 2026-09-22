@@ -1,0 +1,85 @@
+{
+  "run_id": "lg-2026-09-22-wave2-run-g-all-gates-reconstructed",
+  "basis_state": "Run G final deterministic state",
+  "artifact_type": "reconstructed",
+  "candidates": 12,
+  "passed": 7,
+  "reserve": 5,
+  "first_blocking_histogram": {
+    "pre_filter": 0,
+    "no_decision_maker": 2,
+    "no_recent_evidence": 2,
+    "low_fit_score": 0,
+    "low_evidence_score": 0,
+    "language_mismatch": 0,
+    "manual_exclude": 1
+  },
+  "all_failing_gate_counts": {
+    "pre_filter": 0,
+    "no_decision_maker": 2,
+    "no_recent_evidence": 4,
+    "low_fit_score": 0,
+    "low_evidence_score": 4,
+    "language_mismatch": 0,
+    "manual_exclude": 1
+  },
+  "reserve_detail": [
+    {
+      "company_name": "OmegaCode",
+      "all_failing_gates": [
+        "manual_exclude"
+      ],
+      "first_blocking_gate": "manual_exclude",
+      "gate_count": 1,
+      "multi_gate": false,
+      "cause": "hook_grounding_failed / source_bundle_mismatch"
+    },
+    {
+      "company_name": "e-point",
+      "all_failing_gates": [
+        "no_recent_evidence",
+        "low_evidence_score"
+      ],
+      "first_blocking_gate": "no_recent_evidence",
+      "gate_count": 2,
+      "multi_gate": true
+    },
+    {
+      "company_name": "KK Digital",
+      "all_failing_gates": [
+        "no_recent_evidence",
+        "low_evidence_score"
+      ],
+      "first_blocking_gate": "no_recent_evidence",
+      "gate_count": 2,
+      "multi_gate": true
+    },
+    {
+      "company_name": "Brand Active",
+      "all_failing_gates": [
+        "no_decision_maker",
+        "no_recent_evidence",
+        "low_evidence_score"
+      ],
+      "first_blocking_gate": "no_decision_maker",
+      "gate_count": 3,
+      "multi_gate": true
+    },
+    {
+      "company_name": "Storise",
+      "all_failing_gates": [
+        "no_decision_maker",
+        "no_recent_evidence",
+        "low_evidence_score"
+      ],
+      "first_blocking_gate": "no_decision_maker",
+      "gate_count": 3,
+      "multi_gate": true
+    }
+  ],
+  "invariants": {
+    "I1": "7 + 5 = 12",
+    "I2": "2 + 2 + 1 = 5",
+    "I3": "linkedin=3 + google=4 = 7"
+  }
+}
