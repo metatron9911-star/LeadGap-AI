@@ -16,12 +16,14 @@ jobs:
       - name: Install dependencies
         run: python -m pip install -r requirements.txt
       - name: Compile
-        run: python -m py_compile main.py outreach_v101.py smoke_test.py preflight_v101_test.py
+        run: python -m py_compile main.py outreach_v101.py smoke_test.py preflight_v101_test.py wave2_test.py src/enrichment/*.py src/verification/*.py
       - name: Existing smoke tests
         run: python smoke_test.py
       - name: Outreach v1.0.1 preflight
         run: python preflight_v101_test.py
 
+      - name: Wave2 unit tests
+        run: python wave2_test.py
       - name: CatalogFix wave-1 calibration
         env:
           RUN_ID: lg-2026-09-22-01
