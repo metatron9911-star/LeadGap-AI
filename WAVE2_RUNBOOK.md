@@ -141,3 +141,25 @@ All-gates mode is a planning diagnostic, not a permanent production output. Use 
 
 Normal runs may continue to emit the compact first-blocking histogram. Recompute the all-gates view only when planning or validating a structural change.
 
+## Why-diagnostic enums
+
+Why-diagnostics are gate-specific, not one shared enum.
+
+For evidence-related gates:
+
+`evidence_gate_why = no_evidence_exists | sourcing_gap | cutoff_policy_question | evidence_low_quality | rubric_missed`
+
+For decision-maker gates:
+
+`dm_gate_why = role_matrix_narrow | role_actually_wrong | dm_not_public`
+
+A gate is an observed failure condition; a why-diagnostic identifies the underlying cause and therefore the likely fix class. In particular, `low_evidence_score` may be caused by weak selected evidence, missing/old evidence, or a scoring-rubric problem. Do not infer the fix class from the gate alone.
+
+## All-gates invariants
+
+`all_failing_gate_counts` is a diagnostic view, not a manifest accounting field. It is not subject to I1, I2, or I3. Multi-gate candidates are intentionally counted once per failing gate, so its total may exceed both `reserve_count` and `candidates_raw`.
+
+## Data-level source substitution
+
+An evidence-substitution calibration run may replace the selected evidence for a candidate while leaving collector behavior unchanged. A successful promotion proves only that downstream scoring/gating can work with a stronger input. It does **not** prove that the collector would discover that stronger source automatically. Collector-discovery improvement remains a separate follow-up experiment.
+
