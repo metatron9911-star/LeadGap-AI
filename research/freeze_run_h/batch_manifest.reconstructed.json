@@ -1,0 +1,54 @@
+{
+  "freeze_id": "lg-2026-09-23-wave2-run-h-freeze",
+  "artifact_type": "reconstructed",
+  "provenance": {
+    "reference_baseline": "lg-2026-09-22-01",
+    "intermediate_dm_only_commit": "6ff36a5",
+    "measured_state": "Run H",
+    "measured_state_branch": "wave2-run-h-omegacode-grounding-bundle-repair",
+    "note": "Run H raw Apify status was observed as 8 passed / 4 reserve, regressions=0. This manifest is reconstructed from deterministic Run H code plus the observed terminal result; it is not a raw KVS export."
+  },
+  "run_h": {
+    "run_id": "lg-2026-09-22-wave2-run-h-omegacode-grounding-bundle-repair",
+    "totals": {
+      "candidates_raw": 12,
+      "passed_thresholds": 8,
+      "reserve_count": 4
+    },
+    "segment_distribution_passed": {
+      "shopify_commerce_agency": 4,
+      "pim_mdm_integrator": 3,
+      "pl_cee_de_smb_agency": 1
+    },
+    "exclusion_reasons_histogram": {
+      "pre_filter": 0,
+      "no_decision_maker": 2,
+      "no_recent_evidence": 2,
+      "low_fit_score": 0,
+      "low_evidence_score": 0,
+      "language_mismatch": 0,
+      "manual_exclude": 0
+    },
+    "source_mix": {
+      "linkedin": 3,
+      "clutch": 0,
+      "shopify_partners": 0,
+      "apify_store": 0,
+      "google": 5,
+      "referral": 0,
+      "other": 0
+    },
+    "regressions_on_run_g_passed_set": 0,
+    "email_stage_note": "Run A' email-only was executed separately and improved confident email coverage among the then-passed set from 0/4 to 2/4. Runs B-H did not rerun email enrichment."
+  },
+  "invariants": {
+    "I1": "8 + 4 = 12",
+    "I2": "2 + 2 = 4",
+    "I3": "3 linkedin + 5 google = 8"
+  },
+  "known_limitations": [
+    "Run H grounding support for OmegaCode MDM uses first-party self-claim evidence, not independent verification.",
+    "Current grounding evaluator is single-string evidence_content; Run H uses compatibility concatenation with explicit provenance metadata rather than a list-native evidence model.",
+    "Collector capability was not improved by manual source substitutions in Runs E and G."
+  ]
+}
