@@ -2,7 +2,7 @@ name: LeadGap preflight
 
 on:
   push:
-    branches: [main]
+    branches: [main, wave2-dm-email-enrichment]
   workflow_dispatch:
 
 jobs:
