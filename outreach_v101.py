@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import math
 import re
 from dataclasses import dataclass
@@ -121,6 +122,18 @@ def load_stopwords(path: str | Path | None = None) -> frozenset[str]:
 
 
 STOPWORDS_V1 = load_stopwords()
+
+_MAIN_SCHEMA_PATH = Path(__file__).with_name("schemas") / "leadgap-lead.json"
+_MAIN_OUTPUT_FIELDS = frozenset(
+    json.loads(_MAIN_SCHEMA_PATH.read_text(encoding="utf-8"))
+    .get("properties", {})
+    .keys()
+)
+
+
+def public_main_record(record: dict) -> dict:
+    """Strip research/internal fields so main output conforms to the canonical JSON Schema."""
+    return {key: value for key, value in record.items() if key in _MAIN_OUTPUT_FIELDS}
 
 
 def token_set(text: str) -> set[str]:
@@ -464,4 +477,5 @@ def evaluate_batch(candidates: list[dict], *, run_id: str, run_timestamp_utc: st
         candidates_raw=len(candidates),
         passed_pre_filter=passed_pre_filter,
     )
+    passed = [public_main_record(row) for row in passed]
     return passed, reserve, manifest
