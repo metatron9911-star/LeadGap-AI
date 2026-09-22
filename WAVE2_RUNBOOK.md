@@ -124,3 +124,20 @@ This does not replace the reference baseline. `lg-2026-09-22-01` remains the per
 
 Run A' email-only **was executed** on top of the frozen DM-only state. It improved confident email coverage among passed leads from 0/4 to 2/4 while leaving pass/reserve counts unchanged. Runs B/C/D did not rerun email enrichment and should be read as evidence/hook experiments on the same 12-candidate calibration batch.
 
+## Invariant scope for all-gates diagnostics
+
+I2 applies only to the first-blocking histogram:
+
+`sum(first_blocking_histogram.values()) == reserve_count`.
+
+It does **not** apply to `all_failing_gate_counts`, because multi-gate reserve candidates are counted once per failing gate there. Therefore `sum(all_failing_gate_counts.values())` may exceed `reserve_count` by design.
+
+## Diagnostic-mode scope
+
+All-gates mode is a planning diagnostic, not a permanent production output. Use it when:
+- selecting or sequencing fixes;
+- a first-blocking bucket may hide downstream failures;
+- a change unexpectedly moves candidates between exclusion stages.
+
+Normal runs may continue to emit the compact first-blocking histogram. Recompute the all-gates view only when planning or validating a structural change.
+
