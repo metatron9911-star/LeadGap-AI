@@ -21,3 +21,15 @@ jobs:
         run: python smoke_test.py
       - name: Outreach v1.0.1 preflight
         run: python preflight_v101_test.py
+
+      - name: CatalogFix wave-1 calibration
+        env:
+          RUN_ID: lg-2026-09-22-01
+          RUN_TIMESTAMP_UTC: 2026-09-22T04:12:00Z
+        run: python run_catalogfix_wave1.py
+      - name: Upload CatalogFix wave-1 calibration
+        uses: actions/upload-artifact@v4
+        with:
+          name: catalogfix-wave1-calibration
+          path: research/wave1_output/
+          if-no-files-found: error
