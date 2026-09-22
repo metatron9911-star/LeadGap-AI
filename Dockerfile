@@ -7,9 +7,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . ./
 
-# Real outreach batches are gated by deterministic synthetic pre-flight tests.
-RUN python -m py_compile main.py outreach_v101.py smoke_test.py preflight_v101_test.py \
+RUN python -m py_compile main.py outreach_v101.py smoke_test.py preflight_v101_test.py run_wave2_evidence_only.py \
     && python smoke_test.py \
     && python preflight_v101_test.py
 
-CMD ["python", "main.py"]
+CMD ["python", "run_wave2_evidence_only.py"]
