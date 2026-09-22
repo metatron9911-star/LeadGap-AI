@@ -187,3 +187,11 @@ Expected properties:
 
 A rule-level experiment may be motivated by one candidate, but it must be interpreted as a global rule change.
 
+## Why-diagnostic targeting rule
+
+Run why-diagnostics against the **current first-blocking gate**, not merely against every failing gate on the candidate.
+
+For a multi-gate reserve candidate, diagnose the gate that currently determines exclusion under `EXCLUSION_PRECEDENCE`. A downstream failing gate may be recorded for context, but it should not drive the next experiment until the first blocker is cleared.
+
+This preserves attribution: a fix should target the gate that can actually change the candidate's first-blocking state or promote it.
+
