@@ -1,0 +1,79 @@
+{
+  "series": "D-H",
+  "artifact_type": "reconstructed_from_deterministic_runs_and_observed_terminal_status",
+  "runs": [
+    {
+      "run": "D",
+      "passed": 5,
+      "reserve": 7,
+      "first_blocking": {
+        "no_decision_maker": 3,
+        "no_recent_evidence": 3,
+        "low_evidence_score": 1,
+        "manual_exclude": 0
+      },
+      "I1": "5+7=12",
+      "I2": "3+3+1=7",
+      "I3": "linkedin=2, google=3 => 5"
+    },
+    {
+      "run": "E",
+      "passed": 6,
+      "reserve": 6,
+      "first_blocking": {
+        "no_decision_maker": 3,
+        "no_recent_evidence": 3,
+        "low_evidence_score": 0,
+        "manual_exclude": 0
+      },
+      "I1": "6+6=12",
+      "I2": "3+3=6",
+      "I3": "linkedin=3, google=3 => 6"
+    },
+    {
+      "run": "F",
+      "passed": 7,
+      "reserve": 5,
+      "first_blocking": {
+        "no_decision_maker": 2,
+        "no_recent_evidence": 3,
+        "low_evidence_score": 0,
+        "manual_exclude": 0
+      },
+      "I1": "7+5=12",
+      "I2": "2+3=5",
+      "I3": "linkedin=3, google=4 => 7",
+      "regressions": 0
+    },
+    {
+      "run": "G",
+      "passed": 7,
+      "reserve": 5,
+      "first_blocking": {
+        "no_decision_maker": 2,
+        "no_recent_evidence": 2,
+        "low_evidence_score": 0,
+        "manual_exclude": 1
+      },
+      "I1": "7+5=12",
+      "I2": "2+2+1=5",
+      "I3": "linkedin=3, google=4 => 7",
+      "regressions": 0
+    },
+    {
+      "run": "H",
+      "passed": 8,
+      "reserve": 4,
+      "first_blocking": {
+        "no_decision_maker": 2,
+        "no_recent_evidence": 2,
+        "low_evidence_score": 0,
+        "manual_exclude": 0
+      },
+      "I1": "8+4=12",
+      "I2": "2+2=4",
+      "I3": "linkedin=3, google=5 => 8",
+      "regressions": 0
+    }
+  ]
+}
