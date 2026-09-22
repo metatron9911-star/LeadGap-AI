@@ -195,3 +195,11 @@ For a multi-gate reserve candidate, diagnose the gate that currently determines 
 
 This preserves attribution: a fix should target the gate that can actually change the candidate's first-blocking state or promote it.
 
+## Cutoff-policy diagnostic rule
+
+`cutoff_policy_question` applies only when **no fresh qualifying source exists at all** within the frozen evidence window.
+
+If a fresh qualifying source exists but the collector/input did not select it, classify the failure as `sourcing_gap`, regardless of whether an older source is also present.
+
+Do not use the existence of an older out-of-window source as evidence for changing the cutoff until fresh-source discovery has been exhausted.
+
