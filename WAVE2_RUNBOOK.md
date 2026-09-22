@@ -85,3 +85,42 @@ When no real verifier credentials are configured:
 - DM-only Run A may proceed and its artifacts are frozen for the later email-only Run A' stage.
 
 A later Run A' should apply real email verification on top of the frozen DM-only results rather than rerunning the decision-maker stage.
+
+## First-blocking vs all-failing gates
+
+The manifest histogram is a **first-blocking-gate histogram**. It records only the first failing gate selected by `EXCLUSION_PRECEDENCE` for each reserve candidate.
+
+Therefore:
+- histogram bucket size is not the same as total number of failing conditions;
+- one candidate may fail multiple gates simultaneously;
+- resolving the first visible gate may only move the candidate to the next failing gate;
+- promotion requires clearing **all** failing gates for that candidate.
+
+Before treating a histogram bucket as a binding constraint, inspect an all-gates diagnostic for the affected reserve candidates.
+
+## Hook grounding semantics
+
+`hook_grounding` is not a separate exclusion stage. It is a validation input to `manual_exclude`:
+- if any declared hook claim is absent from `evidence_content`, `grounding_failed=True`;
+- this sets the existing `manual_exclude` flag;
+- because `manual_exclude` is last in `EXCLUSION_PRECEDENCE`, it can remain hidden behind earlier failures such as `no_recent_evidence` or `low_evidence_score`.
+
+When `manual_exclude` is caused by hook grounding, reports should state that explicitly instead of implying a human/manual decision.
+
+## Reconstructed deterministic artifacts
+
+Raw Apify KVS artifacts are preferred for freeze.
+
+If raw KVS retrieval is unavailable, a reconstructed artifact may be used for protocol purposes only when:
+1. the reconstruction function/version is identified;
+2. all inputs and source commits/branches are fixed;
+3. the reconstructed artifact is marked `artifact_type: reconstructed`;
+4. deterministic invariants are re-evaluated;
+5. the freeze note records that the artifact was reconstructed rather than exported raw.
+
+This does not replace the reference baseline. `lg-2026-09-22-01` remains the permanent comparison baseline.
+
+## Email stage note
+
+Run A' email-only **was executed** on top of the frozen DM-only state. It improved confident email coverage among passed leads from 0/4 to 2/4 while leaving pass/reserve counts unchanged. Runs B/C/D did not rerun email enrichment and should be read as evidence/hook experiments on the same 12-candidate calibration batch.
+
