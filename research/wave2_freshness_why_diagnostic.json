@@ -1,0 +1,92 @@
+{
+  "run_id": "lg-2026-09-22-wave2-freshness-why-diagnostic",
+  "basis_state": "Run F",
+  "diagnostic_scope": "first-blocking no_recent_evidence only",
+  "evidence_gate_why_enum": [
+    "no_evidence_exists",
+    "sourcing_gap",
+    "cutoff_policy_question",
+    "evidence_low_quality",
+    "rubric_missed"
+  ],
+  "targets": [
+    {
+      "company_name": "e-point",
+      "first_blocking_gate": "no_recent_evidence",
+      "downstream_gates": [
+        "low_evidence_score"
+      ],
+      "why": "sourcing_gap",
+      "confirmation": "Strong current PIM/product-data pages exist, but no defensible publication date inside the frozen 90-day window was established on the selected evidence. Current Run F diagnosis therefore remains sourcing_gap rather than cutoff-policy.",
+      "candidate_sources": [
+        {
+          "url": "https://www.e-point.com/pim-implementation",
+          "note": "Strong PIM implementation relevance; no defensible publication date exposed."
+        },
+        {
+          "url": "https://www.e-point.com/e-commerce",
+          "note": "Current PIM/e-commerce implementation page with product-data relevance; no defensible publication date exposed."
+        }
+      ],
+      "next_fix_class": "source discovery / date-bearing source substitution",
+      "run_g_eligible": true
+    },
+    {
+      "company_name": "OmegaCode",
+      "first_blocking_gate": "no_recent_evidence",
+      "downstream_gates": [
+        "low_evidence_score"
+      ],
+      "why": "sourcing_gap",
+      "diagnosis_change_from_preliminary": true,
+      "previous_preliminary_why": "cutoff_policy_question",
+      "confirmation": "The earlier June 2026 DPP article is outside the frozen 90-day window, but a newer September 9, 2026 Omega Code article on PPWR/e-commerce explicitly references PIM and product-data reporting. Therefore the current first-blocking failure is better classified as sourcing_gap: fresh qualifying evidence exists but was not selected by the frozen collector/input.",
+      "candidate_sources": [
+        {
+          "url": "https://omegacode.pl/",
+          "date": "2026-09-09",
+          "note": "Homepage exposes Sep 9, 2026 PPWR/e-commerce article; snippet states PIM helps with packaging reporting."
+        },
+        {
+          "url": "https://omegacode.pl/en/blog/digital-product-passport/",
+          "date": "2026-06-09",
+          "note": "Highly relevant but outside 90-day window; no longer the best explanation of current failure."
+        }
+      ],
+      "next_fix_class": "source substitution / collector follow-up",
+      "run_g_eligible": true
+    },
+    {
+      "company_name": "KK Digital",
+      "first_blocking_gate": "no_recent_evidence",
+      "downstream_gates": [
+        "low_evidence_score"
+      ],
+      "why": "sourcing_gap",
+      "confirmation": "The Hekiert Shopify case is highly specific and current-looking, but no defensible publication date is exposed on the page itself. The collector has strong evidence but not a date-bearing source acceptable to the 90-day gate.",
+      "candidate_sources": [
+        {
+          "url": "https://kkdigital.pl/wdrozenie-shopify-dla-hekiertmeble-pl-i-wsparcie-dalszej-ekspansji/",
+          "note": "Strong Shopify/product-configuration case; page content is highly relevant but does not expose a defensible publication date."
+        },
+        {
+          "url": "https://kkdigital.pl/migracje-sklepow/",
+          "note": "Current migration page references Hekiert and other migrations; no exact publication date established."
+        }
+      ],
+      "next_fix_class": "date-bearing source discovery / source substitution",
+      "run_g_eligible": true
+    }
+  ],
+  "exclusions_from_this_pass": [
+    {
+      "company_name": "Brand Active",
+      "reason": "first-blocking gate is no_decision_maker; freshness is downstream and is not the target of this diagnostic pass"
+    },
+    {
+      "company_name": "Storise",
+      "reason": "first-blocking gate is no_decision_maker; freshness is downstream and is not the target of this diagnostic pass"
+    }
+  ],
+  "run_g_planning_note": "Run G should include only e-point, OmegaCode, and KK Digital, and should not mix DM work for Brand Active/Storise. The three targets all classify as sourcing_gap in current Run F state, but the source-substitution details differ: OmegaCode has a clearly fresh dated source; e-point and KK Digital still need a defensible date-bearing source before a clean substitution run."
+}
