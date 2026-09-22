@@ -258,3 +258,14 @@ Grounding-related failures are classified by cause:
 
 Known limitation: first-party capability pages may be used as `self_claim` grounding evidence. This is valid under the current experiment semantics but is not independent verification. Treat `self_claim_only_grounding` as a precision limitation to monitor, not as a current failing gate.
 
+## Freshness diagnostic split
+
+Do not collapse source-existence and date-extraction into one why-class.
+
+For an undated/current-looking evidence problem, distinguish:
+
+- `no_evidence_exists`: no qualifying fresh dated source is found in the current research scope. This is an exit/reclassification, not a fix.
+- `sourcing_gap / date_extraction_unresolved`: the relevant source exists, but a defensible publication date has not been established. Do not substitute crawl dates, media filenames, page availability, or other non-publication proxies.
+
+A candidate reclassified to `no_evidence_exists` leaves the active fix queue until new evidence appears. A date-extraction candidate remains active, but is not ready for a clean promotion run until a defensible date-bearing source or metadata path is established.
+
