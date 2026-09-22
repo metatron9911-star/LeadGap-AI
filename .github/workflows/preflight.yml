@@ -31,6 +31,18 @@ jobs:
           RUN_ID: lg-2026-09-22-01
           RUN_TIMESTAMP_UTC: 2026-09-22T04:12:00Z
         run: python run_catalogfix_wave1.py
+      - name: Wave2 DM-only Run A
+        env:
+          RUN_ID: lg-2026-09-22-wave2-dm-only
+          RUN_TIMESTAMP_UTC: 2026-09-22T15:55:00Z
+        run: python run_wave2_dm_only.py
+      - name: Upload Wave2 DM-only Run A
+        uses: actions/upload-artifact@v4
+        with:
+          name: wave2-dm-only-run-a
+          path: research/wave2_dm_only_output/
+          if-no-files-found: error
+
       - name: Upload CatalogFix wave-1 calibration
         uses: actions/upload-artifact@v4
         with:
