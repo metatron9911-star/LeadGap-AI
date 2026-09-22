@@ -49,3 +49,26 @@ Artifacts to retain:
 - schema_conformance.log
 
 Do not send outbound email as part of these calibration runs.
+
+
+## Deterministic DM confidence
+
+`dm_confidence = 0.7 * role_match_score + 0.3 * source/evidence confidence`.
+Tie-break order is fixed: total score, role match, source confidence, fixed source priority, candidate name.
+
+## Verifier status semantics
+
+Manifest/reporting must distinguish:
+- `skipped`: no verifier credentials configured;
+- `partial`: at least one verifier configured, but not the full waterfall;
+- `complete`: all configured waterfall providers available.
+
+`provider_skipped` lists providers skipped because credentials are absent. A skipped provider is never counted as an email miss.
+
+Confidence provenance is explicit:
+- Hunter numeric score → `hunter_score`;
+- NeverBounce categorical valid → `neverbounce_category`;
+- ZeroBounce categorical valid → `zerobounce_category`;
+- MillionVerifier categorical valid → `millionverifier_category`.
+
+A categorical valid result may satisfy policy, but it is never represented as if the provider emitted a numeric score.
