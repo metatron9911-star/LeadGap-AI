@@ -72,3 +72,16 @@ Confidence provenance is explicit:
 - MillionVerifier categorical valid → `millionverifier_category`.
 
 A categorical valid result may satisfy policy, but it is never represented as if the provider emitted a numeric score.
+
+
+## provider_skipped invariant
+
+`provider_skipped` is a valid terminal status, not an error condition.
+
+When no real verifier credentials are configured:
+- `verification_status = "skipped"`;
+- email coverage is reported as **not run / n/a**, not as a verified zero;
+- no simulated key or fabricated verifier response may be used;
+- DM-only Run A may proceed and its artifacts are frozen for the later email-only Run A' stage.
+
+A later Run A' should apply real email verification on top of the frozen DM-only results rather than rerunning the decision-maker stage.
