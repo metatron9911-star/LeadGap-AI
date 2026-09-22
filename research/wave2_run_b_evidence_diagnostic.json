@@ -1,0 +1,46 @@
+[
+  {
+    "company_name": "Noto Agency",
+    "diagnostic": "sourcing_gap",
+    "apply_to_run_b": true,
+    "evidence": {
+      "recent_evidence": "Noto Agency published a September 8, 2026 article on Shopify for premium fashion brands, authored by Zofia Komada-Andrukhiv.",
+      "evidence_type": "company_blog",
+      "evidence_url": "https://notoagency.pl/blogs/strefa-wiedzy/shopify-dla-marki-odziezowej-premium-na-co-zwrocic-uwage",
+      "evidence_date_raw": "2026-09-08",
+      "evidence_content": "Fresh dated company content authored by Zofia Komada-Andrukhiv about Shopify for premium fashion brands; this establishes current Shopify implementation activity inside the frozen 90-day window.",
+      "source_urls_append": [
+        "https://notoagency.pl/blogs/strefa-wiedzy/shopify-dla-marki-odziezowej-premium-na-co-zwrocic-uwage"
+      ]
+    },
+    "rationale": "Fresh, exact publication date inside frozen 90-day window."
+  },
+  {
+    "company_name": "OmegaCode",
+    "diagnostic": "cutoff_policy_question",
+    "apply_to_run_b": false,
+    "candidate_evidence": {
+      "evidence_url": "https://omegacode.pl/en/blog/digital-product-passport/",
+      "evidence_date_raw": "2026-06-09",
+      "note": "Highly relevant product-data/DPP evidence, but outside frozen 90-day window on 2026-09-22."
+    }
+  },
+  {
+    "company_name": "KK Digital",
+    "diagnostic": "sourcing_gap",
+    "apply_to_run_b": false,
+    "candidate_evidence": {
+      "evidence_url": "https://kkdigital.pl/wdrozenie-shopify-dla-hekiertmeble-pl-i-wsparcie-dalszej-ekspansji/",
+      "note": "Strong Shopify/product-configuration case, but no defensible publication date exposed on the page; do not promote into Run B."
+    }
+  },
+  {
+    "company_name": "e-point",
+    "diagnostic": "sourcing_gap",
+    "apply_to_run_b": false,
+    "candidate_evidence": {
+      "evidence_url": "https://www.e-point.com/services/e-commerce/product-information-management-pim",
+      "note": "Current strong PIM relevance, but no qualifying exact/approximate publication date inside the frozen window was established."
+    }
+  }
+]
