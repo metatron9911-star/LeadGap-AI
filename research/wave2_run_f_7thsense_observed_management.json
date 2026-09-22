@@ -1,0 +1,44 @@
+{
+  "run_id": "lg-2026-09-22-wave2-run-f-role-matrix-only",
+  "target_company": "7thSENSE",
+  "diagnostic": "role_matrix_narrow",
+  "affected_segment": "pim_mdm_integrator",
+  "rule_change": {
+    "before": [
+      "cto",
+      "head of delivery",
+      "solution architect",
+      "solutions architect",
+      "managing partner"
+    ],
+    "after": [
+      "cto",
+      "ceo",
+      "head of delivery",
+      "solution architect",
+      "solutions architect",
+      "managing partner"
+    ],
+    "rationale": "CEO is an executive-equivalent decision-maker for a PIM/MDM integrator; this is narrower than accepting arbitrary Head of X roles."
+  },
+  "observed_management": [
+    {
+      "name": "Michael Bofinger",
+      "role": "CEO",
+      "source": "about_page",
+      "source_url": "https://www.7thsense.de/agentur/7thsense.html",
+      "confidence": 1
+    },
+    {
+      "name": "Blasius Damaschek",
+      "role": "CEO",
+      "source": "about_page",
+      "source_url": "https://www.7thsense.de/agentur/7thsense.html",
+      "confidence": 1
+    }
+  ],
+  "collector_behavior_changed": false,
+  "thresholds_changed": false,
+  "evidence_logic_changed": false,
+  "note": "These executives were already publicly observable in the why-diagnostic; Run F changes eligibility, not collector search behavior."
+}
