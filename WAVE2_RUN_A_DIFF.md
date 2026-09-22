@@ -150,3 +150,69 @@ Contains:
 - [ ] update headline `email_coverage`
 
 Before changing any threshold, separately investigate the new visible bottleneck: three recovered DMs are now blocked by missing qualifying recent dated evidence.
+
+## Wave 2 measured series: D → H
+
+Reference baseline remains `lg-2026-09-22-01`.
+
+Intermediate DM-only state remains commit `6ff36a5`.
+
+### Run D — hook-grounding logic
+- result: 5 passed / 7 reserve
+- Noto promoted after fixing grounding against the substituted source
+- first-blocking histogram: no_decision_maker=3, no_recent_evidence=3, low_evidence_score=1
+- attribution: grounding/manual_exclude
+- invariant checks: I1/I2/I3 pass
+
+### Run E — CTG evidence substitution
+- result: 6 passed / 6 reserve
+- The Commerce Team Global promoted
+- attribution: evidence_low_quality → stronger fresh source under the same rubric
+- collector unchanged; this validated downstream handling, not discovery
+- invariant checks: I1/I2/I3 pass
+
+### Run F — PIM/MDM role-matrix title gap
+- result: 7 passed / 5 reserve
+- 7thSENSE promoted
+- change: add CEO alongside Managing Partner for pim_mdm_integrator
+- interpretation: title-gap closure, not replacement of Managing Partner
+- regressions: 0
+- invariant checks: I1/I2/I3 pass
+
+### Run G — OmegaCode fresh source substitution
+- result: 7 passed / 5 reserve
+- no promotion, but no regression
+- substitution removed no_recent_evidence and low_evidence_score for OmegaCode
+- it also introduced a new manual_exclude via hook grounding because the new source narrowed claim coverage
+- classification: sourcing_gap confirmed; new why-class source_bundle_mismatch exposed
+- invariant checks: I1/I2/I3 pass
+
+### Run H — OmegaCode grounding bundle repair
+- result: 8 passed / 4 reserve
+- OmegaCode promoted
+- repair: preserve fresh PPWR evidence for recency/workflow and add first-party MDM/PIM support into the existing single-string grounding context with explicit provenance metadata
+- structural evidence model unchanged
+- grounding rule unchanged
+- regressions: 0
+- invariant checks: I1/I2/I3 pass
+
+### Run H measured state
+Passed segment distribution:
+- shopify_commerce_agency: 4
+- pim_mdm_integrator: 3
+- pl_cee_de_smb_agency: 1
+
+First-blocking reserve:
+- e-point: no_recent_evidence
+- KK Digital: no_recent_evidence
+- Brand Active: no_decision_maker
+- Storise: no_decision_maker
+
+All-failing reserve stacks:
+- e-point: no_recent_evidence + low_evidence_score
+- KK Digital: no_recent_evidence + low_evidence_score
+- Brand Active: no_decision_maker + no_recent_evidence + low_evidence_score
+- Storise: no_decision_maker + no_recent_evidence + low_evidence_score
+
+Freeze artifacts live under `research/freeze_run_h/`. They are explicitly marked reconstructed because raw KVS export was not retrieved. The observed Run H terminal result was 8 passed / 4 reserve with 0 regressions.
+
