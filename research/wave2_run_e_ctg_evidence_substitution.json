@@ -1,0 +1,47 @@
+{
+  "run_id": "lg-2026-09-22-wave2-run-e-ctg-evidence-substitution-only",
+  "target_company": "The Commerce Team Global",
+  "diagnostic": "evidence_low_quality",
+  "mode": "evidence-substitution-only",
+  "collector_behavior_changed": false,
+  "global_scoring_logic_changed": false,
+  "thresholds_changed": false,
+  "dm_logic_changed": false,
+  "evidence_max_age_days_changed": false,
+  "previous_evidence": {
+    "url": "https://uk.linkedin.com/in/paul-sanderson-9b704b6",
+    "type": "linkedin_post",
+    "date_raw": "2026-07-24",
+    "evidence_score": 65
+  },
+  "substituted_evidence": {
+    "evidence_type": "linkedin_post",
+    "evidence_url": "https://uk.linkedin.com/in/paul-sanderson-9b704b6",
+    "evidence_date_raw": "4 weeks ago",
+    "evidence_content": "The Commerce Team Global announced the successful launch of KEF's new Shopify Plus website. The project delivered a modern Shopify Plus experience focused on performance and scalability, product discovery, and future innovation. The linked KEF case study documents migration to Shopify Online Store 2.0, consolidation of regional storefronts, native Shopify CMS/metafields, integrations, QA and optimisation.",
+    "recent_evidence": "Recent KEF Shopify Plus launch announcement and September 2026 case study documenting migration, integration, multi-market consolidation and Shopify Online Store 2.0 work.",
+    "source_urls_append": [
+      "https://www.thecommerceteam.com/our-work/kef-shopify-plus-migration"
+    ],
+    "support_note": "The case-study page is published Sep 2026; the linked public company announcement appears as 4 weeks ago in the frozen Sep 22, 2026 calibration context. The relative label is used as the defensible date input; no exact day is invented."
+  },
+  "rubric": {
+    "version": "run-c-v1",
+    "component_scores": {
+      "source_quality": 20,
+      "recency": 20,
+      "workflow_specificity": 25,
+      "catalog_data_relevance": 15,
+      "traceability": 5
+    },
+    "total": 85,
+    "rationale": {
+      "source_quality": "Case-study evidence.",
+      "recency": "4 weeks ago => 28-day approximate age under existing parser.",
+      "workflow_specificity": "Direct Shopify migration / implementation / integration work.",
+      "catalog_data_relevance": "Adjacent but not explicit supplier/PIM cleanup; content and merchandising/metafields are directly involved.",
+      "traceability": "Named case and author, but the exact calendar day is not exposed on the case-study page; relative-date corroboration is used, so no full traceability bonus."
+    }
+  },
+  "follow_up": "A successful Run E would validate downstream gating on stronger input only. It would not validate collector discovery; collector improvement remains separate."
+}
