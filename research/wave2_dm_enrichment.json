@@ -1,0 +1,62 @@
+[
+  {
+    "company_name": "e-point",
+    "segment": "pim_mdm_integrator",
+    "candidates": [
+      {
+        "name": "Łukasz Krukowski",
+        "role": "CTO",
+        "source": "about_page",
+        "source_url": "https://www.e-point.pl/author/1500093-lukasz-krukowski",
+        "confidence": 1,
+        "evidence_note": "Current e-point expert profile identifies Łukasz Krukowski as Chief Technology Officer."
+      }
+    ]
+  },
+  {
+    "company_name": "OmegaCode",
+    "segment": "pim_mdm_integrator",
+    "candidates": [
+      {
+        "name": "Tomasz Michałowski",
+        "role": "CTO",
+        "source": "linkedin",
+        "source_url": "https://pl.linkedin.com/in/tomasz-micha%C5%82owski-61a413a7",
+        "confidence": 0.9,
+        "evidence_note": "Recent public event material identifies Tomasz Michałowski as CTO, Omega Code; LinkedIn confirms current Omega Code affiliation."
+      }
+    ]
+  },
+  {
+    "company_name": "Noto Agency",
+    "segment": "pl_cee_de_smb_agency",
+    "candidates": [
+      {
+        "name": "Zofia Komada",
+        "role": "CEO",
+        "source": "local_registry",
+        "source_url": "https://rejestr.io/krs/1035178/noto-agency",
+        "confidence": 1,
+        "evidence_note": "Current registry lists Zofia Kamila Komada as Prezes Zarządu (President of the Management Board)."
+      }
+    ]
+  },
+  {
+    "company_name": "7thSENSE",
+    "segment": "pim_mdm_integrator",
+    "candidates": [],
+    "missing_reason": "management found, but no current role matching the fixed PIM/MDM matrix (CTO / Head of Delivery / Solution Architect / Managing Partner)"
+  },
+  {
+    "company_name": "Brand Active",
+    "segment": "pl_cee_de_smb_agency",
+    "candidates": [],
+    "missing_reason": "no current qualifying Owner / CEO / Managing Director / Head of Client Services verified; former CEO evidence is stale"
+  },
+  {
+    "company_name": "Storise",
+    "segment": "pl_cee_de_smb_agency",
+    "candidates": [],
+    "missing_reason": "company/team pages expose no named qualifying decision-maker"
+  }
+]
