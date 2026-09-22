@@ -1,0 +1,80 @@
+{
+  "diagnostic_id": "lg-2026-09-23-wave3-dm-diagnostic",
+  "basis_state": "Frozen Run H",
+  "artifact_type": "research_diagnostic",
+  "brand_active": {
+    "question": "What happened after the stale former CEO, and is there a current qualifying DM?",
+    "result": "no_current_qualifying_successor_verified",
+    "classification": "dm_stale_no_successor",
+    "company_status": "active",
+    "findings": [
+      {
+        "subject": "Marcin Rudzik",
+        "finding": "Former Brand Active CEO; publicly states he left Brand Active after completing the sale of the company to Cloudflight/Divante and remained only a minority shareholder.",
+        "source": "https://pl.linkedin.com/posts/marcinrudzik_nie-by%C5%82o-mnie-tutaj-przez-11-miesi%C4%99cy-activity-7116393092294844416-wB1v"
+      },
+      {
+        "subject": "Brand Active current company",
+        "finding": "Company is active in 2026; current LinkedIn/company pages show ongoing operations and named employees, but no current Owner/CEO/Managing Director/Head of Client Services was verified from surfaced public sources.",
+        "sources": [
+          "https://pl.linkedin.com/company/brand-active-pl",
+          "https://brandactive.co/en/about"
+        ]
+      },
+      {
+        "subject": "Piotr Chrzan",
+        "finding": "Current/visible Brand Active staff member and technical lead/developer in surfaced materials, but role is not in the current PL/CEE/DE qualifying DM matrix.",
+        "sources": [
+          "https://brandactive.co/case-study-nature-love/",
+          "https://brandactive.pl/case-study-bizuu/"
+        ]
+      }
+    ],
+    "rejected_classifications": [
+      "role_matrix_narrow",
+      "dm_role_changed"
+    ],
+    "why": "The stale CEO is definitively no longer current. A current successor in a qualifying title was not verified; the company itself is active, so this is a succession/sourcing problem rather than inactivity or a matrix title gap.",
+    "next_fix_class": "dm_sourcing_successor_discovery",
+    "run_i_ready": false
+  },
+  "storise": {
+    "question": "Does a current verifiable DM exist publicly, and if so is the issue role matching or source access?",
+    "result": "public_owner_identity_found_via_legal_entity",
+    "classification": "dm_public_found",
+    "diagnostic_subtype": "owner_identity_requires_role_normalization",
+    "findings": [
+      {
+        "subject": "Storise legal controller",
+        "finding": "Storise privacy policy identifies the controller as IDM, NIP 7792508107.",
+        "source": "https://www.storise.eu/privacy-policy"
+      },
+      {
+        "subject": "IDM ownership",
+        "finding": "Public Polish business-directory records for NIP 7792508107 identify the sole-proprietorship owner as Przemysław Kosior and the business as active.",
+        "sources": [
+          "https://podobne-firmy.pl/idm-przemyslaw-kosior",
+          "https://cabb.pl/firma/idm-przemyslaw-kosior-7792508107"
+        ]
+      },
+      {
+        "subject": "Storise public site",
+        "finding": "Storise is active in Warsaw in 2026 but does not name leadership on its public About page.",
+        "source": "https://www.storise.eu/about"
+      }
+    ],
+    "why": "A public current owner identity can be tied to the same legal entity behind Storise. For the PL/CEE/DE matrix, Owner is already an allowed title. The remaining issue is not matrix width but whether a sole-proprietorship legal owner may be normalized to the DM role 'Owner' with sufficient source confidence under the current resolver policy.",
+    "next_fix_class": "dm_source_normalization / legal-owner mapping",
+    "run_i_ready": "conditional",
+    "required_pre_run_check": "Confirm that legal-owner evidence from an allowed/approved source class can populate decision_maker_role='Owner' without changing the global role matrix."
+  },
+  "planning": {
+    "clean_rule_level_matrix_change_needed": false,
+    "brand_active_ready_for_promotion_run": false,
+    "storise_ready_for_promotion_run": "conditional on source-policy acceptance",
+    "likely_run_i_scope": [
+      "Storise only, if legal-owner mapping is accepted as a data-level DM sourcing fix"
+    ],
+    "note": "Brand Active remains a sourcing/succession problem. Storise is not dm_not_public: a current legal owner is publicly recoverable from the entity identified by Storise itself."
+  }
+}
