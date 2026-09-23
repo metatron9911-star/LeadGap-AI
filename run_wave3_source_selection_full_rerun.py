@@ -27,7 +27,7 @@ RUN_F_DM = Path("research/wave2_run_f_7thsense_observed_management.json")
 RUN_G_SPEC = Path("research/wave2_run_g_omegacode_source_substitution.json")
 RUN_H_SPEC = Path("research/wave2_run_h_omegacode_grounding_bundle_repair.json")
 
-RUN_ID = os.getenv("RUN_ID", "lg-2026-09-23-wave3-run-j-source-selection-full-rerun")
+RUN_ID = os.getenv("RUN_ID", "lg-2026-09-23-wave3-run-j2-source-selection-freshness-guard")
 RUN_TS = os.getenv("RUN_TIMESTAMP_UTC", "2026-09-22T15:55:00Z")
 
 
@@ -58,6 +58,7 @@ async def main() -> None:
         source_selection_report = await select_fresh_alternate_evidence(
             candidates,
             evidence_diagnostic,
+            run_timestamp_utc=RUN_TS,
         )
 
         passed, reserve, manifest = evaluate_batch(
@@ -101,15 +102,15 @@ async def main() -> None:
         await Actor.set_value("RESERVE", reserve)
         await Actor.set_value("SOURCE_SELECTION_REPORT", source_selection_report)
 
-        Actor.log.info("RUN_J_BATCH_MANIFEST %s", json.dumps(manifest, ensure_ascii=False, sort_keys=True))
-        Actor.log.info("RUN_J_SOURCE_SELECTION_REPORT %s", json.dumps(source_selection_report, ensure_ascii=False, sort_keys=True))
+        Actor.log.info("RUN_J2_BATCH_MANIFEST %s", json.dumps(manifest, ensure_ascii=False, sort_keys=True))
+        Actor.log.info("RUN_J2_SOURCE_SELECTION_REPORT %s", json.dumps(source_selection_report, ensure_ascii=False, sort_keys=True))
 
         promoted_sources = sum(
             1 for row in source_selection_report
             if row.get("status") == "alternate_promoted"
         )
         await Actor.set_status_message(
-            f"Run J complete: {len(passed)} passed / {len(reserve)} reserve; "
+            f"Run J2 complete: {len(passed)} passed / {len(reserve)} reserve; "
             f"alternate_promoted={promoted_sources}; regressions={len(regressions)}",
             is_terminal=True,
         )
