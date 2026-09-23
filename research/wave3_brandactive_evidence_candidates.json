@@ -1,0 +1,31 @@
+{
+  "version": "brandactive-evidence-candidates-v1",
+  "company_name": "Brand Active",
+  "purpose": "Probe fresh first-party Shopify/ecommerce case-study sources after Run M removed the DM blocker.",
+  "candidates": [
+    {
+      "url": "https://brandactive.co/en/case-study/ohhoney",
+      "reason": "Strong product/catalog complexity: 1,200+ SKUs, variants, multi-market Shopify."
+    },
+    {
+      "url": "https://brandactive.co/pl/case-study/lestello",
+      "reason": "Shopify D2C implementation with product assortment/content management and automation."
+    },
+    {
+      "url": "https://brandactive.co/pl/case-study/newhomers",
+      "reason": "Shopify ecosystem spanning physical/digital products plus B2B/D2C."
+    },
+    {
+      "url": "https://brandactive.co/pl/case-study/margopak",
+      "reason": "Shopify B2B implementation with technical product filtering and inventory integration."
+    }
+  ],
+  "selection_policy": {
+    "publication_date_required": true,
+    "freshness_window_days": 90,
+    "no_proxy_dates": true,
+    "prefer_catalog_specificity": true,
+    "no_threshold_change": true,
+    "no_rubric_change": true
+  }
+}
