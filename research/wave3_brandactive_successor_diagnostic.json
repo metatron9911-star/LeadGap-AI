@@ -1,0 +1,33 @@
+{
+  "run_id": "lg-2026-09-23-wave3-brandactive-successor-diagnostic",
+  "basis_state": "Run L / 9 passed, 3 reserve",
+  "company_name": "Brand Active",
+  "previous_state": "dm_stale_no_successor",
+  "diagnostic": "dm_successor_found_first_party_operator_chain",
+  "finding": {
+    "brand_operator_source": "https://brandactive.co/en/imprint",
+    "brand_operator_entity": "Cloudflight Poland sp. z o.o.",
+    "operator_dm_source": "https://www.cloudflight.io/en/imprint/",
+    "decision_maker_name": "Paweł Paszkiewicz",
+    "decision_maker_role": "Managing Director",
+    "role_matrix_segment": "pl_cee_de_smb_agency",
+    "role_matrix_match": "managing director",
+    "provenance": [
+      "BrandActive imprint identifies Cloudflight Poland sp. z o.o. as the entity responsible for brandactive.co.",
+      "Cloudflight imprint identifies Paweł Paszkiewicz as Managing Director for Cloudflight Poland and President of its Management Board."
+    ]
+  },
+  "merger_context": {
+    "source": "https://engineering.cloudflight.io/en/blog/brand-active-announcement/",
+    "note": "The 2024 merger announcement states Brand Active sp. z o.o. was the target company and Divante S.A. the acquiring company. Current BrandActive legal pages now identify Cloudflight Poland sp. z o.o. as the responsible entity."
+  },
+  "classification": {
+    "blocker_removed": "no_decision_maker",
+    "fix_class": "collector-level successor discovery",
+    "source_policy_change_required": false,
+    "role_matrix_change_required": false,
+    "reason": "Managing Director already qualifies for pl_cee_de_smb_agency; both operator linkage and current DM are supported by first-party legal/imprint pages."
+  },
+  "expected_next_gate": "no_recent_evidence",
+  "note": "This diagnostic does not claim Brand Active should pass. Frozen all-gates state also had no_recent_evidence and low_evidence_score; full rerun is required."
+}
