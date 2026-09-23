@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from copy import deepcopy
 
+from outreach_v101 import parse_evidence_date, evidence_is_wave1_eligible
 from src.enrichment.date_extraction import collect_date_diagnostic
 
 
@@ -16,12 +17,14 @@ def _diagnostic_map(evidence_diagnostic: list[dict]) -> dict[str, dict]:
 async def select_fresh_alternate_evidence(
     candidates: list[dict],
     evidence_diagnostic: list[dict],
+    *,
+    run_timestamp_utc: str,
 ) -> list[dict]:
     """
     Collector-level source selection:
-    - only acts when the currently selected evidence is undated/ineligible
+    - acts only when the currently selected evidence is undated/ineligible
     - probes candidate_evidence URLs already discovered by prior diagnostics
-    - promotes only when date collector finds a defensible publication date
+    - promotes only a defensibly dated alternate that is itself inside the frozen freshness window
     - preserves source provenance explicitly
     - does not alter thresholds, rubric, DM matrix, or source-policy
     """
@@ -30,6 +33,18 @@ async def select_fresh_alternate_evidence(
 
     for row in candidates:
         company = row.get("company_name")
+
+        current_raw = row.get("evidence_date_raw")
+        current_date, _ = parse_evidence_date(current_raw, run_timestamp_utc)
+        if evidence_is_wave1_eligible(current_date, run_timestamp_utc):
+            report.append({
+                "company_name": company,
+                "status": "skipped_current_source_already_fresh",
+                "evidence_url": row.get("evidence_url"),
+                "evidence_date_raw": current_raw,
+            })
+            continue
+
         diag = diag_by_company.get(company) or {}
         alt = diag.get("candidate_evidence") or {}
         alt_url = alt.get("evidence_url")
@@ -62,6 +77,20 @@ async def select_fresh_alternate_evidence(
             })
             continue
 
+        alternate_date, _ = parse_evidence_date(
+            selected["normalized_date"],
+            run_timestamp_utc,
+        )
+        if not evidence_is_wave1_eligible(alternate_date, run_timestamp_utc):
+            report.append({
+                "company_name": company,
+                "status": "alternate_not_promoted_outside_freshness_window",
+                "current_evidence_url": current_url,
+                "alternate_evidence_url": alt_url,
+                "selected_signal": selected,
+            })
+            continue
+
         before = {
             "evidence_url": row.get("evidence_url"),
             "evidence_date_raw": row.get("evidence_date_raw"),
@@ -74,12 +103,10 @@ async def select_fresh_alternate_evidence(
         row["evidence_url"] = alt_url
         row["evidence_date_raw"] = selected["normalized_date"]
 
-        # Preserve semantic content from the diagnostic rather than inventing new claims.
         note = alt.get("note") or ""
         if note:
             row["recent_evidence"] = note
 
-        # Conservative type: company case/article is represented by existing schema-compatible press.
         row["evidence_type"] = alt.get("evidence_type") or "press"
 
         urls = list(row.get("source_urls") or [])
@@ -93,6 +120,10 @@ async def select_fresh_alternate_evidence(
             "to_url": alt_url,
             "date_signal": deepcopy(selected),
             "date_diagnostic_policy": date_diag.get("policy"),
+            "freshness_guard": {
+                "run_timestamp_utc": run_timestamp_utc,
+                "eligible": True,
+            },
         }
 
         report.append({
