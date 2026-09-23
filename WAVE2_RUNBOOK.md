@@ -269,3 +269,25 @@ For an undated/current-looking evidence problem, distinguish:
 
 A candidate reclassified to `no_evidence_exists` leaves the active fix queue until new evidence appears. A date-extraction candidate remains active, but is not ready for a clean promotion run until a defensible date-bearing source or metadata path is established.
 
+## Wave 3 collector: date-extraction v1
+
+This collector is diagnostic-first. It may promote only explicit publication-date signals:
+
+- OpenGraph/article `article:published_time`
+- `datePublished` in HTML metadata
+- JSON-LD `datePublished`
+- RSS/Atom `pubDate` or `published` for an exact matching URL
+
+The following are diagnostic only and MUST NOT be converted into publication dates:
+
+- sitemap `lastmod`
+- HTTP `Last-Modified`
+- JSON-LD `dateModified`
+- RSS/Atom `updated`
+- Wayback earliest snapshot
+- media/image filename timestamps
+
+Reason: those signals establish modification, observation, crawl, or asset time, not publication time.
+
+For KK Digital, the collector runs against the Hekiert case URL first. If no defensible publication date is extracted, the candidate remains `date_extraction_unresolved`; do not change the 90-day rule and do not promote on proxy timestamps.
+
