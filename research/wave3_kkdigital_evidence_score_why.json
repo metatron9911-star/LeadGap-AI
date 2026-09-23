@@ -1,0 +1,50 @@
+{
+  "run_id": "lg-2026-09-23-wave3-why-kkdigital-evidence-score",
+  "basis_state": "Run J2 / source-selection freshness-guard full rerun",
+  "purpose": "Explain why KK Digital remains reserve after collector promoted the Hekiert case with a defensible fresh publication date.",
+  "target": {
+    "company_name": "KK Digital",
+    "current_first_blocking_gate": "low_evidence_score",
+    "observed_after_run_j2": {
+      "source_selected": "https://kkdigital.pl/wdrozenie-shopify-dla-hekiertmeble-pl-i-wsparcie-dalszej-ekspansji/",
+      "publication_date": "2026-08-20",
+      "publication_date_signal": "jsonld_datePublished",
+      "alternate_promoted": true,
+      "run_j2_result": "8 passed / 4 reserve",
+      "regressions": 0
+    },
+    "why": "score_not_recomputed_after_source_selection",
+    "why_class": "pipeline_wiring_gap",
+    "why_detail": "Run J2 correctly replaced KK Digital's undated Shopify Partner evidence with the fresh Hekiert case, but source-selection only changed evidence_url/evidence_date/type/recent_evidence. It intentionally did not recompute evidence_score or rebuild evidence_content. KK therefore retained the frozen evidence_score=55 from the old source. The visible low_evidence_score gate is stale derived state after a source mutation, not evidence that the Hekiert case itself scores below threshold.",
+    "frozen_score_before_source_selection": 55,
+    "threshold": 70,
+    "deterministic_run_c_rubric_re_evaluation": {
+      "rubric_version": "run-c-v1",
+      "source_url": "https://kkdigital.pl/wdrozenie-shopify-dla-hekiertmeble-pl-i-wsparcie-dalszej-ekspansji/",
+      "source_date": "2026-08-20",
+      "basis": "Named Hekiert Meble Shopify implementation case documenting 200+ products, 2500+ configurations, product variants/materials, organized product information, automation, and scalable ecommerce architecture.",
+      "component_scores": {
+        "source_quality": 20,
+        "recency": 15,
+        "workflow_specificity": 25,
+        "catalog_data_relevance": 25,
+        "traceability": 10
+      },
+      "total": 95,
+      "passes_threshold": true
+    },
+    "classification_note": "This is not evidence_low_quality and not a reason to loosen the rubric. It is also more specific than rubric_missed: the existing rubric is sufficient, but the pipeline failed to recompute derived scoring after collector-level source selection.",
+    "next_experiment": {
+      "fix_class": "pipeline integration / derived-state recomputation",
+      "action": "After any source-selection mutation, rebuild evidence_content/derived evidence fields as needed and recompute evidence_score under the unchanged run-c-v1 rubric, then full-rerun all 12 candidates with regression check.",
+      "must_not_change": [
+        "evidence_score threshold",
+        "rubric component rules",
+        "90-day cutoff",
+        "DM matrix",
+        "grounding policy",
+        "source-policy"
+      ]
+    }
+  }
+}
