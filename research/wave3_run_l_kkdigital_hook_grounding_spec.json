@@ -1,0 +1,47 @@
+{
+  "version": "run-l-kkdigital-hook-grounding-v1",
+  "purpose": "Repair KK Digital personalization grounding after Run K recomputed evidence state on the Hekiert case. No global grounding-rule change.",
+  "target_company": "KK Digital",
+  "evidence_url": "https://kkdigital.pl/wdrozenie-shopify-dla-hekiertmeble-pl-i-wsparcie-dalszej-ekspansji/",
+  "diagnostic": "source_bundle_mismatch_after_source_selection",
+  "before": {
+    "personalization_hook": "Your Shopify profile is unusually explicit about ERP, CRM and PIM integrations — the gap CatalogFix targets is cleaning supplier data before those integrations receive it.",
+    "hook_grounding": [
+      {
+        "claim": "ERP",
+        "grounded_in": "https://www.shopify.com/partners/directory/partner/kk-digital1"
+      },
+      {
+        "claim": "PIM",
+        "grounded_in": "https://www.shopify.com/partners/directory/partner/kk-digital1"
+      }
+    ]
+  },
+  "after": {
+    "personalization_hook": "Your Hekiert Meble Shopify case describes 200+ products, 2500+ configurations and organized product information — exactly the kind of catalog complexity where pre-import cleanup becomes repetitive.",
+    "first_line": "Your Hekiert Meble Shopify case calls out 200+ products, 2500+ configurations and organized product information; that is the exact catalog complexity CatalogFix is built to clean before import.",
+    "hook_grounding": [
+      {
+        "claim": "200 products",
+        "grounded_in": "https://kkdigital.pl/wdrozenie-shopify-dla-hekiertmeble-pl-i-wsparcie-dalszej-ekspansji/"
+      },
+      {
+        "claim": "2500 configurations",
+        "grounded_in": "https://kkdigital.pl/wdrozenie-shopify-dla-hekiertmeble-pl-i-wsparcie-dalszej-ekspansji/"
+      },
+      {
+        "claim": "product information",
+        "grounded_in": "https://kkdigital.pl/wdrozenie-shopify-dla-hekiertmeble-pl-i-wsparcie-dalszej-ekspansji/"
+      }
+    ]
+  },
+  "invariants": {
+    "thresholds_changed": false,
+    "rubric_changed": false,
+    "evidence_score_changed": false,
+    "dm_matrix_changed": false,
+    "grounding_rule_changed": false,
+    "source_policy_changed": false,
+    "collector_changed": false
+  }
+}
