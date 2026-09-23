@@ -224,7 +224,7 @@ async def sitemap_signals(
         if not xml:
             continue
 
-        soup = BeautifulSoup(xml, "xml")
+        soup = BeautifulSoup(xml, "html.parser")
         for sm in soup.find_all("sitemap"):
             loc = sm.find("loc")
             if loc and loc.get_text(strip=True):
@@ -281,7 +281,7 @@ async def feed_signals(
         xml, _ = await _fetch_text(client, feed_url)
         if not xml:
             continue
-        soup = BeautifulSoup(xml, "xml")
+        soup = BeautifulSoup(xml, "html.parser")
         for entry in soup.find_all(["item", "entry"]):
             links: list[str] = []
             link_text = entry.find("link")
