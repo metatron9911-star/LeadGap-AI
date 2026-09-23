@@ -291,3 +291,14 @@ Reason: those signals establish modification, observation, crawl, or asset time,
 
 For KK Digital, the collector runs against the Hekiert case URL first. If no defensible publication date is extracted, the candidate remains `date_extraction_unresolved`; do not change the 90-day rule and do not promote on proxy timestamps.
 
+## Wave 3 rule: source mutation invalidates derived evidence score
+
+If collector/source-selection changes a candidate's selected evidence source, any derived evidence fields tied to the old source are stale until recomputed.
+
+At minimum, re-evaluate:
+- evidence score under the frozen rubric
+- evidence-content / claim coverage used by grounding, where applicable
+- any diagnostics derived from the previous selected source
+
+A post-selection `low_evidence_score` gate is not interpretable until this recomputation occurs. Treat this as a pipeline integration / derived-state recomputation issue, not as evidence that the new source itself is low quality and not as a reason to loosen the rubric.
+
