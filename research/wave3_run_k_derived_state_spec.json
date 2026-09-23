@@ -1,0 +1,22 @@
+{
+  "version": "run-k-derived-state-v1",
+  "rubric_version": "run-c-v1",
+  "purpose": "Recompute source-derived evidence fields after collector-level source selection without changing thresholds or rubric.",
+  "targets": {
+    "KK Digital": {
+      "evidence_url": "https://kkdigital.pl/wdrozenie-shopify-dla-hekiertmeble-pl-i-wsparcie-dalszej-ekspansji/",
+      "evidence_date_raw": "2026-08-20",
+      "evidence_type": "press",
+      "evidence_content": "Hekiert Meble Shopify implementation case: over 200 products and more than 2500 configurations; product variants, materials and parameters; organized product information; automation of store processes; scalable ecommerce architecture supporting further expansion.",
+      "scoring_basis": "Named Hekiert Meble Shopify implementation case documenting product configuration, organized product information, automation, migration/implementation workflow and scalable ecommerce architecture.",
+      "component_scores": {
+        "source_quality": 20,
+        "recency": 15,
+        "workflow_specificity": 25,
+        "catalog_data_relevance": 25,
+        "traceability": 10
+      },
+      "total": 95
+    }
+  }
+}
