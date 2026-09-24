@@ -1,0 +1,24 @@
+{
+  "version": "epoint-freshness-discovery-v1",
+  "terminal_statuses": [
+    "recent_evidence_found",
+    "no_recent_evidence_found_in_expanded_scope"
+  ],
+  "window_rule": "run_timestamp - 90 days",
+  "rules": {
+    "scoring_unchanged": true,
+    "date_rules_unchanged": true,
+    "dm_unchanged": true,
+    "discovery_only": true,
+    "candidate_state_mutation_forbidden": true
+  },
+  "metrics": [
+    "candidates_found",
+    "dated_candidates",
+    "in_window",
+    "fresh_evidence_items",
+    "rejection_reasons",
+    "source_type_breakdown",
+    "duration_sec"
+  ]
+}
