@@ -1,0 +1,53 @@
+{
+  "version": "storise-source-policy-v1",
+  "decisions": {
+    "privacy_policy_brand_to_legal_entity": {
+      "allowed": true,
+      "tier": 2,
+      "owner_source_allowed": false
+    },
+    "registry_aggregator": {
+      "allowed": true,
+      "tier": 2,
+      "uses": [
+        "discovery",
+        "cross_check",
+        "corroboration"
+      ],
+      "owner_basis_allowed": false
+    },
+    "aggregator_only_owner": {
+      "assurance": "low",
+      "resolution_status": "insufficient_primary_source"
+    }
+  },
+  "chain_rules": [
+    {
+      "step": "brand_to_legal_entity",
+      "allowed_tiers": [
+        1,
+        2
+      ]
+    },
+    {
+      "step": "legal_entity_to_registry",
+      "allowed_tiers": [
+        1
+      ],
+      "registration_number_match_required": true
+    },
+    {
+      "step": "registry_to_owner",
+      "allowed_tiers": [
+        1
+      ],
+      "as_of_date_required": true
+    }
+  ],
+  "terminal_statuses": [
+    "resolved",
+    "insufficient_primary_source",
+    "unresolved_conflict"
+  ],
+  "invariant": "policy_resolved != record_passed"
+}
