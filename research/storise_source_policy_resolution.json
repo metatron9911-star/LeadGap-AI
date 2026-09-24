@@ -1,0 +1,28 @@
+{
+  "artifact_type": "policy_resolution",
+  "policy_version": "storise-source-policy-v1",
+  "brand": "Storise",
+  "brand_to_legal_entity": {
+    "source_url": "https://www.storise.eu/privacy-policy",
+    "source_type": "privacy_policy",
+    "source_tier": 2,
+    "legal_entity_name": "IDM",
+    "registration_number": "7792508107",
+    "admissible_as_anchor": true
+  },
+  "registry_identity": {
+    "official_tier1_source_found": false,
+    "aggregator_corroboration_found": true,
+    "note": "Current accessible evidence includes registry-aggregator corroboration for NIP 7792508107, but no official Tier-1 registry record was verified in the available search scope."
+  },
+  "current_owner": {
+    "tier1_verified": false,
+    "aggregator_only_name": "Przemysław Kosior"
+  },
+  "chain_valid": false,
+  "chain_break_step": "legal_entity_to_registry",
+  "aggregator_role": "sole_source",
+  "assurance": "low",
+  "resolution_status": "insufficient_primary_source",
+  "invariant": "policy_resolved != record_passed"
+}
