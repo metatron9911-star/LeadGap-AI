@@ -1,0 +1,11 @@
+{
+  "artifact_type": "observed_terminal_summary",
+  "source_run_id": "qaEKuDE1exMJHXvbn",
+  "source_build": "0.0.74",
+  "company_name": "Brand Active",
+  "observed_status_message": "BrandActive evidence diagnostic complete: fresh=0/4",
+  "fresh_evidence_items": 0,
+  "candidate_urls_tested": 4,
+  "terminal_status": "no_recent_evidence_found_in_expanded_scope",
+  "limitations": "Run UI confirms fresh=0/4. Granular counters candidates_found/dated_candidates/in_window/rejection_reasons were not persisted in the observed status message and are therefore not invented here."
+}
