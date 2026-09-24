@@ -1,0 +1,87 @@
+{
+  "artifact": "research/wave3_epoint_expanded_scope_result.json",
+  "artifact_version": "1.0",
+  "record": "e-point",
+  "task": "freshness_discovery_expanded_scope",
+  "run_id": "ep-fd-2026-09-24-001",
+  "build": "0.0.74",
+  "window_start": "2026-06-26",
+  "window_end": "2026-09-24",
+  "window_rule": "run_timestamp - 90 days",
+  "query_pack": [
+    "site:e-point.com (blog OR news OR press OR events OR insights OR webinar)",
+    "site:e-point.com after:{window_start}",
+    "\"e-point\" (webinar OR event OR conference OR meetup OR \"online event\") after:{window_start}",
+    "\"e-point\" (вебінар OR подія OR конференція OR зустріч) after:{window_start}",
+    "\"e-point\" (вебинар OR мероприятие OR конференция) after:{window_start}",
+    "\"e-point\" (partner OR partnership OR integration OR \"case study\" OR certification) after:{window_start}",
+    "\"e-point\" (партнерство OR інтеграція OR сертифікація OR кейс) after:{window_start}",
+    "site:linkedin.com/posts \"e-point\" after:{window_start}",
+    "site:linkedin.com/company \"e-point\"",
+    "site:linkedin.com/posts \"e-point\" (webinar OR event OR partnership OR award)",
+    "\"e-point\" (launch OR release OR award OR \"press release\") after:{window_start}",
+    "\"e-point\" (запуск OR нагорода OR реліз) after:{window_start}",
+    "\"e-point\" (запуск OR награда OR релиз) after:{window_start}",
+    "\"e-point\" (product OR platform OR solution OR module) after:{window_start}",
+    "\"e-point\" (продукт OR платформа OR рішення OR модуль) after:{window_start}"
+  ],
+  "candidates": [
+    {
+      "source_url": "https://pl.linkedin.com/posts/e-point-sa_forumlider%C3%B3wbank%C3%B3wsp%C3%B3%C5%82dzielczych-epoint-activity-7502649670976897024-4DVA",
+      "source_type": "linkedin",
+      "published_at": null,
+      "date_confidence": "none",
+      "date_source": null,
+      "in_window": false,
+      "rejection_reason": "no_defensible_date",
+      "notes": "Пост о Forum Liderów Banków Spółdzielczych (16–17 сентября 2026). Дата публикации на доступной странице отображается только как относительная метка (\"2 tyg.\"), что не соответствует defensible-date rules."
+    },
+    {
+      "source_url": "https://www.e-point.com/blog/award-for-epoint-solutions-for-banks",
+      "source_type": "brand_site",
+      "published_at": "2024-04-05",
+      "date_confidence": "high",
+      "date_source": "visible",
+      "in_window": false,
+      "rejection_reason": "out_of_window",
+      "notes": "Запись в блоге e-point от 05.04.2024, вне 90-дневного окна."
+    },
+    {
+      "source_url": "https://compabase.com/companies/krs/0000759589",
+      "source_type": "registry_aggregator",
+      "published_at": "2026-04-28",
+      "date_confidence": "medium",
+      "date_source": "visible",
+      "in_window": false,
+      "rejection_reason": "out_of_window",
+      "notes": "Агрегатор реестра с датой последнего обновления 28.04.2026, вне окна. Не является press/blog/partner-источником."
+    }
+  ],
+  "metrics": {
+    "candidates_found": 3,
+    "dated_candidates": 2,
+    "in_window": 0,
+    "fresh_evidence_items": 0,
+    "rejection_reasons": {
+      "no_defensible_date": 1,
+      "out_of_window": 2,
+      "wrong_entity": 0,
+      "aggregator": 0,
+      "duplicate": 0
+    },
+    "source_type_breakdown": {
+      "brand_site": 1,
+      "linkedin": 1,
+      "registry_aggregator": 1,
+      "event": 0,
+      "partner_site": 0,
+      "media": 0,
+      "press_release": 0
+    },
+    "duration_sec": 42
+  },
+  "terminal_status": "no_recent_evidence_found_in_expanded_scope",
+  "terminal_reason": "В расширенном scope не найдено ни одного dated source внутри 90-дневного окна, удовлетворяющего defensible-date rules. Основной свежий сигнал (LinkedIn-пост) не имеет подтверждённой даты публикации.",
+  "next_action": "full_12_control_rerun",
+  "precondition_cleared": true
+}
