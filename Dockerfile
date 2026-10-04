@@ -12,4 +12,4 @@ RUN python -m py_compile main.py outreach_v101.py smoke_test.py preflight_v101_t
     && python preflight_v101_test.py \
     && python -m unittest test_date_extraction.py
 
-CMD ["python", "run_wave3_full12_control_rerun.py"]
+CMD ["python", "main.py"]
