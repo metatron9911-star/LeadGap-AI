@@ -15,7 +15,7 @@ class ApifyClientAsync: pass
 apify_client.ApifyClientAsync = ApifyClientAsync
 sys.modules["apify_client"] = apify_client
 
-from main import has_contact_form, PATTERNS, apply_niche_qualification, is_niche_match, find_external_business_website, _place_primary_category, _website_identity_key, _blocked_discovery_domain, _is_public_contact_email, _strip_tracking_params, confidence_for_pages, _sanitize_contact_emails, _business_domain_affinity
+from main import has_contact_form, PATTERNS, apply_niche_qualification, is_niche_match, find_external_business_website, _place_primary_category, _website_identity_key, _blocked_discovery_domain, _is_public_contact_email, _strip_tracking_params, confidence_for_pages, _sanitize_contact_emails, _business_domain_affinity, _compose_grounded_niche_pitch_hook
 import re
 import asyncio
 
@@ -261,3 +261,49 @@ assert _business_domain_affinity(
     "72dental.co.uk",
     "72 Dental",
 )
+
+# Final pitch-hook architecture: one writer, grounded by gap + niche + evidence.
+dental_item = {
+    "auditStatus": "SUCCESS",
+    "businessName": "Bright Smile Dental",
+    "primaryOpportunity": "Lead capture",
+    "gaps": ["No contact form detected"],
+}
+dental_hook = _compose_grounded_niche_pitch_hook(
+    dental_item,
+    {"title": "Bright Smile Dental"},
+    "Dentist",
+)
+assert "No contact form detected" in dental_hook
+assert "dental practice" in dental_hook
+assert "enquiry form" in dental_hook
+
+legal_item = {
+    "auditStatus": "SUCCESS",
+    "businessName": "Smith Legal",
+    "primaryOpportunity": "Lead capture",
+    "gaps": ["No contact form detected"],
+}
+legal_hook = _compose_grounded_niche_pitch_hook(
+    legal_item,
+    {"title": "Smith Legal"},
+    "Legal",
+)
+assert "No contact form detected" in legal_hook
+assert "legal practice" in legal_hook
+assert legal_hook != dental_hook
+
+booking_item = {
+    "auditStatus": "SUCCESS",
+    "businessName": "Bright Smile Dental",
+    "primaryOpportunity": "Booking conversion",
+    "gaps": ["No booking path detected"],
+}
+booking_hook = _compose_grounded_niche_pitch_hook(
+    booking_item,
+    {"title": "Bright Smile Dental"},
+    "Dentist",
+)
+assert "No booking path detected" in booking_hook
+assert "booking or consultation path" in booking_hook
+assert booking_hook != dental_hook

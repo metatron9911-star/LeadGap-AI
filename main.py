@@ -2763,6 +2763,83 @@ def is_niche_match(place: dict, business_type: str) -> bool:
     # than a slightly narrower recall.
     return False
 
+def _compose_grounded_niche_pitch_hook(
+    item: dict,
+    place: dict,
+    business_type: str,
+) -> str:
+    """Compose the final buyer-facing hook from gap + niche + observed evidence.
+
+    This is the single final writer for pitchHook after niche qualification.
+    It prevents earlier generic or niche-specific layers from silently
+    overwriting one another.
+    """
+    name = item.get("businessName") or place.get("title") or "the business"
+    niche = _norm_niche_text(business_type)
+    primary = item.get("primaryOpportunity") or "digital conversion"
+    gaps = item.get("gaps") or []
+    evidence = str(gaps[0]).rstrip(".") if gaps else str(primary)
+
+    if any(term in niche for term in ("dentist", "dental", "orthodont", "endodont", "periodont")):
+        niche_label = "dental practice"
+        audience = "patients"
+    elif any(term in niche for term in ("med spa", "medspa", "aesthetic", "botox", "filler", "skin clinic")):
+        niche_label = "aesthetics clinic"
+        audience = "prospective clients"
+    elif any(term in niche for term in ("beauty", "salon", "spa", "hair", "nail", "lash", "brow", "barber")):
+        niche_label = "beauty business"
+        audience = "clients"
+    elif any(term in niche for term in ("lawyer", "solicitor", "attorney", "legal", "law firm")):
+        niche_label = "legal practice"
+        audience = "prospective clients"
+    elif any(term in niche for term in ("accountant", "accounting", "bookkeep", "tax")):
+        niche_label = "accounting practice"
+        audience = "prospective clients"
+    elif any(term in niche for term in (
+        "plumber", "electrician", "roofer", "builder", "hvac", "heating",
+        "air conditioning", "locksmith", "cleaner", "landscaper",
+        "pest control", "handyman",
+    )):
+        niche_label = "local service business"
+        audience = "high-intent visitors"
+    else:
+        niche_label = "local business"
+        audience = "high-intent visitors"
+
+    if primary == "Booking conversion":
+        return (
+            f"I reviewed {name} and could not confirm a clear online booking or consultation path. "
+            f"The audit evidence was: {evidence}. For a {niche_label}, I would test that journey first "
+            f"because it sits directly between {audience} showing intent and completing an appointment."
+        )
+
+    if primary == "Lead capture":
+        return (
+            f"I reviewed {name} and could not confirm a clear enquiry form. "
+            f"The audit evidence was: {evidence}. For a {niche_label}, a short low-friction enquiry path "
+            f"can capture {audience} who are not ready to call or book immediately."
+        )
+
+    if primary == "Mobile lead capture":
+        return (
+            f"I reviewed {name} and could not confirm a click-to-call path for mobile visitors. "
+            f"The audit evidence was: {evidence}. For a {niche_label}, I would test that contact path first "
+            f"because it affects {audience} who want to act immediately."
+        )
+
+    if primary == "Website trust and technical reliability":
+        return (
+            f"I reviewed {name} and found a technical trust issue: {evidence}. "
+            f"For a {niche_label}, I would verify and repair that before proposing broader conversion work."
+        )
+
+    return (
+        f"I reviewed {name} and found one concrete {str(primary).lower()} issue. "
+        f"The audit evidence was: {evidence}. For a {niche_label}, that is specific enough to validate "
+        "as a focused improvement rather than a generic website pitch."
+    )
+
+
 def apply_niche_qualification(item: dict, place: dict, business_type: str) -> dict:
     """Make commercial qualification aware of the selected business niche."""
     niche = _norm_niche_text(business_type)
@@ -2943,6 +3020,13 @@ def apply_niche_qualification(item: dict, place: dict, business_type: str) -> di
                     "bookkeeping or advisory questions. A short intake form is often what turns "
                     "a curious visitor into a qualified conversation."
                 )
+    if item.get("auditStatus") == "SUCCESS":
+        item["pitchHook"] = _compose_grounded_niche_pitch_hook(
+            item=item,
+            place=place,
+            business_type=business_type,
+        )
+
     return item
 
 
