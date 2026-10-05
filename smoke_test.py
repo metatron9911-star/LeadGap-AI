@@ -15,7 +15,7 @@ class ApifyClientAsync: pass
 apify_client.ApifyClientAsync = ApifyClientAsync
 sys.modules["apify_client"] = apify_client
 
-from main import has_contact_form, PATTERNS, apply_niche_qualification, is_niche_match, find_external_business_website, _place_primary_category, _website_identity_key, _blocked_discovery_domain, _is_public_contact_email, _strip_tracking_params, confidence_for_pages, _sanitize_contact_emails
+from main import has_contact_form, PATTERNS, apply_niche_qualification, is_niche_match, find_external_business_website, _place_primary_category, _website_identity_key, _blocked_discovery_domain, _is_public_contact_email, _strip_tracking_params, confidence_for_pages, _sanitize_contact_emails, _business_domain_affinity
 import re
 import asyncio
 
@@ -247,3 +247,17 @@ cleaned, placeholders, cross = _sanitize_contact_emails(
 )
 assert cleaned == ["hello@72dental.co.uk"], cleaned
 assert placeholders == 0 and cross == 0, (placeholders, cross)
+
+# Industry-generic token "dental" alone must never establish affinity.
+assert not _business_domain_affinity(
+    "albiondentalbrighton.co.uk",
+    "Crossways Dental Coulsdon",
+)
+assert _business_domain_affinity(
+    "crooklogdental.co.uk",
+    "Crook Log Dental Practice",
+)
+assert _business_domain_affinity(
+    "72dental.co.uk",
+    "72 Dental",
+)

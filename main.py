@@ -2319,6 +2319,82 @@ async def discover_businesses(
     return places
 
 
+async def discover_businesses_by_place_ids(
+    place_ids: list[str],
+) -> list[dict]:
+    """DEV-only deterministic Maps lookup by Google Place ID."""
+    token = os.getenv("APIFY_TOKEN")
+    if not token:
+        raise RuntimeError(
+            "APIFY_TOKEN is not available. "
+            "Place-ID discovery requires an Apify Platform run."
+        )
+
+    cleaned_ids = [
+        str(place_id).strip()
+        for place_id in (place_ids or [])
+        if str(place_id).strip()
+    ]
+    if not cleaned_ids:
+        return []
+
+    invalid_ids = [
+        place_id
+        for place_id in cleaned_ids
+        if not re.fullmatch(r"(?:ChIJ|GhIJ)[A-Za-z0-9_-]{20,}", place_id)
+    ]
+    if invalid_ids:
+        raise ValueError(
+            "Invalid DEV place ID(s): " + ", ".join(invalid_ids)
+        )
+
+    apify_client = ApifyClientAsync(token)
+    actor_client = apify_client.actor(GOOGLE_MAPS_ACTOR)
+
+    run = await actor_client.call(
+        run_input={
+            "placeIds": cleaned_ids,
+            "scrapeContacts": False,
+            "scrapeSocialMediaProfiles": {
+                "facebooks": False,
+                "instagrams": False,
+                "youtubes": False,
+                "tiktoks": False,
+                "twitters": False,
+            },
+            "maximumLeadsEnrichmentRecords": 0,
+        }
+    )
+    if run is None:
+        raise RuntimeError("Google Maps DEV place-ID lookup failed.")
+
+    default_dataset_id = (
+        run.get("defaultDatasetId")
+        if isinstance(run, dict)
+        else getattr(run, "default_dataset_id", None)
+    )
+    if not default_dataset_id:
+        raise RuntimeError(
+            "Google Maps DEV place-ID lookup returned no default dataset ID."
+        )
+
+    dataset_client = apify_client.dataset(default_dataset_id)
+    page = await dataset_client.list_items(limit=len(cleaned_ids))
+    page_items = (
+        page.get("items", [])
+        if isinstance(page, dict)
+        else getattr(page, "items", [])
+    )
+    places = list(page_items)
+
+    Actor.log.warning(
+        "DEV MODE: direct placeIds lookup returned %s/%s businesses.",
+        len(places),
+        len(cleaned_ids),
+    )
+    return places
+
+
 def _norm_niche_text(value: object) -> str:
     return re.sub(r"[^a-z0-9]+", " ", str(value or "").lower()).strip()
 
@@ -3154,6 +3230,22 @@ async def main() -> None:
             or []
         )
 
+        dev_place_ids = []
+        if os.environ.get("LEADGAP_DEV_MODE") == "1":
+            raw_dev_place_ids = actor_input.get("__dev_placeIds") or []
+            if raw_dev_place_ids:
+                if not isinstance(raw_dev_place_ids, list):
+                    raise ValueError("__dev_placeIds must be an array.")
+                dev_place_ids = [
+                    str(place_id).strip()
+                    for place_id in raw_dev_place_ids
+                    if str(place_id).strip()
+                ]
+                Actor.log.warning(
+                    "DEV MODE ACTIVE: deterministic placeIds flow requested for %s place(s).",
+                    len(dev_place_ids),
+                )
+
 
         max_businesses = int(
             actor_input.get(
@@ -3246,11 +3338,23 @@ async def main() -> None:
                         raw_url,
                         country,
                     )
+                    raw_emails = list(item.get("emails") or [])
                     item["emails"], placeholder_dropped, cross_location_dropped = _sanitize_contact_emails(
-                        item.get("emails") or [],
+                        raw_emails,
                         item.get("website") or raw_url,
                         item.get("businessName") or "",
                     )
+                    if placeholder_dropped or cross_location_dropped:
+                        Actor.log.info(
+                            "EMAIL_FILTER %s",
+                            json.dumps({
+                                "title": item.get("businessName") or item.get("website"),
+                                "input_emails": len(raw_emails),
+                                "kept": len(item.get("emails") or []),
+                                "dropped_placeholder": placeholder_dropped,
+                                "dropped_cross_location": cross_location_dropped,
+                            }, ensure_ascii=False, default=str),
+                        )
                     stats["email_placeholder_dropped"] += placeholder_dropped
                     stats["cross_location_email_dropped"] += cross_location_dropped
                     stats["after_commercial_eval"] += 1
@@ -3304,12 +3408,15 @@ async def main() -> None:
                     )
 
 
-                places = await discover_businesses(
-                    country=country,
-                    city=city,
-                    business_type=business_type,
-                    max_businesses=max_businesses,
-                )
+                if dev_place_ids:
+                    places = await discover_businesses_by_place_ids(dev_place_ids)
+                else:
+                    places = await discover_businesses(
+                        country=country,
+                        city=city,
+                        business_type=business_type,
+                        max_businesses=max_businesses,
+                    )
                 stats["discovered"] = len(places)
                 for discovered_place in places:
                     Actor.log.info(
@@ -3518,11 +3625,23 @@ async def main() -> None:
                         item["websiteSource"] = "GOOGLE_MAPS"
 
 
+                    raw_emails = list(item.get("emails") or [])
                     item["emails"], placeholder_dropped, cross_location_dropped = _sanitize_contact_emails(
-                        item.get("emails") or [],
+                        raw_emails,
                         item.get("website") or website,
                         item.get("businessName") or place.get("title") or "",
                     )
+                    if placeholder_dropped or cross_location_dropped:
+                        Actor.log.info(
+                            "EMAIL_FILTER %s",
+                            json.dumps({
+                                "title": item.get("businessName") or place.get("title"),
+                                "input_emails": len(raw_emails),
+                                "kept": len(item.get("emails") or []),
+                                "dropped_placeholder": placeholder_dropped,
+                                "dropped_cross_location": cross_location_dropped,
+                            }, ensure_ascii=False, default=str),
+                        )
                     stats["email_placeholder_dropped"] += placeholder_dropped
                     stats["cross_location_email_dropped"] += cross_location_dropped
                     stats["after_commercial_eval"] += 1
