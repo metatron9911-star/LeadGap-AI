@@ -7,6 +7,12 @@
       "title": "Sales-ready leads",
       "description": "Qualified local businesses with a concrete commercial opportunity and ready pitch hook.",
       "template": "{{links.apiDefaultDatasetUrl}}/items?view=salesReadyLeads"
+    },
+    "needsReview": {
+      "type": "string",
+      "title": "Needs manual review",
+      "description": "Strong opportunity signals with insufficient audit confidence. Verify manually before outreach.",
+      "template": "{{links.apiDefaultKeyValueStoreUrl}}/records/NEEDS_REVIEW"
     }
   }
 }
