@@ -276,7 +276,10 @@ dental_hook = _compose_grounded_niche_pitch_hook(
 )
 assert "No contact form detected" in dental_hook
 assert "dental practice" in dental_hook
-assert "enquiry form" in dental_hook
+assert "patients" in dental_hook.lower()
+assert "enquiry form" in dental_hook.lower()
+assert "appointment-led business has no clear online" not in dental_hook.lower()
+assert "couldn't find a clear online enquiry form" not in dental_hook.lower()
 
 legal_item = {
     "auditStatus": "SUCCESS",
@@ -291,6 +294,9 @@ legal_hook = _compose_grounded_niche_pitch_hook(
 )
 assert "No contact form detected" in legal_hook
 assert "legal practice" in legal_hook
+assert "prospective clients" in legal_hook.lower()
+assert "patients" not in legal_hook.lower()
+assert "dental practice" not in legal_hook.lower()
 assert legal_hook != dental_hook
 
 booking_item = {
@@ -306,4 +312,6 @@ booking_hook = _compose_grounded_niche_pitch_hook(
 )
 assert "No booking path detected" in booking_hook
 assert "booking or consultation path" in booking_hook
+assert "patients" in booking_hook.lower()
+assert "enquiry form" not in booking_hook.lower()
 assert booking_hook != dental_hook

@@ -3228,6 +3228,7 @@ def log_place_diagnostic(
         "confidenceScore": item.get("confidenceScore"),
         "salesPriority": item.get("salesPriority"),
         "estimatedDealType": item.get("estimatedDealType"),
+        "pitchHook": item.get("pitchHook"),
         "doNotPitch": item.get("doNotPitch"),
         "pagesScanned": item.get("pagesScanned"),
         "emailsCount": len(item.get("emails") or []),
