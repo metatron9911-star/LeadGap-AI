@@ -3066,7 +3066,7 @@ def apply_niche_qualification(item: dict, place: dict, business_type: str) -> di
         )
         item["whyThisLead"] = (
             f"{name} was evaluated as a restaurant, where a clear reservation or ordering path "
-            "is more relevant than appointment or consultation language."
+            "is a high-value conversion opportunity for diners."
         )
 
     appointment_niches = (
