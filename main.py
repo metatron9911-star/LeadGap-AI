@@ -379,6 +379,13 @@ _BLOCKED_CONTACT_EMAIL_LOCALS = {
     "demo",
     "sample",
     "dummy",
+    "your.email",
+    "your-email",
+    "your_email",
+    "yourname",
+    "your.name",
+    "your-name",
+    "your_name",
     "noreply",
     "no-reply",
     "do-not-reply",
@@ -412,15 +419,41 @@ def _email_placeholder_reason(email: str) -> str | None:
     return None
 
 
-def _business_domain_affinity(email_domain: str, business_name: str) -> bool:
-    compact_domain = re.sub(r"[^a-z0-9]", "", (email_domain or "").lower().split(".")[0])
+def _business_identity_tokens(business_name: str) -> list[str]:
     tokens = re.findall(r"[a-z0-9]+", (business_name or "").lower())
-    distinctive = [
+    return [
         token for token in tokens
         if token not in _GENERIC_BUSINESS_DOMAIN_TOKENS
         and (len(token) >= 3 or token.isdigit())
     ]
-    return any(token in compact_domain for token in distinctive)
+
+
+def _business_domain_affinity(email_domain: str, business_name: str) -> bool:
+    compact_domain = re.sub(r"[^a-z0-9]", "", (email_domain or "").lower().split(".")[0])
+    return any(
+        token in compact_domain
+        for token in _business_identity_tokens(business_name)
+    )
+
+
+def _business_email_affinity(email: str, business_name: str) -> bool:
+    """Match cross-domain email identity using domain OR local-part evidence.
+
+    This preserves legitimate addresses such as mulgravedentalcentre17@gmail.com
+    or thewhitehouse@a-third-party-gateway when the local part contains a
+    distinctive business-name token, while unrelated branch emails still fail.
+    """
+    email = (email or "").strip().lower()
+    if "@" not in email:
+        return False
+    local, domain = email.rsplit("@", 1)
+    if _business_domain_affinity(domain, business_name):
+        return True
+    compact_local = re.sub(r"[^a-z0-9]", "", local)
+    return any(
+        token in compact_local
+        for token in _business_identity_tokens(business_name)
+    )
 
 
 def _sanitize_contact_emails(
@@ -467,7 +500,7 @@ def _sanitize_contact_emails(
                 or website_host.endswith("." + email_domain)
             )
         )
-        if website_host and not same_domain and not _business_domain_affinity(email_domain, business_name):
+        if website_host and not same_domain and not _business_email_affinity(email, business_name):
             cross_location_dropped += 1
             dropped_addresses["cross_location"].append(email)
             continue

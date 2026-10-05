@@ -15,7 +15,7 @@ class ApifyClientAsync: pass
 apify_client.ApifyClientAsync = ApifyClientAsync
 sys.modules["apify_client"] = apify_client
 
-from main import has_contact_form, PATTERNS, apply_niche_qualification, is_niche_match, find_external_business_website, _place_primary_category, _website_identity_key, _blocked_discovery_domain, _is_public_contact_email, _strip_tracking_params, confidence_for_pages, _sanitize_contact_emails, _business_domain_affinity, _compose_grounded_niche_pitch_hook
+from main import has_contact_form, PATTERNS, apply_niche_qualification, is_niche_match, find_external_business_website, _place_primary_category, _website_identity_key, _blocked_discovery_domain, _is_public_contact_email, _strip_tracking_params, confidence_for_pages, _sanitize_contact_emails, _business_domain_affinity, _business_email_affinity, _compose_grounded_niche_pitch_hook
 import re
 import asyncio
 
@@ -270,6 +270,41 @@ assert _business_domain_affinity(
     "72dental.co.uk",
     "72 Dental",
 )
+
+# Cross-domain identity can also be carried by the local part.
+assert _business_email_affinity(
+    "mulgravedentalcentre17@gmail.com",
+    "Mulgrave Dental Centre",
+)
+assert _business_email_affinity(
+    "bluedental79@gmail.com",
+    "Bluedental - Dentist Croydon - Emergency Dentist",
+)
+assert _business_email_affinity(
+    "thewhitehouse@soegateway.com",
+    "The White House Dental Surgery",
+)
+assert not _business_email_affinity(
+    "reception@albiondentalbrighton.co.uk",
+    "Crossways Dental Coulsdon",
+)
+
+cleaned, placeholders, cross, dropped = _sanitize_contact_emails(
+    ["mulgravedentalcentre17@gmail.com"],
+    "https://www.mulgravedental.com/",
+    "Mulgrave Dental Centre",
+)
+assert cleaned == ["mulgravedentalcentre17@gmail.com"], cleaned
+assert placeholders == 0 and cross == 0, (placeholders, cross)
+
+cleaned, placeholders, cross, dropped = _sanitize_contact_emails(
+    ["your.email@example.com", "hello@confidentalclinic.com"],
+    "https://confidentalclinic.com/purley",
+    "ConfiDental Clinic Purley",
+)
+assert cleaned == ["hello@confidentalclinic.com"], cleaned
+assert placeholders == 1 and cross == 0, (placeholders, cross)
+assert dropped["placeholder"] == ["your.email@example.com"], dropped
 
 # Final pitch-hook architecture: one writer, grounded by gap + niche + evidence.
 dental_item = {
