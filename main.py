@@ -404,6 +404,8 @@ def _email_placeholder_reason(email: str) -> str | None:
     if "@" not in email:
         return "invalid"
     local, domain = email.rsplit("@", 1)
+    if domain in {"example.com", "example.org", "example.net"}:
+        return "placeholder"
     if email in {
         "example@email.com",
         "example@example.com",

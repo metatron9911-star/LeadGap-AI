@@ -306,6 +306,16 @@ assert cleaned == ["hello@confidentalclinic.com"], cleaned
 assert placeholders == 1 and cross == 0, (placeholders, cross)
 assert dropped["placeholder"] == ["your.email@example.com"], dropped
 
+cleaned, placeholders, cross, dropped = _sanitize_contact_emails(
+    ["info@example.com", "reception@abbeywooddental.co.uk"],
+    "https://abbeywooddental.co.uk/",
+    "Abbeywood Dental",
+)
+assert cleaned == ["reception@abbeywooddental.co.uk"], cleaned
+assert placeholders == 1 and cross == 0, (placeholders, cross)
+assert dropped["placeholder"] == ["info@example.com"], dropped
+assert dropped["cross_location"] == [], dropped
+
 # Final pitch-hook architecture: one writer, grounded by gap + niche + evidence.
 dental_item = {
     "auditStatus": "SUCCESS",
