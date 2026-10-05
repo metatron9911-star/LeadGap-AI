@@ -2922,6 +2922,9 @@ def _compose_grounded_niche_pitch_hook(
     elif any(term in niche for term in ("accountant", "accounting", "bookkeep", "tax")):
         niche_label = "accounting practice"
         audience = "prospective clients"
+    elif any(term in niche for term in ("restaurant", "cafe", "bistro", "takeaway", "steakhouse", "grill", "pizza")):
+        niche_label = "restaurant"
+        audience = "diners"
     elif any(term in niche for term in (
         "plumber", "electrician", "roofer", "builder", "hvac", "heating",
         "air conditioning", "locksmith", "cleaner", "landscaper",
@@ -2934,6 +2937,16 @@ def _compose_grounded_niche_pitch_hook(
         audience = "high-intent visitors"
 
     if primary == "Booking conversion":
+        if niche_label == "restaurant":
+            restaurant_evidence = evidence.replace(
+                "online booking path",
+                "online reservation or ordering path",
+            )
+            return (
+                f"I reviewed {name} and could not confirm a clear online reservation or ordering path. "
+                f"The audit evidence was: {restaurant_evidence}. For a restaurant, I would test that journey first "
+                "because it sits directly between diners showing intent and reserving a table or placing an order."
+            )
         return (
             f"I reviewed {name} and could not confirm a clear online booking or consultation path. "
             f"The audit evidence was: {evidence}. For a {niche_label}, I would test that journey first "
@@ -3032,6 +3045,28 @@ def apply_niche_qualification(item: dict, place: dict, business_type: str) -> di
         item["whyThisLead"] = (
             f"{name} was evaluated using home-service conversion rules, where quote, contact, "
             "and call paths matter more than appointment booking."
+        )
+
+    restaurant_niche = any(
+        term in niche
+        for term in ("restaurant", "cafe", "bistro", "takeaway", "steakhouse", "grill", "pizza")
+    )
+    if (
+        restaurant_niche
+        and item.get("auditStatus") == "SUCCESS"
+        and item.get("primaryOpportunity") == "Booking conversion"
+    ):
+        name = item.get("businessName") or place.get("title") or "the restaurant"
+        item["estimatedDealType"] = "Reservation / ordering funnel"
+        item["recommendedService"] = "Online reservation / ordering funnel optimization"
+        item["qualificationReason"] = (
+            "No clear online reservation or ordering path was detected. "
+            "For a restaurant, that can create friction between high-intent visitors "
+            "and a table reservation or order."
+        )
+        item["whyThisLead"] = (
+            f"{name} was evaluated as a restaurant, where a clear reservation or ordering path "
+            "is more relevant than appointment or consultation language."
         )
 
     appointment_niches = (

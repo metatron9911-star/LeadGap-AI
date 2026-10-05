@@ -371,6 +371,49 @@ assert "patients" in booking_hook.lower()
 assert "enquiry form" not in booking_hook.lower()
 assert booking_hook != dental_hook
 
+restaurant_item = {
+    "auditStatus": "SUCCESS",
+    "businessName": "Manchester Grill",
+    "primaryOpportunity": "Booking conversion",
+    "gaps": ["No clear online booking path detected across 2 scanned page(s)"],
+}
+restaurant_hook = _compose_grounded_niche_pitch_hook(
+    restaurant_item,
+    {"title": "Manchester Grill"},
+    "Restaurant",
+)
+assert "reservation or ordering path" in restaurant_hook.lower()
+assert "reserving a table or placing an order" in restaurant_hook.lower()
+assert "consultation" not in restaurant_hook.lower()
+assert "appointment" not in restaurant_hook.lower()
+assert "patients" not in restaurant_hook.lower()
+assert restaurant_hook != booking_hook
+
+restaurant_qualified = apply_niche_qualification(
+    {
+        "auditStatus": "SUCCESS",
+        "businessName": "Manchester Grill",
+        "signals": {"booking": False, "contact_form": False},
+        "primaryOpportunity": "Booking conversion",
+        "confidenceScore": 95,
+        "salesPriority": "HIGH",
+        "doNotPitch": False,
+        "estimatedDealType": "Booking funnel",
+        "recommendedService": "Online booking funnel implementation",
+        "revenueImpact": "HIGH",
+        "whyThisLead": "generic",
+        "pitchHook": "generic",
+        "gaps": ["No clear online booking path detected across 2 scanned page(s)"],
+    },
+    {"title": "Manchester Grill"},
+    "Restaurant",
+)
+assert restaurant_qualified["estimatedDealType"] == "Reservation / ordering funnel"
+assert "reservation / ordering" in restaurant_qualified["recommendedService"].lower()
+assert "appointment" not in restaurant_qualified["qualificationReason"].lower()
+assert "consultation" not in restaurant_qualified["whyThisLead"].lower()
+assert "reservation or ordering path" in restaurant_qualified["pitchHook"].lower()
+
 paid_social_item = {
     "auditStatus": "SUCCESS",
     "businessName": "Bright Smile Dental",
