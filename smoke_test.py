@@ -217,6 +217,7 @@ print('All smoke tests passed')
 # Sellable-v1 production hygiene regressions.
 assert not _is_public_contact_email("8c4075d5481d476e945486754f783364@sentry.io")
 assert not _is_public_contact_email("2062d0a4929b45348643784b5cb39c36@sentry.wixpress.com")
+assert not _is_public_contact_email("best-new-practice-1@2x.png")
 assert _is_public_contact_email("reception@royalarsenaldentists.com")
 assert _strip_tracking_params("https://example.com/page?utm_source=google&utm_medium=organic") == "https://example.com/page"
 assert _strip_tracking_params("https://example.com/page?id=7&utm_source=google") == "https://example.com/page?id=7"

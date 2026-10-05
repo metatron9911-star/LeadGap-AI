@@ -363,6 +363,8 @@ def _is_public_contact_email(email: str) -> bool:
     if "@" not in email:
         return False
     local, domain = email.rsplit("@", 1)
+    if domain.rsplit(".", 1)[-1] in {"png", "jpg", "jpeg", "gif", "webp", "svg", "ico"}:
+        return False
     if domain in _BLOCKED_CONTACT_EMAIL_DOMAINS:
         return False
     if re.fullmatch(r"[0-9a-f]{24,}", local) and (
