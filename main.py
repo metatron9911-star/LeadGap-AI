@@ -522,6 +522,77 @@ def _sanitize_contact_emails(
     )
 
 
+_GENERIC_LOCATION_EMAIL_LOCALS = {
+    "info", "reception", "hello", "contact", "office", "admin",
+    "enquiry", "enquiries", "appointments", "appointment", "booking",
+    "bookings", "team", "mail",
+}
+
+_LOCATION_TOKEN_STOPWORDS = _GENERIC_BUSINESS_DOMAIN_TOKENS | {
+    "road", "street", "lane", "avenue", "drive", "house", "building",
+    "unit", "floor", "south", "north", "east", "west", "united", "kingdom",
+    "england", "london",
+}
+
+
+def _same_domain_location_filter(
+    emails: list[str],
+    business_name: str,
+    place: dict,
+) -> tuple[list[str], list[str]]:
+    """Conservatively remove obvious sibling-branch emails on one domain.
+
+    A location token must be confirmed by both the business name and Maps
+    location text. Generic inboxes are always retained. If the evidence is
+    ambiguous, all addresses are preserved.
+    """
+    unique = sorted(set((e or "").strip().lower() for e in emails or [] if e))
+    if len(unique) <= 1:
+        return unique, []
+
+    name_tokens = {
+        t for t in re.findall(r"[a-z0-9]+", (business_name or "").lower())
+        if len(t) >= 5 and t not in _LOCATION_TOKEN_STOPWORDS
+    }
+    location_text = " ".join(
+        str(place.get(k) or "")
+        for k in ("address", "city", "neighborhood", "street", "postalCode")
+    ).lower()
+    location_tokens = {
+        t for t in name_tokens
+        if t in re.findall(r"[a-z0-9]+", location_text)
+    }
+    if not location_tokens:
+        return unique, []
+
+    matched: list[str] = []
+    generic: list[str] = []
+    candidates: list[str] = []
+
+    for email in unique:
+        local = email.split("@", 1)[0]
+        local_parts = [p for p in re.split(r"[._-]+", local) if p]
+        if local in _GENERIC_LOCATION_EMAIL_LOCALS or any(
+            p in _GENERIC_LOCATION_EMAIL_LOCALS for p in local_parts
+        ):
+            generic.append(email)
+            continue
+        if any(tok in local for tok in location_tokens):
+            matched.append(email)
+        else:
+            candidates.append(email)
+
+    # Safety envelope: only filter when at least one address positively matches
+    # the current location and at least one non-generic sibling does not.
+    if not matched or not candidates:
+        return unique, []
+
+    kept = sorted(set(matched + generic))
+    if not kept:
+        return unique, []
+    return kept, sorted(set(candidates))
+
+
 def extract_contacts(
     html: str,
 ) -> tuple[list[str], list[str]]:
@@ -3450,6 +3521,7 @@ async def main() -> None:
             "UNAVAILABLE": 0,
             "email_placeholder_dropped": 0,
             "cross_location_email_dropped": 0,
+            "same_domain_cross_location_dropped": 0,
         }
 
 
@@ -3494,6 +3566,7 @@ async def main() -> None:
                                 "kept": len(item.get("emails") or []),
                                 "dropped_placeholder": placeholder_dropped,
                                 "dropped_cross_location": cross_location_dropped,
+                                "dropped_same_domain_location": 0,
                                 "dropped_addresses": dropped_addresses,
                             }, ensure_ascii=False, default=str),
                         )
@@ -3773,7 +3846,14 @@ async def main() -> None:
                         item.get("website") or website,
                         item.get("businessName") or place.get("title") or "",
                     )
-                    if placeholder_dropped or cross_location_dropped:
+                    item["emails"], same_domain_dropped_addresses = _same_domain_location_filter(
+                        item.get("emails") or [],
+                        item.get("businessName") or place.get("title") or "",
+                        place,
+                    )
+                    same_domain_location_dropped = len(same_domain_dropped_addresses)
+                    dropped_addresses["same_domain_location"] = same_domain_dropped_addresses
+                    if placeholder_dropped or cross_location_dropped or same_domain_location_dropped:
                         Actor.log.info(
                             "EMAIL_FILTER %s",
                             json.dumps({
@@ -3782,11 +3862,13 @@ async def main() -> None:
                                 "kept": len(item.get("emails") or []),
                                 "dropped_placeholder": placeholder_dropped,
                                 "dropped_cross_location": cross_location_dropped,
+                                "dropped_same_domain_location": same_domain_location_dropped,
                                 "dropped_addresses": dropped_addresses,
                             }, ensure_ascii=False, default=str),
                         )
                     stats["email_placeholder_dropped"] += placeholder_dropped
                     stats["cross_location_email_dropped"] += cross_location_dropped
+                    stats["same_domain_cross_location_dropped"] += same_domain_location_dropped
                     stats["after_commercial_eval"] += 1
                     commercially_qualified = is_commercially_qualified(
                         item,

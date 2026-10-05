@@ -15,7 +15,7 @@ class ApifyClientAsync: pass
 apify_client.ApifyClientAsync = ApifyClientAsync
 sys.modules["apify_client"] = apify_client
 
-from main import has_contact_form, PATTERNS, apply_niche_qualification, is_niche_match, find_external_business_website, _place_primary_category, _website_identity_key, _blocked_discovery_domain, _is_public_contact_email, _strip_tracking_params, confidence_for_pages, _sanitize_contact_emails, _business_domain_affinity, _business_email_affinity, _compose_grounded_niche_pitch_hook
+from main import has_contact_form, PATTERNS, apply_niche_qualification, is_niche_match, find_external_business_website, _place_primary_category, _website_identity_key, _blocked_discovery_domain, _is_public_contact_email, _strip_tracking_params, confidence_for_pages, _sanitize_contact_emails, _business_domain_affinity, _business_email_affinity, _compose_grounded_niche_pitch_hook, _same_domain_location_filter
 import re
 import asyncio
 
@@ -401,3 +401,61 @@ assert "after-hours enquiry capture" in after_hours_hook.lower()
 assert "No live-chat technology detected" in after_hours_hook
 assert "dental practice" in after_hours_hook
 assert after_hours_hook != paid_social_hook
+
+# Same-domain sibling branch filtering: conservative, Maps-grounded.
+sky_place = {
+    "title": "Sky Dental Clinic Bexley",
+    "address": "Bexley, Greater London, United Kingdom",
+    "city": "Bexley",
+    "neighborhood": None,
+    "street": "High Street",
+    "postalCode": "DA5",
+}
+cleaned, dropped = _same_domain_location_filter(
+    [
+        "beckenham@skydentalclinic.co.uk",
+        "bexley@skydentalclinic.co.uk",
+        "orpington@skydentalclinic.co.uk",
+    ],
+    "Sky Dental Clinic Bexley",
+    sky_place,
+)
+assert cleaned == ["bexley@skydentalclinic.co.uk"], cleaned
+assert dropped == [
+    "beckenham@skydentalclinic.co.uk",
+    "orpington@skydentalclinic.co.uk",
+], dropped
+
+# Generic inboxes remain even when branch-specific siblings are filtered.
+cleaned, dropped = _same_domain_location_filter(
+    [
+        "info@skydentalclinic.co.uk",
+        "bexley@skydentalclinic.co.uk",
+        "orpington@skydentalclinic.co.uk",
+    ],
+    "Sky Dental Clinic Bexley",
+    sky_place,
+)
+assert cleaned == [
+    "bexley@skydentalclinic.co.uk",
+    "info@skydentalclinic.co.uk",
+], cleaned
+assert dropped == ["orpington@skydentalclinic.co.uk"], dropped
+
+# No positive location match => preserve everything.
+cleaned, dropped = _same_domain_location_filter(
+    ["beckenham@example.co.uk", "orpington@example.co.uk"],
+    "Example Dental Bexley",
+    sky_place,
+)
+assert cleaned == ["beckenham@example.co.uk", "orpington@example.co.uk"], cleaned
+assert dropped == [], dropped
+
+# Single email => never filter.
+cleaned, dropped = _same_domain_location_filter(
+    ["reception@crosswaysdental.co.uk"],
+    "Crossways Dental Coulsdon",
+    {"address": "Coulsdon, UK", "city": "Coulsdon"},
+)
+assert cleaned == ["reception@crosswaysdental.co.uk"], cleaned
+assert dropped == [], dropped
