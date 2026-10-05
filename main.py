@@ -372,6 +372,100 @@ def _is_public_contact_email(email: str) -> bool:
     return True
 
 
+_BLOCKED_CONTACT_EMAIL_LOCALS = {
+    "example",
+    "test",
+    "testing",
+    "demo",
+    "sample",
+    "dummy",
+    "noreply",
+    "no-reply",
+    "do-not-reply",
+    "donotreply",
+}
+
+_GENERIC_BUSINESS_DOMAIN_TOKENS = {
+    "dental", "dentist", "dentistry", "clinic", "practice", "centre", "center",
+    "group", "health", "care", "services", "service", "limited", "ltd", "the",
+    "and", "of", "uk",
+}
+
+
+def _email_placeholder_reason(email: str) -> str | None:
+    email = (email or "").strip().lower()
+    if "@" not in email:
+        return "invalid"
+    local, domain = email.rsplit("@", 1)
+    if email in {
+        "example@email.com",
+        "example@example.com",
+        "test@example.com",
+        "your@email.com",
+        "yourname@example.com",
+    }:
+        return "placeholder"
+    if local in _BLOCKED_CONTACT_EMAIL_LOCALS:
+        return "placeholder"
+    if local.startswith(("noreply", "no-reply", "donotreply", "do-not-reply")):
+        return "non_contact"
+    return None
+
+
+def _business_domain_affinity(email_domain: str, business_name: str) -> bool:
+    compact_domain = re.sub(r"[^a-z0-9]", "", (email_domain or "").lower().split(".")[0])
+    tokens = re.findall(r"[a-z0-9]+", (business_name or "").lower())
+    distinctive = [
+        token for token in tokens
+        if token not in _GENERIC_BUSINESS_DOMAIN_TOKENS
+        and (len(token) >= 3 or token.isdigit())
+    ]
+    return any(token in compact_domain for token in distinctive)
+
+
+def _sanitize_contact_emails(
+    emails: list[str],
+    website: str,
+    business_name: str,
+) -> tuple[list[str], int, int]:
+    """Keep only buyer-safe emails.
+
+    Cross-domain addresses are accepted only when the email domain has a clear
+    affinity with the specific business name. This preserves cases such as
+    72dental.co.uk for "72 Dental" while dropping unrelated location emails
+    found on multi-location group sites.
+    """
+    website_host = clean_host(website or "")
+    kept: list[str] = []
+    placeholder_dropped = 0
+    cross_location_dropped = 0
+
+    for raw in emails or []:
+        email = (raw or "").strip().lower()
+        if not _is_public_contact_email(email):
+            continue
+        if _email_placeholder_reason(email):
+            placeholder_dropped += 1
+            continue
+
+        _, email_domain = email.rsplit("@", 1)
+        same_domain = bool(
+            website_host
+            and (
+                email_domain == website_host
+                or email_domain.endswith("." + website_host)
+                or website_host.endswith("." + email_domain)
+            )
+        )
+        if website_host and not same_domain and not _business_domain_affinity(email_domain, business_name):
+            cross_location_dropped += 1
+            continue
+
+        kept.append(email)
+
+    return sorted(set(kept))[:10], placeholder_dropped, cross_location_dropped
+
+
 def extract_contacts(
     html: str,
 ) -> tuple[list[str], list[str]]:
@@ -3121,6 +3215,8 @@ async def main() -> None:
             "FOUND": 0,
             "NOT_FOUND": 0,
             "UNAVAILABLE": 0,
+            "email_placeholder_dropped": 0,
+            "cross_location_email_dropped": 0,
         }
 
 
@@ -3150,6 +3246,13 @@ async def main() -> None:
                         raw_url,
                         country,
                     )
+                    item["emails"], placeholder_dropped, cross_location_dropped = _sanitize_contact_emails(
+                        item.get("emails") or [],
+                        item.get("website") or raw_url,
+                        item.get("businessName") or "",
+                    )
+                    stats["email_placeholder_dropped"] += placeholder_dropped
+                    stats["cross_location_email_dropped"] += cross_location_dropped
                     stats["after_commercial_eval"] += 1
 
                     commercially_qualified = is_commercially_qualified(
@@ -3415,6 +3518,13 @@ async def main() -> None:
                         item["websiteSource"] = "GOOGLE_MAPS"
 
 
+                    item["emails"], placeholder_dropped, cross_location_dropped = _sanitize_contact_emails(
+                        item.get("emails") or [],
+                        item.get("website") or website,
+                        item.get("businessName") or place.get("title") or "",
+                    )
+                    stats["email_placeholder_dropped"] += placeholder_dropped
+                    stats["cross_location_email_dropped"] += cross_location_dropped
                     stats["after_commercial_eval"] += 1
                     commercially_qualified = is_commercially_qualified(
                         item,

@@ -15,7 +15,7 @@ class ApifyClientAsync: pass
 apify_client.ApifyClientAsync = ApifyClientAsync
 sys.modules["apify_client"] = apify_client
 
-from main import has_contact_form, PATTERNS, apply_niche_qualification, is_niche_match, find_external_business_website, _place_primary_category, _website_identity_key, _blocked_discovery_domain, _is_public_contact_email, _strip_tracking_params, confidence_for_pages
+from main import has_contact_form, PATTERNS, apply_niche_qualification, is_niche_match, find_external_business_website, _place_primary_category, _website_identity_key, _blocked_discovery_domain, _is_public_contact_email, _strip_tracking_params, confidence_for_pages, _sanitize_contact_emails
 import re
 import asyncio
 
@@ -222,3 +222,28 @@ assert _strip_tracking_params("https://example.com/page?utm_source=google&utm_me
 assert _strip_tracking_params("https://example.com/page?id=7&utm_source=google") == "https://example.com/page?id=7"
 low_conf = confidence_for_pages(1, signals={"title": True, "meta_description": True, "mobile_viewport": True}, successful_fetches=1, attempted_fetches=1, contacts_found=True)[1]
 assert low_conf < 60, low_conf
+
+# Email hygiene: placeholders and cross-location contamination.
+cleaned, placeholders, cross = _sanitize_contact_emails(
+    ["example@email.com", "info@keppeladvanceddentistry.co.uk"],
+    "https://keppeladvanceddentistry.co.uk/",
+    "Keppel Advanced Dentistry",
+)
+assert cleaned == ["info@keppeladvanceddentistry.co.uk"], cleaned
+assert placeholders == 1 and cross == 0, (placeholders, cross)
+
+cleaned, placeholders, cross = _sanitize_contact_emails(
+    ["reception@albiondentalbrighton.co.uk", "reception@crosswaysdental.co.uk"],
+    "https://www.qualitydentalgroup.co.uk/coulsdon/about-us/",
+    "Crossways Dental Coulsdon",
+)
+assert cleaned == ["reception@crosswaysdental.co.uk"], cleaned
+assert placeholders == 0 and cross == 1, (placeholders, cross)
+
+cleaned, placeholders, cross = _sanitize_contact_emails(
+    ["hello@72dental.co.uk"],
+    "https://72dentalcoulsdon.co.uk/",
+    "72 Dental",
+)
+assert cleaned == ["hello@72dental.co.uk"], cleaned
+assert placeholders == 0 and cross == 0, (placeholders, cross)
