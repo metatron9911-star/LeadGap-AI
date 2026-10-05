@@ -15,7 +15,7 @@ class ApifyClientAsync: pass
 apify_client.ApifyClientAsync = ApifyClientAsync
 sys.modules["apify_client"] = apify_client
 
-from main import has_contact_form, PATTERNS, apply_niche_qualification, is_niche_match, find_external_business_website, _place_primary_category, _website_identity_key, _blocked_discovery_domain, _is_public_contact_email, _strip_tracking_params, confidence_for_pages, _sanitize_contact_emails, _business_domain_affinity, _business_email_affinity, _compose_grounded_niche_pitch_hook, _same_domain_location_filter
+from main import has_contact_form, PATTERNS, apply_niche_qualification, is_niche_match, find_external_business_website, _place_primary_category, _website_identity_key, _blocked_discovery_domain, _is_public_contact_email, _strip_tracking_params, confidence_for_pages, _sanitize_contact_emails, _business_domain_affinity, _business_email_affinity, _compose_grounded_niche_pitch_hook, _same_domain_location_filter, is_needs_review_candidate
 import re
 import asyncio
 
@@ -459,3 +459,23 @@ cleaned, dropped = _same_domain_location_filter(
 )
 assert cleaned == ["reception@crosswaysdental.co.uk"], cleaned
 assert dropped == [], dropped
+
+# Needs-review classification
+review_ok = {
+    "auditStatus": "SUCCESS",
+    "opportunityScore": 83,
+    "confidenceScore": 59,
+    "pagesScanned": 1,
+    "salesPriority": "MEDIUM",
+    "estimatedDealType": "Booking funnel",
+}
+review_low_score = dict(review_ok); review_low_score["opportunityScore"] = 20
+review_high_conf = dict(review_ok); review_high_conf["confidenceScore"] = 95
+review_two_pages = dict(review_ok); review_two_pages["pagesScanned"] = 2
+review_tracking = dict(review_ok); review_tracking["estimatedDealType"] = "Meta Ads tracking"
+assert is_needs_review_candidate(review_ok, 0)
+assert not is_needs_review_candidate(review_low_score, 0)
+assert not is_needs_review_candidate(review_high_conf, 0)
+assert not is_needs_review_candidate(review_two_pages, 0)
+assert not is_needs_review_candidate(review_tracking, 0)
+assert not is_needs_review_candidate(review_ok, 90)
