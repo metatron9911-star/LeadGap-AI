@@ -3267,6 +3267,27 @@ def is_commercially_qualified(
     )
 
 
+def is_needs_review_candidate(item: dict, min_score: int) -> bool:
+    review_score_floor = max(40, int(min_score or 0))
+    return (
+        item.get("auditStatus") == "SUCCESS"
+        and item.get("opportunityScore", 0) >= review_score_floor
+        and item.get("confidenceScore", 0) < 60
+        and item.get("pagesScanned") == 1
+        and item.get("salesPriority") in ("HIGH", "MEDIUM")
+        and item.get("estimatedDealType") not in (
+            "Tracking setup", "Meta Ads tracking", "SEO metadata", "Live chat", "Manual review"
+        )
+    )
+
+
+def make_needs_review_output(item: dict) -> dict:
+    record = make_public_output(item)
+    record["reviewStatus"] = "NEEDS_REVIEW"
+    record["reviewReason"] = "Strong opportunity signal with one-page audit coverage; verify manually before outreach."
+    return record
+
+
 def make_public_output(
     item: dict,
 ) -> dict:
@@ -3509,6 +3530,7 @@ async def main() -> None:
 
 
         qualified = 0
+        needs_review_items: list[dict] = []
         stats = {
             "discovered": 0,
             "after_dedup": 0,
@@ -3522,6 +3544,7 @@ async def main() -> None:
             "email_placeholder_dropped": 0,
             "cross_location_email_dropped": 0,
             "same_domain_cross_location_dropped": 0,
+            "needs_review": 0,
         }
 
 
@@ -3893,6 +3916,9 @@ async def main() -> None:
                             )
                             break
                     else:
+                        if is_needs_review_candidate(item, min_score):
+                            needs_review_items.append(make_needs_review_output(item))
+                            stats["needs_review"] += 1
                         log_place_diagnostic(
                             place,
                             niche_match=True,
@@ -3901,6 +3927,12 @@ async def main() -> None:
                             pushed=False,
                         )
 
+
+        await Actor.set_value(
+            "NEEDS_REVIEW",
+            {"status": "needs_review", "count": len(needs_review_items), "items": needs_review_items},
+            content_type="application/json",
+        )
 
         Actor.log.info(
             "RUN_SUMMARY %s",
