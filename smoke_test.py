@@ -359,3 +359,34 @@ assert "booking or consultation path" in booking_hook
 assert "patients" in booking_hook.lower()
 assert "enquiry form" not in booking_hook.lower()
 assert booking_hook != dental_hook
+
+paid_social_item = {
+    "auditStatus": "SUCCESS",
+    "businessName": "Bright Smile Dental",
+    "primaryOpportunity": "Paid social measurement",
+    "gaps": ["No Meta Pixel detected"],
+}
+paid_social_hook = _compose_grounded_niche_pitch_hook(
+    paid_social_item,
+    {"title": "Bright Smile Dental"},
+    "Dentist",
+)
+assert "paid social measurement" in paid_social_hook.lower()
+assert "No Meta Pixel detected" in paid_social_hook
+assert "dental practice" in paid_social_hook
+
+after_hours_item = {
+    "auditStatus": "SUCCESS",
+    "businessName": "Bright Smile Dental",
+    "primaryOpportunity": "After-hours enquiry capture",
+    "gaps": ["No live-chat technology detected"],
+}
+after_hours_hook = _compose_grounded_niche_pitch_hook(
+    after_hours_item,
+    {"title": "Bright Smile Dental"},
+    "Dentist",
+)
+assert "after-hours enquiry capture" in after_hours_hook.lower()
+assert "No live-chat technology detected" in after_hours_hook
+assert "dental practice" in after_hours_hook
+assert after_hours_hook != paid_social_hook
