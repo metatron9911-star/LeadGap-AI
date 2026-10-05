@@ -427,18 +427,27 @@ def _sanitize_contact_emails(
     emails: list[str],
     website: str,
     business_name: str,
-) -> tuple[list[str], int, int]:
-    """Keep only buyer-safe emails.
+) -> tuple[list[str], int, int, dict[str, list[str]]]:
+    """Keep only buyer-safe emails and return an auditable drop journal.
 
     Cross-domain addresses are accepted only when the email domain has a clear
     affinity with the specific business name. This preserves cases such as
     72dental.co.uk for "72 Dental" while dropping unrelated location emails
     found on multi-location group sites.
+
+    The fourth return value is intentionally structured for future hygiene
+    stages (for example same-domain branch filtering) without changing the
+    buyer-facing output schema.
     """
     website_host = clean_host(website or "")
     kept: list[str] = []
     placeholder_dropped = 0
     cross_location_dropped = 0
+    dropped_addresses: dict[str, list[str]] = {
+        "placeholder": [],
+        "cross_location": [],
+        "same_domain_location": [],
+    }
 
     for raw in emails or []:
         email = (raw or "").strip().lower()
@@ -446,6 +455,7 @@ def _sanitize_contact_emails(
             continue
         if _email_placeholder_reason(email):
             placeholder_dropped += 1
+            dropped_addresses["placeholder"].append(email)
             continue
 
         _, email_domain = email.rsplit("@", 1)
@@ -459,11 +469,20 @@ def _sanitize_contact_emails(
         )
         if website_host and not same_domain and not _business_domain_affinity(email_domain, business_name):
             cross_location_dropped += 1
+            dropped_addresses["cross_location"].append(email)
             continue
 
         kept.append(email)
 
-    return sorted(set(kept))[:10], placeholder_dropped, cross_location_dropped
+    for key in dropped_addresses:
+        dropped_addresses[key] = sorted(set(dropped_addresses[key]))
+
+    return (
+        sorted(set(kept))[:10],
+        placeholder_dropped,
+        cross_location_dropped,
+        dropped_addresses,
+    )
 
 
 def extract_contacts(
@@ -3424,7 +3443,7 @@ async def main() -> None:
                         country,
                     )
                     raw_emails = list(item.get("emails") or [])
-                    item["emails"], placeholder_dropped, cross_location_dropped = _sanitize_contact_emails(
+                    item["emails"], placeholder_dropped, cross_location_dropped, dropped_addresses = _sanitize_contact_emails(
                         raw_emails,
                         item.get("website") or raw_url,
                         item.get("businessName") or "",
@@ -3438,6 +3457,7 @@ async def main() -> None:
                                 "kept": len(item.get("emails") or []),
                                 "dropped_placeholder": placeholder_dropped,
                                 "dropped_cross_location": cross_location_dropped,
+                                "dropped_addresses": dropped_addresses,
                             }, ensure_ascii=False, default=str),
                         )
                     stats["email_placeholder_dropped"] += placeholder_dropped
@@ -3711,7 +3731,7 @@ async def main() -> None:
 
 
                     raw_emails = list(item.get("emails") or [])
-                    item["emails"], placeholder_dropped, cross_location_dropped = _sanitize_contact_emails(
+                    item["emails"], placeholder_dropped, cross_location_dropped, dropped_addresses = _sanitize_contact_emails(
                         raw_emails,
                         item.get("website") or website,
                         item.get("businessName") or place.get("title") or "",
@@ -3725,6 +3745,7 @@ async def main() -> None:
                                 "kept": len(item.get("emails") or []),
                                 "dropped_placeholder": placeholder_dropped,
                                 "dropped_cross_location": cross_location_dropped,
+                                "dropped_addresses": dropped_addresses,
                             }, ensure_ascii=False, default=str),
                         )
                     stats["email_placeholder_dropped"] += placeholder_dropped

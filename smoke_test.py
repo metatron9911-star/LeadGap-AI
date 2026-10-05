@@ -224,29 +224,38 @@ low_conf = confidence_for_pages(1, signals={"title": True, "meta_description": T
 assert low_conf < 60, low_conf
 
 # Email hygiene: placeholders and cross-location contamination.
-cleaned, placeholders, cross = _sanitize_contact_emails(
+cleaned, placeholders, cross, dropped = _sanitize_contact_emails(
     ["example@email.com", "info@keppeladvanceddentistry.co.uk"],
     "https://keppeladvanceddentistry.co.uk/",
     "Keppel Advanced Dentistry",
 )
 assert cleaned == ["info@keppeladvanceddentistry.co.uk"], cleaned
 assert placeholders == 1 and cross == 0, (placeholders, cross)
+assert dropped["placeholder"] == ["example@email.com"], dropped
+assert dropped["cross_location"] == [], dropped
 
-cleaned, placeholders, cross = _sanitize_contact_emails(
+cleaned, placeholders, cross, dropped = _sanitize_contact_emails(
     ["reception@albiondentalbrighton.co.uk", "reception@crosswaysdental.co.uk"],
     "https://www.qualitydentalgroup.co.uk/coulsdon/about-us/",
     "Crossways Dental Coulsdon",
 )
 assert cleaned == ["reception@crosswaysdental.co.uk"], cleaned
 assert placeholders == 0 and cross == 1, (placeholders, cross)
+assert dropped["placeholder"] == [], dropped
+assert dropped["cross_location"] == ["reception@albiondentalbrighton.co.uk"], dropped
 
-cleaned, placeholders, cross = _sanitize_contact_emails(
+cleaned, placeholders, cross, dropped = _sanitize_contact_emails(
     ["hello@72dental.co.uk"],
     "https://72dentalcoulsdon.co.uk/",
     "72 Dental",
 )
 assert cleaned == ["hello@72dental.co.uk"], cleaned
 assert placeholders == 0 and cross == 0, (placeholders, cross)
+assert dropped == {
+    "placeholder": [],
+    "cross_location": [],
+    "same_domain_location": [],
+}, dropped
 
 # Industry-generic token "dental" alone must never establish affinity.
 assert not _business_domain_affinity(
