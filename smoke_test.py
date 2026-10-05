@@ -213,3 +213,12 @@ async def _test_external_search_statuses():
 asyncio.run(_test_external_search_statuses())
 
 print('All smoke tests passed')
+
+# Sellable-v1 production hygiene regressions.
+assert not main._is_public_contact_email("8c4075d5481d476e945486754f783364@sentry.io")
+assert not main._is_public_contact_email("2062d0a4929b45348643784b5cb39c36@sentry.wixpress.com")
+assert main._is_public_contact_email("reception@royalarsenaldentists.com")
+assert main._strip_tracking_params("https://example.com/page?utm_source=google&utm_medium=organic") == "https://example.com/page"
+assert main._strip_tracking_params("https://example.com/page?id=7&utm_source=google") == "https://example.com/page?id=7"
+low_conf = main.confidence_for_pages(1, signals={"title": True, "meta_description": True, "mobile_viewport": True}, successful_fetches=1, attempted_fetches=1, contacts_found=True)[1]
+assert low_conf < 60, low_conf

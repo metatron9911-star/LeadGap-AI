@@ -2,8 +2,9 @@ import asyncio
 import json
 import os
 import re
+import hashlib
 from difflib import SequenceMatcher
-from urllib.parse import parse_qs, unquote, urljoin, urlparse
+from urllib.parse import parse_qs, parse_qsl, urlencode, unquote, urljoin, urlparse, urlunparse
 
 import httpx
 from bs4 import BeautifulSoup
@@ -165,6 +166,20 @@ def normalize_url(url: str) -> str:
         url = "https://" + url
 
     return url
+
+
+def _strip_tracking_params(url: str) -> str:
+    """Remove marketing-only tracking params while preserving functional query params."""
+    if not url:
+        return url
+    parsed = urlparse(url)
+    kept = [
+        (k, v)
+        for k, v in parse_qsl(parsed.query, keep_blank_values=True)
+        if not k.lower().startswith("utm_")
+        and k.lower() not in {"gclid", "fbclid", "msclkid"}
+    ]
+    return urlunparse(parsed._replace(query=urlencode(kept), fragment=""))
 
 
 def clean_host(url: str) -> str:
@@ -337,6 +352,27 @@ def find_candidate_pages(
     return output
 
 
+_BLOCKED_CONTACT_EMAIL_DOMAINS = {
+    "sentry.io",
+    "sentry.wixpress.com",
+    "sentry-next.wixpress.com",
+}
+
+
+def _is_public_contact_email(email: str) -> bool:
+    email = (email or "").strip().lower()
+    if "@" not in email:
+        return False
+    local, domain = email.rsplit("@", 1)
+    if domain in _BLOCKED_CONTACT_EMAIL_DOMAINS:
+        return False
+    if re.fullmatch(r"[0-9a-f]{24,}", local) and (
+        "sentry" in domain or "wixpress.com" in domain
+    ):
+        return False
+    return True
+
+
 def extract_contacts(
     html: str,
 ) -> tuple[list[str], list[str]]:
@@ -375,6 +411,8 @@ def extract_contacts(
         re.I,
     ):
         emails.add(email.lower())
+
+    emails = {email for email in emails if _is_public_contact_email(email)}
 
     return (
         sorted(emails)[:10],
@@ -896,6 +934,12 @@ def confidence_for_pages(
             score += 5
         elif fetch_ratio < 0.5:
             score -= 10
+    # Fail closed on absence-based claims from a single successfully scanned page.
+    # One-page audits can still be shown internally, but they must not cross the
+    # commercial outreach confidence threshold without broader evidence.
+    if pages_scanned < 2:
+        score = min(score, 59)
+
     score = max(20, min(score, 95))
     if score >= 85:
         return "HIGH", score
@@ -1129,26 +1173,50 @@ def make_pitch(
 ) -> tuple[str, str]:
 
     primary = opportunity["primary"]["opportunity"]
-
-    why = (
-        f"{business_name} has an active public website, "
-        f"but the automated audit found a specific "
-        f"{primary.lower()} opportunity after checking "
-        f"{pages_scanned} page(s). "
-        "This gives an agency a concrete reason "
-        "to approach the business instead of sending "
-        "a generic website pitch."
-    )
-
     gap = opportunity["primary"]["gap"]
 
-    pitch = (
-        f"I reviewed {domain} and noticed a potential "
-        f"conversion gap: {gap}. "
-        "There may be an opportunity to improve the path "
-        "from website visitor to enquiry or booked appointment. "
-        "I can show you the exact change I would test first."
+    why = (
+        f"{business_name} has an active public website. "
+        f"Across {pages_scanned} scanned page(s), the strongest grounded opportunity "
+        f"was {primary.lower()}: {gap}."
     )
+
+    variants = [
+        (
+            f"I checked {domain}. {gap}. "
+            "That is a concrete conversion issue worth testing before spending more on traffic."
+        ),
+        (
+            f"On {domain}, the clearest gap I found was: {gap}. "
+            "I would start there because it directly affects how a visitor becomes an enquiry."
+        ),
+        (
+            f"I reviewed the public journey on {domain} and found this specific issue: {gap}. "
+            "There is a practical fix here that can be tested without rebuilding the whole site."
+        ),
+        (
+            f"A quick audit of {domain} surfaced one actionable point: {gap}. "
+            "That gives you a specific outreach angle rather than a generic website pitch."
+        ),
+        (
+            f"The strongest conversion opportunity I found on {domain} is {primary.lower()}. "
+            f"The evidence was: {gap}. I would test that path first."
+        ),
+        (
+            f"I looked at {domain} from a customer-conversion perspective. {gap}. "
+            "This is the first thing I would validate because it sits close to enquiry intent."
+        ),
+        (
+            f"There is a measurable-looking friction point on {domain}: {gap}. "
+            "It is specific enough to test as a focused conversion improvement."
+        ),
+        (
+            f"Rather than a broad redesign pitch, I found one concrete issue on {domain}: {gap}. "
+            "That is the change I would investigate first."
+        ),
+    ]
+    digest = hashlib.sha256(f"{business_name}|{domain}|{primary}".encode("utf-8")).digest()
+    pitch = variants[digest[0] % len(variants)]
 
     return why, pitch
 
@@ -2845,7 +2913,7 @@ def make_public_output(
         "city": item.get("city"),
         "country": item.get("country"),
 
-        "website": item.get("website"),
+        "website": _strip_tracking_params(item.get("website") or ""),
         "websiteSource": item.get("websiteSource"),
         "phone": phone,
         "emails": item.get("emails") or [],
