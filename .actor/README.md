@@ -1,5 +1,7 @@
 # LeadGap AI — Local Business Website Gap Finder
 
+![LeadGap AI — Find the gap. Start the conversation.](https://raw.githubusercontent.com/metatron9911-star/LeadGap-AI/leadgap-sellable-v1/docs/assets/LeadGap_Hero.jpg)
+
 Find local businesses with actionable website gaps, public contact details, and grounded outreach angles.
 
 LeadGap helps web design, local SEO, lead-generation agencies and freelancers decide **who to approach and what to discuss**. Choose a niche and city, run the audit, then review the opportunities.
