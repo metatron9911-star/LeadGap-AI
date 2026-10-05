@@ -2,7 +2,6 @@ import asyncio
 import json
 import os
 import re
-import hashlib
 from difflib import SequenceMatcher
 from urllib.parse import parse_qs, parse_qsl, urlencode, unquote, urljoin, urlparse, urlunparse
 
@@ -1172,8 +1171,10 @@ def make_pitch(
     pages_scanned: int,
 ) -> tuple[str, str]:
 
-    primary = opportunity["primary"]["opportunity"]
-    gap = opportunity["primary"]["gap"]
+    primary_obj = opportunity["primary"]
+    primary = primary_obj["opportunity"]
+    gap = primary_obj["gap"]
+    gap_key = primary_obj.get("key") or primary.lower().replace(" ", "_")
 
     why = (
         f"{business_name} has an active public website. "
@@ -1181,42 +1182,40 @@ def make_pitch(
         f"was {primary.lower()}: {gap}."
     )
 
-    variants = [
-        (
-            f"I checked {domain}. {gap}. "
-            "That is a concrete conversion issue worth testing before spending more on traffic."
+    templates = {
+        "booking": (
+            f"I reviewed {domain} and could not confirm a clear online booking path. "
+            "For an appointment-led business, I would test that journey first because it sits directly between intent and a booked visit."
         ),
-        (
-            f"On {domain}, the clearest gap I found was: {gap}. "
-            "I would start there because it directly affects how a visitor becomes an enquiry."
+        "contact_form": (
+            f"I checked {domain} and could not confirm a clear enquiry form. "
+            "That creates a specific lead-capture angle: give visitors who are not ready to call or book a low-friction way to ask a question."
         ),
-        (
-            f"I reviewed the public journey on {domain} and found this specific issue: {gap}. "
-            "There is a practical fix here that can be tested without rebuilding the whole site."
+        "click_to_call": (
+            f"I reviewed {domain} on the mobile contact path and could not confirm a click-to-call link. "
+            "That is a focused conversion fix worth testing for visitors who want to contact the business immediately."
         ),
-        (
-            f"A quick audit of {domain} surfaced one actionable point: {gap}. "
-            "That gives you a specific outreach angle rather than a generic website pitch."
+        "cta": (
+            f"I checked {domain} and the clearest issue was the absence of a strong conversion CTA. "
+            "I would test a more explicit next step before proposing any broader redesign."
         ),
-        (
-            f"The strongest conversion opportunity I found on {domain} is {primary.lower()}. "
-            f"The evidence was: {gap}. I would test that path first."
+        "https": (
+            f"I reviewed {domain} and HTTPS was not confirmed by the automated audit. "
+            "I would verify that first because trust and technical reliability come before conversion work."
         ),
-        (
-            f"I looked at {domain} from a customer-conversion perspective. {gap}. "
-            "This is the first thing I would validate because it sits close to enquiry intent."
+        "mobile_viewport": (
+            f"I checked {domain} and the audit did not confirm a mobile viewport configuration. "
+            "I would validate the mobile experience first because it can affect every conversion path on the site."
         ),
+    }
+
+    pitch = templates.get(
+        gap_key,
         (
-            f"There is a measurable-looking friction point on {domain}: {gap}. "
-            "It is specific enough to test as a focused conversion improvement."
+            f"I reviewed {domain} and found one concrete conversion issue: {gap}. "
+            "It is specific enough to validate as a focused improvement rather than a generic website pitch."
         ),
-        (
-            f"Rather than a broad redesign pitch, I found one concrete issue on {domain}: {gap}. "
-            "That is the change I would investigate first."
-        ),
-    ]
-    digest = hashlib.sha256(f"{business_name}|{domain}|{primary}".encode("utf-8")).digest()
-    pitch = variants[digest[0] % len(variants)]
+    )
 
     return why, pitch
 
