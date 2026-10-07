@@ -1,7 +1,8 @@
 # LeadGap AI — Local Leads, Website Gaps & Outreach Angles
 
-Find local businesses with website conversion gaps worth reviewing for outreach.
-LeadGap audits websites, filters weak leads and public contact data, and returns qualified opportunities with grounded outreach hooks.
+**Find local businesses with real website gaps, public contact details, and a grounded reason to contact them.**
+
+LeadGap AI is built for agencies, freelancers, consultants, and outbound teams that do not want another raw business-list export. It discovers or audits local businesses, checks their web presence, separates stronger opportunities from lower-confidence candidates, and returns evidence-based outreach angles you can actually use.
 
 ![LeadGap AI — Find the gap. Start the conversation.](https://raw.githubusercontent.com/metatron9911-star/LeadGap-AI/leadgap-sellable-v1/docs/assets/LeadGap_Hero.jpg)
 
@@ -14,6 +15,26 @@ LeadGap helps web design, local SEO, lead-generation agencies and freelancers de
 - A reason for qualification and an outreach hook tied to what the audit detected.
 - Public phone numbers, emails and social links when available.
 - Qualified opportunities and **Needs manual review** kept separate.
+
+## Popular use cases
+
+### Find dentist leads in London
+Discover dental practices with visible appointment, contact, mobile-conversion, or website gaps and rank the strongest outreach opportunities.
+
+### Find plumber leads
+Find local plumbing businesses whose web presence suggests a realistic redesign, lead-capture, mobile-contact, or local SEO opportunity.
+
+### Find restaurants with weak websites
+Audit restaurant websites for reservation, ordering, mobile contact, and conversion-path friction.
+
+### Find med spa, beauty salon, lawyer, and accountant leads
+Use niche + city discovery to build targeted local prospect lists instead of buying generic lead databases.
+
+### Find businesses without online booking
+Surface businesses whose booking or enquiry journey appears missing or weak, then verify the evidence before outreach.
+
+### Audit your own prospect list
+Skip discovery and submit website URLs directly when you already have a list of businesses you want LeadGap to evaluate.
 
 ## Quick start
 
@@ -103,6 +124,18 @@ This is contact discovery and filtering, **not mailbox or deliverability verific
 Apify plan discounts: Bronze $28, Silver $26, Gold $24 per 1,000. This is why the Store may show “from $24”.
 
 The billable event is **Qualified opportunity**. It is associated with accepted qualified dataset output. Discovered listings, rejected candidates and Needs manual review records do not trigger that event. Under the current Actor pricing settings, users do not pay separate Apify platform usage costs for this Actor.
+
+## API, automations, and AI agents
+
+LeadGap can be run from the Apify Console, API, scheduled Tasks, integrations, and Apify MCP workflows. The public Example Tasks are intentionally named around concrete buyer jobs so they can be discovered by people and AI agents looking for local lead-generation and website-gap workflows.
+
+Common automation pattern: **niche + city → qualified opportunities → export/API → CRM or outreach review**.
+
+## 60-second demo flow
+
+**Manchester + Dentist → inspect 30 businesses → return up to 10 qualified opportunities → review website gap, public contacts, priority, and outreach hook.**
+
+Use the public Example Tasks in the Store when you want to launch a common scenario without configuring the Actor from scratch.
 
 ## Trial
 
