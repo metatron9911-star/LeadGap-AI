@@ -1,8 +1,9 @@
-# LeadGap AI — Local Business Website Gap Finder
+# LeadGap AI — Local Leads, Website Gaps & Outreach Angles
+
+Find local businesses with website conversion gaps worth reviewing for outreach.
+LeadGap audits websites, filters weak leads and public contact data, and returns qualified opportunities with grounded outreach hooks.
 
 ![LeadGap AI — Find the gap. Start the conversation.](https://raw.githubusercontent.com/metatron9911-star/LeadGap-AI/leadgap-sellable-v1/docs/assets/LeadGap_Hero.jpg)
-
-Find local businesses with actionable website gaps, public contact details, and grounded outreach angles.
 
 LeadGap helps web design, local SEO, lead-generation agencies and freelancers decide **who to approach and what to discuss**. Choose a niche and city, run the audit, then review the opportunities.
 
