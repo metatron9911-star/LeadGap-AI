@@ -116,7 +116,14 @@ You pay for qualified opportunities delivered to the dataset, not for every busi
 
 The public Example Tasks in the Apify Store let you launch common scenarios without configuring the Actor from scratch.
 
+## API, automations, and AI agents
+
+LeadGap can be run from the Apify Console, API, scheduled Tasks, integrations, and Apify MCP workflows. The public Example Tasks are intentionally named around concrete buyer jobs so they can be discovered by people and AI agents looking for local lead-generation and website-gap workflows.
+
+Common automation pattern: **niche + city → qualified opportunities → export/API → CRM or outreach review**.
+
 ## Notes
+
 
 - Results depend on the availability and quality of public business and website data.
 - Public contact details are filtered, but email deliverability is not verified.
