@@ -4,7 +4,34 @@
 
 LeadGap AI is built for agencies, freelancers, consultants, and outbound teams that do not want another raw business-list export. It discovers or audits local businesses, checks their web presence, separates stronger opportunities from lower-confidence candidates, and returns evidence-based outreach angles you can actually use.
 
-![LeadGap AI — Find the gap. Start the conversation.](https://raw.githubusercontent.com/metatron9911-star/LeadGap-AI/leadgap-sellable-v1/docs/assets/LeadGap_Hero.jpg)
+[**Run the Manchester demo**](https://console.apify.com/actors/M0aiz7xLf5Z0iqOi4) · [**Choose a public example**](https://apify.com/w_met/leadgap-ai-local-business-opportunity-finder/examples)
+
+**Input:** UK + Manchester + Dentist → **Audit:** up to 30 businesses → **Output:** up to 10 qualified opportunities with website gap, public contact, priority and pitch hook. The output cap is not a guaranteed count.
+
+**Price:** $0.03 per qualified opportunity at the standard rate. Up to 10 delivered opportunities cost up to $0.30 at that rate. Rejected and manual-review candidates do not trigger that event.
+
+![LeadGap real output result card](https://raw.githubusercontent.com/metatron9911-star/LeadGap-AI/leadgap-sellable-v1/docs/store/leadgap-hero.png)
+
+### A real result at a glance
+
+Excerpt from the successful Restaurant / Manchester run on **5 October 2026**:
+
+| Field | Observed output |
+| --- | --- |
+| Business | Toro's Steakhouse Manchester |
+| Website gap | No click-to-call telephone link detected across the scanned pages |
+| Opportunity score / confidence | 20 / 95 (Actor scores, not probabilities of a sale) |
+| Public contact | +44 161 795 5447 |
+| Sales priority | MEDIUM |
+| Pitch hook | Review and test the mobile contact path before proposing a change |
+
+The pitch hook above is a shortened description; the exact emitted text is retained below. The audit finding is time-specific and needs a manual recheck. **Public contacts filtered; email deliverability not verified.**
+
+### 40-second illustrated walkthrough
+
+![LeadGap input to Sales-ready leads walkthrough](https://raw.githubusercontent.com/metatron9911-star/LeadGap-AI/leadgap-sellable-v1/docs/store/leadgap-walkthrough.gif)
+
+This animated guide explains the workflow and uses a real output excerpt. It is an illustrated walkthrough, not a screen recording.
 
 LeadGap helps web design, local SEO, lead-generation agencies and freelancers decide **who to approach and what to discuss**. Choose a niche and city, run the audit, then review the opportunities.
 
@@ -146,3 +173,10 @@ Want to see the output before choosing your workflow? Email **leadgapaicatalogfi
 ## Integrations
 
 Use the Apify API, scheduling, or Apify MCP to connect LeadGap to your workflow. Export qualified records to your CRM or spreadsheet after review.
+
+
+## Support and honest feedback
+
+Use the Actor's **Issues** tab for a reproducible problem or workflow question. Include the run ID and the expected result, without private credentials. If LeadGap helped with a real prospecting task, an honest Store review describing that task is welcome. No review is required for support or a sample.
+
+Documentation and public example pages checked: **12 October 2026**. Website findings remain dated observations; they are not promises of current business needs.
