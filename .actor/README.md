@@ -4,9 +4,9 @@
 
 LeadGap AI is built for agencies, freelancers, consultants, and outbound teams that do not want another raw business-list export. It discovers or audits local businesses, checks their web presence, separates stronger opportunities from lower-confidence candidates, and returns evidence-based outreach angles you can actually use.
 
-[**Run the Manchester demo**](https://console.apify.com/actors/M0aiz7xLf5Z0iqOi4) · [**Choose a public example**](https://apify.com/w_met/leadgap-ai-local-business-opportunity-finder/examples)
+[**Run the Dentist / London example**](https://apify.com/w_met/leadgap-ai-local-business-opportunity-finder/examples/find-qualified-dentist-leads-in-london) · [**Choose a public example**](https://apify.com/w_met/leadgap-ai-local-business-opportunity-finder/examples)
 
-**Input:** UK + Manchester + Dentist → **Audit:** up to 30 businesses → **Output:** up to 10 qualified opportunities with website gap, public contact, priority and pitch hook. The output cap is not a guaranteed count.
+**Example input:** UK + London + Dentist → **Audit:** up to 30 businesses → **Output:** up to 10 qualified opportunities with website gap, public contact, priority and pitch hook. The output cap is not a guaranteed count.
 
 **Price:** $0.03 per qualified opportunity at the standard rate. Up to 10 delivered opportunities cost up to $0.30 at that rate. Rejected and manual-review candidates do not trigger that event.
 
@@ -179,4 +179,4 @@ Use the Apify API, scheduling, or Apify MCP to connect LeadGap to your workflow.
 
 Use the Actor's **Issues** tab for a reproducible problem or workflow question. Include the run ID and the expected result, without private credentials. If LeadGap helped with a real prospecting task, an honest Store review describing that task is welcome. No review is required for support or a sample.
 
-Documentation and public example pages checked: **12 October 2026**. Website findings remain dated observations; they are not promises of current business needs.
+Documentation and public example pages checked: **14 October 2026**. Website findings remain dated observations; they are not promises of current business needs.
